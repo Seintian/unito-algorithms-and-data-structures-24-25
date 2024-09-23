@@ -2,37 +2,63 @@
 
 # Regole d'esame
 
----
 
-**Importante**: gli studenti che hanno nel piano di studi l'insegnamento di Algoritmi con un numero di CFU **differente da 9** sono pregati di contattare il docente al più presto, al fine di concordare un programma d'esame commisurato ai CFU.
+## Studenti e studentesse di anni precedenti il 2024/2025
 
----
+Gli studenti e le studentesse iscritti al secondo anno in un anno accademico precedente il 2024/2025 **possono** svolgere il laboratorio secondo:
+-  le presenti specifiche
+
+o, in alternativa e **entro e non oltre appello di settembre 2025**,
+
+- le specifiche dell'anno accademico 2023/2024:
+> [https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024](https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024)
+
+## Studenti e studentesse con Algoritmi non di 9 CFU
+
+Gli studenti e le studentesse che hanno nel piano di studi l'insegnamento di Algoritmi con un numero di CFU **differente da 9** sono pregati di contattare il docente al più presto, al fine di concordare un programma d'esame commisurato ai CFU.
+
+## Gruppi di laboratorio e turni
 
 Il progetto di laboratorio può essere svolto individualmente o in gruppo (al più 3 persone). **I membri di uno stesso gruppo devono appartenere tutti allo stesso turno di laboratorio**.
 
-ll progetto di laboratorio va consegnato mediante Git (vedi sotto) entro e non oltre la data della prova scritta che si intende sostenere. E' vietato sostenere la prova scritta in caso di mancata consegna del progetto di laboratorio. In caso di superamento della prova scritta, la prova orale (discussione del laboratorio) va sostenuta, previa prenotazione mediante apposita procedura che sarà messa a disposizione sulla pagina i-learn del corso, **nella medesima sessione della prova scritta superata** (si ricorda che le sessioni sono giugno-luglio 2024, settembre 2024, dicembre 2024 e gennaio-febbraio 2025).
+Uno studente o una studentessa, assegnato/a al Turno X può spostarsi al Turno Y, **a patto che trovi un/a collega del turno Y che accetta di spostarsi al turno X**. La richiesta di spostamento deve essere inoltrata via email ai docenti di laboratorio, da parte di una persona che intende effettuare lo scambio, mettendo in cc la persona disposta allo scambio inverso. Lo scambio si intende effettuato solo a seguito di esplicita autorizzazione (via email) da parte dei docenti.
+E' possibile effettuare un solo spostamento di turno durante uno stesso anno accademico.
+I docenti si riservano di respingere le richieste di spostamento che non dovessero pervenire con congruo anticipo (min. 1 mese) rispetto alla data dello scritto che si intende sostenere.
 
-Si noti che, per la sola sessione di giugno-luglio saranno previsti due appelli e, pertanto, esisteranno due possibilità per la discussione del laboratorio (primo o secondo appello della sessione). Nelle altre sessioni, l'appello è unico. Ad esempio, se la studentessa/lo studente X supera la prova scritta a dicembre 2024, deve necessariamente sostenere la discussione di laboratorio con la prova orale di dicembre 2024 (non sarà possibile discutere a gennaio-febbraio 2025).
+## Esame complessivo
+Come specificato nella descrizione ufficiale dell'insegnamento (https://laurea.informatica.unito.it/do/corsi.pl/Show?_id=iw3r):
 
-Esempio:
+L'esame di Algoritmi e strutture dati consiste in una prova scritta, somministrata mediante la piattaforma Esami, ed in una discussione orale del progetto di laboratorio. Il superamento dello scritto permette di accedere alle prove orali della sessione in cui è stato superato lo scritto. Nel caso in cui questa seconda prova non venga superata entro i termini della sessione, lo scritto dovrà essere ripetuto. Il voto sarà la media pesata dei voti ottenuti nelle due prove scritta ed orale [in base ai crediti associati alle parti di teoria (6 CFU) e di laboratorio (3 CFU), nella media lo scritto peserà 6 e l'orale 3], valutate in 30+1 esimi, essendo comunque necessario il raggiungimento della sufficienza in entrambe le prove.
 
-- la studentessa/lo studente X sostiene la prova scritta nel primo appello di giugno;
-- la studentessa/lo studente X deve assicurarsi che il progetto su GitLab, alla data della prova scritta che intende sostenere (in questo esempio, quella del primo appello di giugno), sia aggiornato alla versione che vuole presentare al docente di laboratorio;
-- se la studentessa/lo studente X supera la prova scritta nel primo appello di giugno, deve (pena la perdita del voto ottenuto nella prova scritta) iscriversi a uno degli appelli orali di giugno o luglio, prenotarsi su i-learn in uno degli slot messi a disposizione dal docente del turno di appartenenza e sostenere l'orale nello slot temporale prenotato.
+## Consegna del progetto discussione orale
 
-Le regole riportate sopra si applicano alla singola studentessa/al singolo studente. Per poter accedere alla discussione di laboratorio è in ogni caso necessaria l'iscrizione alla prova orale corrispondente su myunito.
+Il  progetto di laboratorio va consegnato mediante Git (vedi sotto) entro e non oltre la data della prova scritta che si intende sostenere. E' vietato sostenere la prova scritta in caso di mancata consegna del progetto di laboratorio.
 
-Studentesse/studenti diversi, appartenenti allo stesso gruppo, possono sostenere la prova **scritta** nello stesso appello o in appelli diversi. Se studentesse/studenti diversi, appartenenti allo stesso gruppo, superano la prova scritta nello stesso appello, **devono** sostenere l' **orale** nello stesso appello orale. Se studentesse/studenti diversi, appartenenti allo stesso gruppo, superano la prova scritta in appelli diversi, **possono** sostenere l'**orale** in appelli diversi.
+La prova orale può essere sostenuta solo dopo il superamento della prova scritta.
 
-Ad esempio, si consideri un gruppo di laboratorio costituito dalle studentesse/dagli studenti X, Y e Z, e si supponga che i soli X e Y sostengano la prova scritta nel primo appello di giugno, X con successo, mentre Y con esito insufficiente. Devono essere rispettate le seguenti condizioni:
+In caso di superamento della prova scritta, la prova orale (discussione del laboratorio) va sostenuta**nella medesima sessione della prova scritta superata** (si ricorda che le sessioni sono gennaio-febbraio 2025, giugno-luglio 2025, settembre 2025).
 
-- alla data della prova scritta del primo appello di giugno, il progetto di laboratorio del gruppo deve essere aggiornato alla versione che si intende presentare;
-- il solo studente X deve sostenere la prova orale nella sessione giugno-luglio,  procedendo come indicato nell'esempio riportato sopra, mentre Y e Z sosterranno la discussione quando avranno superato la prova scritta.
-- Supponiamo che Y e Z superino la prova scritta nell'appello di gennaio: essi dovranno sostenere la prova orale nella sessione di gennaio-febbraio.
-- Gli studenti Y e Z dovranno, di norma, discutere la stessa versione del progetto di laboratorio che ha discusso lo studente X; i.e., eventuali modifiche al laboratorio successive alla discussione di X dovranno essere debitamente documentate (i.e., il log delle modifiche dovrà comparire su GitLab) e motivate.
+Si noti che per quelle sessioni per cui sono previsti due appelli esisteranno due possibilità per la discussione del laboratorio (primo o secondo appello della sessione); per le sessioni in cui è previsto un solo appello, la discussione deve essere effettuata necessariamente in quell'appello.
 
-**Validità del progetto di laboratorio** : le specifiche per il progetto di laboratorio descritte in questo documento resteranno valide fino all'ultimo appello della sessione gennaio-febbraio relativa al corrente anno accademico **(vale a dire, quella di gennaio-febbraio 2025)** e non oltre! Gli appelli delle sessioni successive a questa dovranno essere sostenuti sulla base delle specifiche che verranno descritte nella prossima edizione del laboratorio di algoritmi.
+Esempio (caso di una sessione con 2 appelli):
 
+- la studentessa/lo studente X sostiene la prova scritta nel primo appello di una sessione con 2 appelli;
+- la studentessa/lo studente X deve assicurarsi che il progetto su GitLab, alla data della prova scritta che intende sostenere (in questo esempio, quella del primo appello della sessione), sia aggiornato alla versione che vuole presentare al docente di laboratorio;
+- se la studentessa/lo studente X supera la prova scritta nel primo appello della sessione, deve (pena la perdita del voto ottenuto nella prova scritta):
+-- iscriversi a uno dei due appelli orali della stessa sessione
+-- prenotarsi su i-learn in uno degli slot messi a disposizione dal docente del turno di appartenenza
+-- sostenere l'orale nello slot temporale prenotato.
+
+Studentesse/studenti diversi, appartenenti allo stesso gruppo di laboratorio , possono sostenere la prova **scritta** nello stesso appello o in appelli diversi. Se studentesse/studenti diversi, appartenenti allo stesso gruppo, superano la prova scritta nello stesso appello, **devono** sostenere l' **orale** nello stesso appello orale. Se studentesse/studenti diversi, appartenenti allo stesso gruppo, superano la prova scritta in appelli diversi, **possono** sostenere l'**orale** in appelli diversi.
+
+Ad esempio, si consideri un gruppo di laboratorio costituito dalle studentesse/dagli studenti X, Y e Z, e si supponga che i soli X e Y sostengano la prova scritta nel primo appello di una sessione con due appelli, X con successo, mentre Y con esito insufficiente. Devono essere rispettate le seguenti condizioni:
+
+- alla data della prova scritta del primo appello della sessione, il progetto di laboratorio del gruppo deve essere aggiornato alla versione che si intende presentare;
+- il solo studente X deve sostenere la prova orale nella stessa sessione in cui ha superato lo scritto,  procedendo come indicato nell'esempio riportato sopra, mentre Y e Z sosterranno la discussione quando avranno superato la prova scritta.
+- Supponiamo che Y e Z superino la prova scritta nell'appello di una sessione con un solo appello: essi dovranno sostenere la prova orale in quello stesso appello.
+- Gli studenti Y e Z dovranno, di norma, discutere la stessa versione del progetto di laboratorio che ha discusso lo studente X; i.e., eventuali modifiche al laboratorio successive alla discussione di X dovranno essere di modesta entità, debitamente documentate (i.e., il log delle modifiche dovrà comparire su GitLab) e motivate.
+
+**Validità del progetto di laboratorio** : le specifiche per il progetto di laboratorio descritte in questo documento resteranno valide fino all'ultimo appello della sessione gennaio-febbraio relativa al corrente anno accademico **(vale a dire, quella di settembre 2025)** e non oltre! Gli appelli delle sessioni successive a quella dovranno essere sostenuti sulla base delle specifiche che verranno descritte nella prossima edizione del laboratorio di algoritmi.
 
 # Indicazioni generali e suggerimenti
 
@@ -57,50 +83,23 @@ Si rammenta che la valutazione del progetto di laboratorio considererà anche l'
 
 ## Linguaggio in cui sviluppare il laboratorio
 
-Gli esercizi vanno implementati utilizzando esclusivamente  il linguaggio C,
+L'intera implementazione del laboratorio deve essere realizzata nel linguaggio C.
 
-Come indicato sotto, alcuni esercizi chiedono di implementare codice generico. Seguono alcuni suggerimenti sul modo di realizzare codice con questa caratteristica nei due linguaggi accettati.
+Come indicato sotto, alcuni esercizi chiedono di implementare **codice generico**. Con "codice generico" si intende codice che deve poter essere eseguito con tipi di dato non noti a tempo di compilazione.
 
-**Nota** : Con "codice generico" si intende codice che deve poter essere eseguito con tipi di dato non noti a tempo di compilazione.
-
-**Suggerimenti (C)**: Nel caso del C, è necessario capire come meglio approssimare l'idea di codice generico utilizzando quanto permesso dal linguaggio. Un approccio comune è far sì che le funzioni e le procedure presenti nel codice prendano in input puntatori a `void` e utilizzino qualche funzione fornita dall'utente per accedere alle componenti necessarie.
-
-**Suggerimenti (Java)**: La realizzazione di codice generico in Java deve basarsi sull’uso delle classi parametriche e dei cosiddetti “tipi generici”. Inoltre, è possibile (e consigliato) usare gli ArrayList invece degli array nativi al fine di semplificare la realizzazione di codice generico.
+**Suggerimento per la realizzazione di codice generico in C**: Nel caso del C, è necessario capire come meglio approssimare l'idea di codice generico utilizzando quanto permesso dal linguaggio. Un approccio comune è far sì che le funzioni e le procedure presenti nel codice prendano in input puntatori a `void` e utilizzino qualche funzione fornita dall'utente per accedere alle componenti necessarie (uso di puntatori a funzione).
 
 ## Uso di librerie esterne e/o native del linguaggio scelto
 
-È vietato (sia nello sviluppo in Java che in quello in C) l'uso di strutture dati native del linguaggio scelto o offerte da librerie esterne, quando la loro realizzazione è richiesta da uno degli esercizi proposti.
+È vietato l'uso di strutture dati native del linguaggio scelto o offerte da librerie esterne, quando la loro realizzazione è richiesta da uno degli esercizi proposti.
 
 È, invece, possibile l'uso di strutture dati native del linguaggio o offerte da librerie esterne, se la loro realizzazione non è richiesta da uno degli esercizi proposti.
 
-**Esempio:** nello sviluppo in Java, l'uso di ArrayList è da ritenersi possibile, se nessun esercizio chiede la realizzazione in Java di un array dinamico.
+**Esempio:** l'uso di una libreria C che implementa array dinamici è consentito, solo se nessun esercizio chiede la realizzazione di un array dinamico.
 
-## Qualità dell'implementazione
+## Relazione sugli esercizi
 
-È parte del mandato degli esercizi la realizzazione di codice di buona qualità.
-
-Per "buona qualità" intendiamo codice ben modularizzato, ben commentato e ben testato.
-
-**Alcuni suggerimenti:**
-
-- verificare che il codice sia suddiviso correttamente in package o moduli;
-- aggiungere un commento, prima di una definizione, che spiega il funzionamento dell'oggetto definito. Evitare quando possibile di commentare direttamente il codice interno alle funzioni/metodi implementati (se il codice è ben scritto, i commenti in genere non servono);
-- la lunghezza di un metodo/funzione è in genere un campanello di allarme: se essa cresce troppo, probabilmente è necessario rifattorizzare il codice spezzando la funzione in più parti. In linea di massima si può consigliare di intervenire quando la funzione cresce sopra le 30 righe (considerando anche commenti e spazi bianchi);
-- sono accettabili commenti in italiano, sebbene siano preferibili in inglese;
-- tutti i nomi (es., nomi di variabili, di metodi, di classi, ecc.) *devono* essere significativi e in inglese;
-- il codice deve essere correttamente indentato; impostare l'indentazione a 2 caratteri (un'indentazione di 4 caratteri è ammessa ma scoraggiata) e impostare l'editor in modo che inserisca "soft tabs" (cioè, deve inserire il numero corretto di spazi invece che un carattere di tabulazione);
-- per dare i nomi agli identificatori, seguire le convenzioni in uso per il linguaggio scelto:
-  - Java: i nomi dei package sono tutti in minuscolo senza separazione fra le parole (es. thepackage); i nomi dei tipi (classi, interfacce, ecc.) iniziano con una lettera maiuscola e proseguono in camel case (es. TheClass), i nomi dei metodi e delle variabili iniziano con una lettera minuscola e proseguono in camel case (es. theMethod), i nomi delle costanti sono tutti in maiuscolo e in formato snake case (es. THE\_CONSTANT);
-  - C:  macro e costanti sono tutti in maiuscolo e in formato snake case (es. THE\_MACRO, THE\_CONSTANT); i nomi di tipo (e.g.  struct, typedefs, enums, ...) iniziano con una lettera maiuscola e proseguono in camel case (e.g., TheType, TheStruct); i nomi di funzione iniziano con una lettera minuscola e proseguono in snake case (e.g., the\_function());
-- i file vanno salvati in formato UTF-8.
-
-# Consegne per gli esercizi
-
-**Importante**: Gli esercizi richiedono (fra le altre cose) di sviluppare codice generico. Nello sviluppare questa parte, si deve assumere di stare sviluppando una libreria generica intesa come fondamento di futuri programmi. Non è pertanto lecito fare assunzioni semplificative; in generale, l'implementazione della libreria generica deve restare separata e non deve essere influenzata in alcun modo dagli usi di essa eventualmente richiesti negli esercizi (ad esempio, se un esercizio dovesse richiedere l'implementazione della struttura dati grafo e quello stesso o un altro esercizio dovesse richiedere l'implementazione, a partire da tale struttura dati, di un algoritmo per il calcolo delle componenti connesse di un grafo, l'implementazione della struttura dati dovrebbe essere separata dall'algoritmo per il calcolo delle componenti connesse e *non* dovrebbe contenere elementi – variabili, procedure, funzioni, metodi, ecc. – eventualmente utili a tale algoritmo, ma non essenziali alla struttura dati; analogamente, se un esercizio dovesse richiedere di operare su grafi con nodi di tipo stringa, l'implementazione della struttura dati grafo dovrebbe restare generica e non potrebbe quindi assumere per i nodi il solo tipo stringa).
-
-In sede di discussione d'esame, sarà facoltà del docente chiedere di eseguire gli algoritmi implementati su dati forniti dal docente stesso. Nel caso questi dati siano memorizzati su file, questi saranno dei csv con la medesima struttura dei dataset forniti e descritti nel testo dell'esercizio. I codici sviluppati dovranno consentire un rapido e semplice adattamento agli input forniti: ad esempio, **una buona implementazione consentirà di inserire in input il nome del file su cui eseguire il test**, mentre una peggiore richiederà di modificare il codice sorgente e una successiva compilazione a fronte della sola modifica del nome del file contenente il dataset.
-
-Per alcune parti degli esercizi sarà anche fornita durante il corso una piattaforma per la valutazione automatica della correttezza del codice prodotto.
+La relazione, per quelli esercizi che la richiedono, deve essere inserita nel file README del progetto, divenendo così parte integrante della documentazione.
 
 ## Unit Testing
 
@@ -108,9 +107,34 @@ Come indicato esplicitamente nei testi degli esercizi, il progetto di laboratori
 
 Si rammenta, però, che il focus del laboratorio è l'implementazione di strutture dati e algoritmi. Relativamente agli unit-test sarà quindi sufficiente che gli studenti dimostrino di averne colto il senso e di saper realizzare una suite di test sufficiente a coprire i casi più comuni e i casi limite.
 
-## Esercizio 1 - Merge Sort e Quick Sort
+## Qualità dell'implementazione
 
-### Linguaggio richiesto: C
+È parte del mandato degli esercizi la realizzazione di codice di buona qualità.
+
+Per "buona qualità" intendiamo codice ben organizzato, ben modularizzato, ben commentato e ben testato.
+
+**Alcuni suggerimenti:**
+
+- **Importante**: Gli esercizi richiedono (fra le altre cose) di sviluppare codice generico. Nello sviluppare questa parte, si deve assumere di stare sviluppando una libreria generica intesa come fondamento di futuri programmi. Non è pertanto lecito fare assunzioni semplificative; in generale, l'implementazione della libreria generica deve restare separata e non deve essere influenzata in alcun modo dagli usi di essa eventualmente richiesti negli esercizi (ad esempio, se un esercizio dovesse richiedere l'implementazione della struttura dati grafo e quello stesso o un altro esercizio dovesse richiedere l'implementazione, a partire da tale struttura dati, di un algoritmo per il calcolo delle componenti connesse di un grafo, l'implementazione della struttura dati dovrebbe essere separata dall'algoritmo per il calcolo delle componenti connesse e *non* dovrebbe contenere elementi – variabili, procedure, funzioni, definizioni di tipo, ecc. – eventualmente utili a tale algoritmo, ma non essenziali alla struttura dati; analogamente, se un esercizio dovesse richiedere di operare su grafi con nodi di tipo stringa, l'implementazione della struttura dati grafo dovrebbe restare generica e non potrebbe quindi assumere per i nodi il solo tipo stringa).
+- verificare che il codice sia suddiviso correttamente in package o moduli;
+- aggiungere un commento, prima di una definizione, che spieghi il funzionamento dell'oggetto definito. Evitare quando possibile di commentare direttamente il codice interno alle funzioni/metodi implementati (se il codice è ben scritto, i commenti in genere non servono);
+- la lunghezza di un metodo/funzione è in genere un campanello di allarme: se essa cresce troppo, probabilmente è necessario rifattorizzare il codice spezzando la funzione in più parti. In linea di massima si può consigliare di intervenire quando la funzione cresce sopra le 30 righe (considerando anche commenti e spazi bianchi);
+- sono accettabili commenti in italiano, sebbene siano preferibili in inglese;
+- tutti i nomi (es., nomi di variabili, di metodi, di classi, ecc.) *devono* essere significativi e in inglese;
+- il codice deve essere correttamente indentato; impostare l'indentazione a 2 caratteri (un'indentazione di 4 caratteri è ammessa ma scoraggiata) e impostare l'editor in modo che inserisca "soft tabs" (cioè, deve inserire il numero corretto di spazi invece che un carattere di tabulazione);
+- per dare i nomi agli identificatori, seguire le convenzioni in uso per il linguaggio C:
+  - macro e costanti sono tutti in maiuscolo e in formato snake case (es. THE\_MACRO, THE\_CONSTANT); i nomi di tipo (e.g.  struct, typedefs, enums, ...) iniziano con una lettera maiuscola e proseguono in camel case (e.g., TheType, TheStruct); i nomi di funzione iniziano con una lettera minuscola e proseguono in snake case (e.g., the\_function());
+- i file vanno salvati in formato UTF-8.
+
+# Consegne per gli esercizi
+
+In sede di discussione d'esame, sarà facoltà del docente chiedere di eseguire gli algoritmi implementati su dati forniti dal docente stesso. Nel caso questi dati siano memorizzati su file, questi saranno dei csv con la medesima struttura dei dataset forniti e descritti nel testo dell'esercizio. I codici sviluppati dovranno consentire un rapido e semplice adattamento agli input forniti: ad esempio, **una buona implementazione consentirà di inserire in input il nome del file su cui eseguire il test**, mentre una peggiore richiederà di modificare il codice sorgente e una successiva compilazione a fronte della sola modifica del nome del file contenente il dataset.
+
+Per alcune parti degli esercizi sarà anche fornita durante il corso una piattaforma per la valutazione automatica della correttezza del codice prodotto.
+
+
+
+## Esercizio 1 - Merge Sort e Quick Sort
 
 ### Testo
 
@@ -141,7 +165,7 @@ Dato che la prima versione è anche in grado di ordinare array di puntatori (pas
 
 ### Unit Testing
 
-Implementare gli unit-test per la libreria secondo le indicazioni suggerite nel documento Unit Testing.
+Implementare gli unit-test per la libreria secondo le indicazioni suggerite nel documento [Unit Testing](UnitTesting.md).
 
 ### Uso della libreria di ordinamento implementata
 
@@ -184,12 +208,10 @@ Si misurino i tempi di risposta per i due algoritmi, per ciascuno dei tre field 
 - L'eseguibile `main_ex1` deve ricevere come parametri il percorso del file CSV contenente i record da ordinare, il percorso del file in cui salvare i record ordinati, e il valore del campo `field` da utilizzare per l'ordinamento. Per esempio:
 
 ```
-$ ./main_ex1 /tmp/data/records.csv /tmp/data/sorted.csv 27 1
+$ ./main_ex1 /tmp/data/records.csv /tmp/data/sorted.csv 1
 ```
 
 ## Esercizio 2 - Edit distance
-
-### Linguaggio richiesto: C
 
 ### Testo
 
@@ -231,7 +253,7 @@ int edit_distance_dyn(const char *s1, const char* s2);
 
 ### Unit Testing
 
-Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel documento Unit Testing.
+Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel documento [Unit Testing](UnitTesting.md).
 
 ### Uso delle funzioni implementate
 
@@ -260,45 +282,39 @@ Si implementi un'applicazione che usa la funzione `edit_distance_dyn` per determ
 $ ./main_ex2 /tmp/data/dictionary.txt /tmp/data/correctme.txt
 ```
 
-## Esercizio 3 - PriorityQueue
+## Esercizio 3 - Tavole hash (con concatenamento)
 
-### Linguaggio richiesto: Java
 
 ### Testo
 
-Si implementi la struttura dati *coda con priorità (PriorityQueue)*.
+Si implementi, avvalendosi del supporto di un sistema basato su un Large Language Model, quale, ad esempio, ChatGPT (si veda sotto), una libreria generica che realizza la struttura dati *tavola hash (con concatenamento)* in grado di ospitare un insieme di coppie {<chiave_1,valore_1>,...,<chiave_n,valore_n>}.
 
-La struttura dati deve gestire tipi generici e consentire un numero qualunque e non noto a priori di elementi, implementando la seguente interfaccia (con requisiti minimi di complessità):
+La tavola hash deve accettare chiavi e valori di tipi generici (tutte le chiavi hanno uno stesso tipo, tutti i valori hanno uno stesso tipo, ma chiavi e valori possono avere tipi fra loro differenti).
 
-```
-public interface AbstractQueue<E> {
-  public boolean empty(); // controlla se la coda è vuota -- O(1)
-  public boolean push(E e); // aggiunge un elemento alla coda -- O(logN)
-  public boolean contains(E e); // controlla se un elemento è in coda -- O(1)
-  public E top(); // accede all'elemento in cima alla coda -- O(1)
-  public void pop(); // rimuove l'elemento in cima alla coda -- O(logN)
-  public boolean remove(E e); // rimuove un elemento se presente in coda -- O(logN)
-};
-```
-
-*Suggerimento*: per implementare i metodi `contains` e `remove` potrebbe essere necessario usare una struttura dati di appoggio oltre allo heap (è ammesso usare strutture dati dalla libreria standard di Java se necessario).
-
-La classe concreta `PriorityQueue<E>` che implementa l'interfaccia dovrebbe avere almeno un costruttore che crea una coda vuota e prende come argomento un `Comparator<E>` da usare per confrontare gli elementi:
+La struttura dati deve offrire almeno le seguenti funzionalità (ricavare il significato delle varie funzioni e procedure e dei loro parametri a partire dai loro prototipi e da quanto studiato nella parte di teoria del corso):
 
 ```
-PriorityQueue(Comparator<E> comparator)
+HashTable* hash_table_create(int (*f1)(const void*,const void*),unsigned long (*f2)(const void*));
+void hash_table_put(HashTable*,const void*,const void*);
+void* hash_table_get(const HashTable*,const void*);
+int hash_table_contains_key(const HashTable*,const void*);
+void hash_table_remove(HashTable*,const void*);
+int hash_table_size(const HashTable*);
+void** hash_table_keyset(const HashTable*);
+void hash_table_free(HashTable*);
 ```
-
-_Nota_: `Comparator` è un'[interfaccia base](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Comparator.html) di Java.
 
 ### Unit Testing
 
-Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel documento [Unit Testing](UnitTesting.md).
+Implementare avvalendosi del supporto di un sistema basato su un Large Language Model (LLM), quale, ad esempio, ChatGPT (si veda sotto), gli unit-test degli algoritmi secondo le indicazioni suggerite nel documento [Unit Testing](UnitTesting.md).
 
-### Condizioni per la consegna:
+### Uso di sistema basato su un Large Language Model:
 
-- Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà tutte le classi relative a questo esercizio e al seguente, compresi i file di progetto relativi all'IDE Java che avete utilizzato.
-- Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file `.class` eseguibili relativi a tutte le classi implementate. Includete anche tutti i file `.jar` (come junit) necessari alla compilazione.
+Si richiede che per implementare quanto richiesto dal presente esercizio ci si avvalga del supporto di un sistema basato su un Large Language Model, quale, ad esempio, ChatGPT.
+
+E' possibile che il processo di sviluppo risulti iterativo, comportando varie interazioni con il sistema LLM.
+
+Si documenti, in una relazione, il suddetto processo di sviluppo nei suoi aspetti principali (prompt iniziale, output prodotto dal sistema, analisi critica dell'output, raffinamento del prompt, ecc.) e si riportino alcune considerazioni generali sull'intero processo.
 
 ## Esercizio 4 - Grafi sparsi e Visita in Ampiezza
 
@@ -329,7 +345,7 @@ typedef struct edge {
 }Edge;
 
 
-Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  ); 
+Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  );
 //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
 //le etichette occuperanno label_size byte, il grafo è diretto se directed == true, la funzione node_compare serve per poter confrontare due nodi -- O(1)
 Bool isDirected(Graph gr); // dice se il grafo è diretto o meno -- O(1)
@@ -369,10 +385,10 @@ Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel 
 Si implementi l'algoritmo di visita in ampiezza secondo il seguente prototipo di funzione
 
 ```
-void * breadth_first_visit(Graph gr, void* start); 
+void * breadth_first_visit(Graph gr, void* start);
 //start è il nodo di partenza da cui cominciare la visita, la funzione restituisce l'array dei nodi nell'ordine di visita.
 //eventualmente, la funzione restituisce null se il nodo start non è presente nel grafo gr.
- 
+
 ```
 
 L'implementazione dell'algoritmo di visita in ampiezza dovrà utilizzare la libreria sui grafi appena implementata.
@@ -398,4 +414,4 @@ Ogni record contiene i seguenti dati:
 ### Condizioni per la consegna:
 
 - Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà tutte le classi relative a questo esercizio e al precedente.
-- Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file eseguibili. 
+- Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file eseguibili.
