@@ -1,6 +1,6 @@
 # Unit Testing
 
-I test automatici sono "oggetti" software che vengono scritti con l'obbiettivo
+I test automatici sono "oggetti" software che vengono scritti con l'obiettivo
 di verificare che una porzione di una applicazione sia corretta (secondo qualche
 criterio di corretteza definito nel test stesso). Quando gli oggetti testati
 sono "piccoli" e autocontenuti, essi vengono chiamati "unit" e il test automatico
@@ -82,71 +82,6 @@ Si noti che scrivere i test di unità è diverso dallo scrivere un programma di
 prova per il proprio software. Gli unit test sono pensati per essere eseguiti
 automaticamente e non richiedere attenzione da parte dell'utente.
 
-## Unit testing in Java
-
-La libreria di unit testing più usata in ambito Java è JUnit.
-
-La versione più recente di JUnit è JUnit 5. Per semplicità, nell'esecuzione di
-questo laboratorio, suggeriamo l'uso della versione JUnit 4 immediatamente precedente.
-
-Nel seguito, faremo riferimento a JUnit 4.
-
-Un test in JUnit
-è un metodo marcato con l'annotazione ```@Test```. Tali metodi possono usare
-un certo numero di funzioni messe a disposizione dalla libreria per verificare
-la correttezza del programma. Ad esempio:
-
-```Java
-import org.junit.Test;
-import static org.junit.Assert.assertArrayEquals;
-
-public class TestSorting {
-  @Test
-  public void testSortEmptyArray() {
-    MySortingAlgorithm sorter = new MySortingAlgorithm();
-    int[] a = {};
-    assertArrayEquals( new int[]{}, sorter.sort(a) );
-  }
-
-  @Test
-  public void testSortNullArray() {
-    MySortingAlgorithm sorter = new MySortingAlgorithm();
-    int[] a = null;
-    assertArrayEquals( null, sorter.sort(a) );
-  }
-}
-```
-
-JUnit provvederà ad eseguire i test in ordine casuale ricaricando la classe
-prima di ogni singolo test. Nel caso in questione quest'ultima operazione non
-influisce sul risultato. Le cose sarebbero state però diverse nel caso la classe
-di test avesse memorizzato i dati in qualche variabile di istanza (o di classe).
-
-### Compilazione ed esecuzione
-
-Potete trovare le librerie JUnit (junit e hamcrest-core) nella cartella `Resources/Java/JUnit`
-di questo repository. In alternativa, potete scaricarle dal sito di JUnit 4 (https://junit.org/junit4/),
-dove trovate anche altre informazioni interessanti.
-
-Al fine di poter compilare ed eseguire le classi di test è necessario aggiungere
-le librerie JUnit al classpath di Java.
-
-Esempio (unix):
-
-```csh
-setenv CLASSPATH /usr/NFS/Linux/labalgoritmi/lib/junit-4.12.jar:/usr/NFS/Linux/labalgoritmi/lib/hamcrest-core-1.3.jar:.
-```
-
-Per lanciare i test si può usare la classe JUnitCore messa a disposizione dalla
-libreria JUnit. Assumendo che il CLASSPATH sia stato impostato correttamente,
-è sufficiente lanciare il seguente comando:
-
-```csh
-java org.junit.runner.JUnitCore <nome classe da eseguire>
-```
-
-Dove <nome classe da eseguire> è la classe che contiene i test. Il nome deve
-essere comprensivo del path (i.e., del package) alla classe stessa.
 
 ## Unit testing in C
 
