@@ -171,7 +171,7 @@ Implementare gli unit-test per la libreria secondo le indicazioni suggerite nel 
 
 Il file `records.csv` che potete trovare (compresso) all'indirizzo:
 
-> [https://datacloud.di.unito.it/index.php/s/X7qC8JSLNRtLxPC](https://datacloud.di.unito.it/index.php/s/X7qC8JSLNRtLxPC)
+> [https://datacloud.di.unito.it/index.php/s/9sQmzB9TdDHezX7](https://datacloud.di.unito.it/index.php/s/9sQmzB9TdDHezX7)
 
 contiene 20 milioni di record da ordinare.
 Ogni record è descritto su una riga e contiene i seguenti campi:
@@ -259,7 +259,7 @@ Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel 
 
 All'indirizzo:
 
-> [https://datacloud.di.unito.it/index.php/s/gfoEndRSfwQKiHS](https://datacloud.di.unito.it/index.php/s/gfoEndRSfwQKiHS)
+> [https://datacloud.di.unito.it/index.php/s/9BKY7BXFCY4bMcB](https://datacloud.di.unito.it/index.php/s/9BKY7BXFCY4bMcB)
 
 potete trovare un dizionario (`dictionary.txt`) e un file da correggere (`correctme.txt`).
 
@@ -394,7 +394,7 @@ void * breadth_first_visit(Graph gr, void* start);
 L'implementazione dell'algoritmo di visita in ampiezza dovrà utilizzare la libreria sui grafi appena implementata.
 L'algoritmo dovrà poi essere usato con i dati contenuti nel file `italian_dist_graph.csv`, che potete recuperare all'indirizzo:
 
-> [https://datacloud.di.unito.it/index.php/s/PirTJpq4JMnpH3G](https://datacloud.di.unito.it/index.php/s/PirTJpq4JMnpH3G)
+> [https://datacloud.di.unito.it/index.php/s/FqneW99EGWLSRpY](https://datacloud.di.unito.it/index.php/s/FqneW99EGWLSRpY)
 
 Tale file contiene le distanze in metri tra varie località italiane e una frazione delle località a loro più vicine. Il formato è un CSV standard: i campi sono separati da virgole; i record sono separati dal carattere di fine riga (`\n`).
 
