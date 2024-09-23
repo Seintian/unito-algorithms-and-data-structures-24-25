@@ -99,7 +99,7 @@ Come indicato sotto, alcuni esercizi chiedono di implementare **codice generico*
 
 ## Relazione sugli esercizi
 
-La relazione, per quelli esercizi che la richiedono, deve essere inserita nel file README del progetto, divenendo così parte integrante della documentazione.
+La relazione, per quegli esercizi che la richiedono, deve essere inserita nel file README del progetto, divenendo così parte integrante della documentazione.
 
 ## Unit Testing
 
