@@ -322,6 +322,13 @@ typedef enum {false = 0, true = 1} Bool;
 
 typedef struct graph *Graph;
 
+typedef struct edge {
+   void* source; //nodo d'origine
+   void* dest; //nodo di destinazione
+   void* label; //etichetta dell'arco
+}Edge;
+
+
 Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  ); 
 //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
 //le etichette occuperanno label_size byte, il grafo è diretto se directed == true, la funzione node_compare serve per poter confrontare due nodi -- O(1)
@@ -336,13 +343,15 @@ Bool removeEdge(Graph gr, void* n1, void* n2); // rimuove un arco dal grafo -- O
 int numNodes(Graph gr); // numero di nodi -- O(1)
 int numEdges(Graph gr); // numero di archi -- O(N)
 void* getNodes(Graph gr); // recupero dei nodi del grafo -- O(N)
-void* getEdges(Graph gr); // recupero degli archi del grafo -- O(N)
+Edge* getEdges(Graph gr); // recupero degli archi del grafo -- O(N)
 void* getNeighbours(Graph gr, void* n); // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
 void* getLabel(Graph gr, void* n1, void* n2); // recupero dell'etichetta di un arco -- O(1) (*)
 };
 ```
 
 _(*)_ quando il grafo è veramente sparso, assumendo che l'operazione venga effettuata su un nodo la cui lista di adiacenza ha una lunghezza in O(1).
+
+La struttura ```struct graph``` deve essere decisa prendendo in considerazione la richiesta di usare la Tabella Hash dell'esercizio precedente.
 
 
 *Suggerimento*:  un grafo non diretto può essere rappresentato usando un'implementazione per grafi diretti modificata
@@ -357,26 +366,17 @@ Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel 
 
 ### Uso della libreria che implementa la struttura dati Grafo
 
-Si implementi l'algoritmo di Prim per la determinazione della minima foresta ricoprente di un grafo, secondo il seguente template:
+Si implementi l'algoritmo di visita in ampiezza secondo il seguente prototipo di funzione
 
 ```
-public class Prim {
-  public static <V, L extends Number> Collection<? extends AbstractEdge<V, L>> minimumSpanningForest(Graph<V, L> graph) {
-    // calcola la minima foresta ricoprente con l'algoritmo di Prim
-    // restituisce la collezione degli archi che formano la foresta
-  }
-  public static void main(String[] args) {
-    // leggi i dati CSV del grafo dal percorso in args[1]
-    // calcola la minima foresta ricoprente con minimumSpanningForest
-    // scrivi su standard output solo la descrizione della foresta calcolata come CSV con formato analogo a quello in input
-    // su standard error si possono scrivere ulteriori informazioni, come il numero di nodi e archi nella foresta calcolata,
-    // o il peso totale della foresta
-  }
-}
+void * breadth_first_visit(Graph gr, void* start); 
+//start è il nodo di partenza da cui cominciare la visita, la funzione restituisce l'array dei nodi nell'ordine di visita.
+//eventualmente, la funzione restituisce null se il nodo start non è presente nel grafo gr.
+ 
 ```
 
-L'implementazione dell'algoritmo di Prim dovrà utilizzare la struttura dati *PriorityQueue* implementata nell'esercizio precedente e la struttura dati grafo appena implementata.
-La struttura dati e l'algoritmo di Prim dovranno poi essere utilizzati con i dati contenuti nel file `italian_dist_graph.csv`, che potete recuperare all'indirizzo:
+L'implementazione dell'algoritmo di visita in ampiezza dovrà utilizzare la libreria sui grafi appena implementata.
+L'algoritmo dovrà poi essere usato con i dati contenuti nel file `italian_dist_graph.csv`, che potete recuperare all'indirizzo:
 
 > [https://datacloud.di.unito.it/index.php/s/PirTJpq4JMnpH3G](https://datacloud.di.unito.it/index.php/s/PirTJpq4JMnpH3G)
 
@@ -390,14 +390,12 @@ Ogni record contiene i seguenti dati:
 
 **Note:**
 
-- Nel caso in cui il grafo sia costituito da una sola componente connessa, l'algoritmo restituirà un albero. Nel caso in cui, invece, vi siano più componenti connesse, l'algoritmo restituirà una foresta costituita dai minimi alberi ricoprenti di ciascuna componente connessa.
 - Potete intrepretare le informazioni presenti nelle righe del file come archi **non diretti** (per cui probabilmente vorrete inserire nel vostro grafo sia l'arco di andata che quello di ritorno a fronte di ogni riga letta).
 - Il file è stato creato a partire da un dataset poco accurato. I dati riportati contengono inesattezze e imprecisioni.
-- Un'implementazione corretta dell'algoritmo di Prim, eseguita sui dati contenuti nel file `italian_dist_graph.csv`, dovrebbe determinare una minima foresta ricoprente con 18.640 nodi, 18.637 archi (non orientati) e di peso complessivo di circa 89.939,913 Km.
 
 **Si ricorda che il file `italian_dist_graph.csv` (e i file compilati) NON DEVONO ESSERE OGGETTO DI COMMIT SU GIT!**
 
 ### Condizioni per la consegna:
 
-- Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà tutte le classi relative a questo esercizio e al precedente, compresi i file di progetto relativi all'IDE Java che avete utilizzato.
-- Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file `.class` eseguibili relativi a tutte le classi implementate. Includete anche tutti i file `.jar` (come junit) necessari alla compilazione.
+- Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà tutte le classi relative a questo esercizio e al precedente.
+- Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file eseguibili. 
