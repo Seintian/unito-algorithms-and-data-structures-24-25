@@ -323,45 +323,27 @@ typedef enum {false = 0, true = 1} Bool;
 
 typedef struct graph *Graph;
 
-Graph newGraph(size_t node_size, Bool directed); //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e sarà diretto se directed è true
+Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  ); //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
+le etichette occuperanno label_size byte, il grafo è diretto se directed == true, la funzione node_compare serve per poter confrontare due nodi -- O(1)
 Bool isDirected(); // dice se il grafo è diretto o meno -- O(1)
 Bool isLabelled(); // dice se il grafo è etichettato o meno -- O(1)
-Bool addNode(void* node, size_t node_size); // aggiunge un nodo -- O(1)
-bool addEdge(void* n1, void* n2, void* label); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
-  public boolean containsNode(V a); // controlla se un nodo è nel grafo -- O(1)
-  public boolean containsEdge(V a, V b); // controlla se un arco è nel grafo -- O(1) (*)
-  public boolean removeNode(V a); // rimuove un nodo dal grafo -- O(N)
-  public boolean removeEdge(V a, V b); // rimuove un arco dal grafo -- O(1) (*)
-  public int numNodes(); // numero di nodi -- O(1)
-  public int numEdges(); // numero di archi -- O(N)
-  public Collection<V> getNodes(); // recupero dei nodi del grafo -- O(N)
-  public Collection<? extends AbstractEdge<V,L>> getEdges(); // recupero degli archi del grafo -- O(N)
-  public Collection<V> getNeighbours(V a); // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
-  public L getLabel(V a, V b); // recupero dell'etichetta di un arco -- O(1) (*)
+Bool addNode(void* node); // aggiunge un nodo -- O(1)
+Bool addEdge(void* n1, void* n2, void* label); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
+Bool containsNode(void* n); // controlla se un nodo è nel grafo -- O(1)
+Bool containsEdge(void* n1, void* n2); // controlla se un arco è nel grafo -- O(1) (*)
+Bool removeNode(void* n); // rimuove un nodo dal grafo -- O(N)
+Bool removeEdge(void* n1, void* n2); // rimuove un arco dal grafo -- O(1) (*)
+int numNodes(); // numero di nodi -- O(1)
+int numEdges(); // numero di archi -- O(N)
+void* getNodes(); // recupero dei nodi del grafo -- O(N)
+void* getEdges(); // recupero degli archi del grafo -- O(N)
+void* getNeighbours(void* n); // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
+void* getLabel(void* n1, void* n2); // recupero dell'etichetta di un arco -- O(1) (*)
 };
 ```
 
 _(*)_ quando il grafo è veramente sparso, assumendo che l'operazione venga effettuata su un nodo la cui lista di adiacenza ha una lunghezza in O(1).
 
-_Nota_: `AbstractCollection` è un'[interfaccia base](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/AbstractCollection.html) di Java.
-
-L'interfaccia `AbstractGraph` si basa sulla seguente interfaccia per la rappresentazione di un arco:
-
-```
-public interface AbstractEdge<V,L> {
-  public V getStart(); // il nodo di partenza dell'arco
-  public V getEnd(); // il nodo di arrivo dell'arco
-  public L getLabel(); // l'etichetta dell'arco
-};
-```
-
-La classe concreta `Graph<V,L>` che implementa l'interfaccia `AbstractGraph` dovrebbe avere almeno un costruttore che crea un grafo vuoto in complessità O(1) e prende come argomenti due valori booleani per impostare se il grafo è da considerarsi diretto o meno, e se è da considerarsi etichettato o meno:
-
-```
-Graph(boolean directed, boolean labelled)
-```
-
-A seconda del valore di questi due parametri, cambierà il comportamento dei metodi per gestire gli archi per tutte le operazioni successive.
 
 *Suggerimento*:  un grafo non diretto può essere rappresentato usando un'implementazione per grafi diretti modificata
 per garantire che, per ogni arco *(a,b)* etichettato *w*, presente nel grafo, sia presente nel grafo anche l'arco *(b,a)*
