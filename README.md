@@ -57,12 +57,7 @@ Si rammenta che la valutazione del progetto di laboratorio considererà anche l'
 
 ## Linguaggio in cui sviluppare il laboratorio
 
-Gli esercizi vanno implementati utilizzando il linguaggio C o Java come precisato di seguito:
-
-- Esercizio 1: C
-- Esercizio 2: C
-- Esercizio 3: Java
-- Esercizio 4: Java
+Gli esercizi vanno implementati utilizzando esclusivamente  il linguaggio C,
 
 Come indicato sotto, alcuni esercizi chiedono di implementare codice generico. Seguono alcuni suggerimenti sul modo di realizzare codice con questa caratteristica nei due linguaggi accettati.
 
@@ -305,9 +300,9 @@ Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel 
 - Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà tutte le classi relative a questo esercizio e al seguente, compresi i file di progetto relativi all'IDE Java che avete utilizzato.
 - Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file `.class` eseguibili relativi a tutte le classi implementate. Includete anche tutti i file `.jar` (come junit) necessari alla compilazione.
 
-## Esercizio 4 - Grafi sparsi e foreste ricoprenti minime
+## Esercizio 4 - Grafi sparsi e Visita in Ampiezza
 
-### Linguaggio richiesto: Java
+### Linguaggio richiesto: C
 
 ### Testo
 
@@ -315,15 +310,24 @@ Si implementi una libreria che realizza la struttura dati *Grafo* in modo che si
 (**attenzione**: le scelte implementative che farete dovranno essere giustificate in relazione alle nozioni presentate
 durante le lezioni in aula).
 
+È richiesto che l'implementazione sfrutti la Tabella Hash implementata nell'esercizio 3.
+
 L'implementazione deve essere generica sia per quanto riguarda il tipo dei nodi, sia per quanto riguarda le etichette
-degli archi, implementando la seguente interfaccia (con requisiti minimi di complessità; dove _N_ può indicare il numero di nodi o il numero di archi, a seconda del contesto):
+degli archi, implementando le funzioni riportate nel seguente header file (con requisiti minimi di complessità; dove _N_ può indicare il numero di nodi o il numero di archi, a seconda del contesto):
 
 ```
-public interface AbstractGraph<V,L> {
-  public boolean isDirected(); // dice se il grafo è diretto o meno -- O(1)
-  public boolean isLabelled(); // dice se il grafo è etichettato o meno -- O(1)
-  public boolean addNode(V a); // aggiunge un nodo -- O(1)
-  public boolean addEdge(V a, V b, L l); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
+graph.h
+
+typedef enum {false = 0, true = 1} Bool;
+
+
+typedef struct graph *Graph;
+
+Graph newGraph(size_t node_size, Bool directed); //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e sarà diretto se directed è true
+Bool isDirected(); // dice se il grafo è diretto o meno -- O(1)
+Bool isLabelled(); // dice se il grafo è etichettato o meno -- O(1)
+Bool addNode(void* node, size_t node_size); // aggiunge un nodo -- O(1)
+bool addEdge(void* n1, void* n2, void* label); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
   public boolean containsNode(V a); // controlla se un nodo è nel grafo -- O(1)
   public boolean containsEdge(V a, V b); // controlla se un arco è nel grafo -- O(1) (*)
   public boolean removeNode(V a); // rimuove un nodo dal grafo -- O(N)
