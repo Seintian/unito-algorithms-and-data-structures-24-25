@@ -320,25 +320,25 @@ graph.h
 
 typedef enum {false = 0, true = 1} Bool;
 
-
 typedef struct graph *Graph;
 
-Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  ); //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
-le etichette occuperanno label_size byte, il grafo è diretto se directed == true, la funzione node_compare serve per poter confrontare due nodi -- O(1)
-Bool isDirected(); // dice se il grafo è diretto o meno -- O(1)
-Bool isLabelled(); // dice se il grafo è etichettato o meno -- O(1)
-Bool addNode(void* node); // aggiunge un nodo -- O(1)
-Bool addEdge(void* n1, void* n2, void* label); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
-Bool containsNode(void* n); // controlla se un nodo è nel grafo -- O(1)
-Bool containsEdge(void* n1, void* n2); // controlla se un arco è nel grafo -- O(1) (*)
-Bool removeNode(void* n); // rimuove un nodo dal grafo -- O(N)
-Bool removeEdge(void* n1, void* n2); // rimuove un arco dal grafo -- O(1) (*)
-int numNodes(); // numero di nodi -- O(1)
-int numEdges(); // numero di archi -- O(N)
-void* getNodes(); // recupero dei nodi del grafo -- O(N)
-void* getEdges(); // recupero degli archi del grafo -- O(N)
-void* getNeighbours(void* n); // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
-void* getLabel(void* n1, void* n2); // recupero dell'etichetta di un arco -- O(1) (*)
+Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  ); 
+//crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
+//le etichette occuperanno label_size byte, il grafo è diretto se directed == true, la funzione node_compare serve per poter confrontare due nodi -- O(1)
+Bool isDirected(Graph gr); // dice se il grafo è diretto o meno -- O(1)
+Bool isLabelled(Graph gr); // dice se il grafo è etichettato o meno -- O(1)
+Bool addNode(Graph gr, void* node); // aggiunge un nodo -- O(1)
+Bool addEdge(Graph gr, void* n1, void* n2, void* label); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
+Bool containsNode(Graph gr, void* n); // controlla se un nodo è nel grafo -- O(1)
+Bool containsEdge(Graph gr, void* n1, void* n2); // controlla se un arco è nel grafo -- O(1) (*)
+Bool removeNode(Graph gr, void* n); // rimuove un nodo dal grafo -- O(N)
+Bool removeEdge(Graph gr, void* n1, void* n2); // rimuove un arco dal grafo -- O(1) (*)
+int numNodes(Graph gr); // numero di nodi -- O(1)
+int numEdges(Graph gr); // numero di archi -- O(N)
+void* getNodes(Graph gr); // recupero dei nodi del grafo -- O(N)
+void* getEdges(Graph gr); // recupero degli archi del grafo -- O(N)
+void* getNeighbours(Graph gr, void* n); // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
+void* getLabel(Graph gr, void* n1, void* n2); // recupero dell'etichetta di un arco -- O(1) (*)
 };
 ```
 
