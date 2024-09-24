@@ -326,7 +326,7 @@ Si implementi una libreria che realizza la struttura dati *Grafo* in modo che si
 (**attenzione**: le scelte implementative che farete dovranno essere giustificate in relazione alle nozioni presentate
 durante le lezioni in aula).
 
-È richiesto che l'implementazione sfrutti la Tabella Hash implementata nell'esercizio 3.
+È richiesto che l'implementazione sfrutti la Tavola Hash implementata nell'esercizio 3.
 
 L'implementazione deve essere generica sia per quanto riguarda il tipo dei nodi, sia per quanto riguarda le etichette
 degli archi, implementando le funzioni riportate nel seguente header file (con requisiti minimi di complessità; dove _N_ può indicare il numero di nodi o il numero di archi, a seconda del contesto):
@@ -345,9 +345,11 @@ typedef struct edge {
 }Edge;
 
 
-Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*)  );
+Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*), (int (*f1)(const void*,const void*),unsigned long (*f2)(const void*) );
 //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
-//le etichette occuperanno label_size byte, il grafo è diretto se directed == true, la funzione node_compare serve per poter confrontare due nodi -- O(1)
+//le etichette occuperanno label_size byte, il grafo è diretto se directed == true, 
+//la funzione node_compare serve per poter confrontare due nodi,
+//le funzioni f1 e f2 sono necessarie per la costruzione della tavola hash che deve essere usata dalla libreria -- O(1)
 Bool isDirected(Graph gr); // dice se il grafo è diretto o meno -- O(1)
 Bool isLabelled(Graph gr); // dice se il grafo è etichettato o meno -- O(1)
 Bool addNode(Graph gr, void* node); // aggiunge un nodo -- O(1)
