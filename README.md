@@ -36,7 +36,7 @@ Il  progetto di laboratorio va consegnato mediante Git (vedi sotto) entro e non 
 
 La prova orale può essere sostenuta solo dopo il superamento della prova scritta.
 
-In caso di superamento della prova scritta, la prova orale (discussione del laboratorio) va sostenuta**nella medesima sessione della prova scritta superata** (si ricorda che le sessioni sono gennaio-febbraio 2025, giugno-luglio 2025, settembre 2025).
+In caso di superamento della prova scritta, la prova orale (discussione del laboratorio) va sostenuta **nella medesima sessione della prova scritta superata** (si ricorda che le sessioni sono gennaio-febbraio 2025, giugno-luglio 2025, settembre 2025).
 
 Si noti che per quelle sessioni per cui sono previsti due appelli esisteranno due possibilità per la discussione del laboratorio (primo o secondo appello della sessione); per le sessioni in cui è previsto un solo appello, la discussione deve essere effettuata necessariamente in quell'appello.
 
@@ -58,7 +58,7 @@ Ad esempio, si consideri un gruppo di laboratorio costituito dalle studentesse/d
 - Supponiamo che Y e Z superino la prova scritta nell'appello di una sessione con un solo appello: essi dovranno sostenere la prova orale in quello stesso appello.
 - Gli studenti Y e Z dovranno, di norma, discutere la stessa versione del progetto di laboratorio che ha discusso lo studente X; i.e., eventuali modifiche al laboratorio successive alla discussione di X dovranno essere di modesta entità, debitamente documentate (i.e., il log delle modifiche dovrà comparire su GitLab) e motivate.
 
-**Validità del progetto di laboratorio** : le specifiche per il progetto di laboratorio descritte in questo documento resteranno valide fino all'ultimo appello della sessione gennaio-febbraio relativa al corrente anno accademico **(vale a dire, quella di settembre 2025)** e non oltre! Gli appelli delle sessioni successive a quella dovranno essere sostenuti sulla base delle specifiche che verranno descritte nella prossima edizione del laboratorio di algoritmi.
+**Validità del progetto di laboratorio** : le specifiche per il progetto di laboratorio descritte in questo documento resteranno valide fino all'ultimo appello relativo al corrente anno accademico **(vale a dire, quella di settembre 2025)** e non oltre! Gli appelli delle sessioni successive a quella dovranno essere sostenuti sulla base delle specifiche che verranno descritte nella prossima edizione del laboratorio di algoritmi.
 
 # Indicazioni generali e suggerimenti
 
@@ -99,7 +99,7 @@ Come indicato sotto, alcuni esercizi chiedono di implementare **codice generico*
 
 ## Relazione sugli esercizi
 
-La relazione, per quegli esercizi che la richiedono, deve essere inserita nel file README del progetto, divenendo così parte integrante della documentazione.
+La relazione, per quegli esercizi che la richiedono, deve essere inserita nel file README.md del progetto, divenendo così parte integrante della documentazione.
 
 ## Unit Testing
 
@@ -294,11 +294,11 @@ La tavola hash deve accettare chiavi e valori di tipi generici (tutte le chiavi 
 La struttura dati deve offrire almeno le seguenti funzionalità (ricavare il significato delle varie funzioni e procedure e dei loro parametri a partire dai loro prototipi e da quanto studiato nella parte di teoria del corso):
 
 ```
-HashTable* hash_table_create(int (*f1)(const void*,const void*),unsigned long (*f2)(const void*));
-void hash_table_put(HashTable*,const void*,const void*);
-void* hash_table_get(const HashTable*,const void*);
-int hash_table_contains_key(const HashTable*,const void*);
-void hash_table_remove(HashTable*,const void*);
+HashTable* hash_table_create(int (*f1)(const void*,const void*), unsigned long (*f2)(const void*));
+void hash_table_put(HashTable*, const void*, const void*);
+void* hash_table_get(const HashTable*, const void*);
+int hash_table_contains_key(const HashTable*, const void*);
+void hash_table_remove(HashTable*, const void*);
 int hash_table_size(const HashTable*);
 void** hash_table_keyset(const HashTable*);
 void hash_table_free(HashTable*);
@@ -314,7 +314,7 @@ Si richiede che per implementare quanto richiesto dal presente esercizio ci si a
 
 E' possibile che il processo di sviluppo risulti iterativo, comportando varie interazioni con il sistema LLM.
 
-Si documenti, in una relazione, il suddetto processo di sviluppo nei suoi aspetti principali (prompt iniziale, output prodotto dal sistema, analisi critica dell'output, raffinamento del prompt, ecc.) e si riportino alcune considerazioni generali sull'intero processo.
+Si documenti, in una relazione (README.md su git), il suddetto processo di sviluppo nei suoi aspetti principali (prompt iniziale, output prodotto dal sistema, analisi critica dell'output, raffinamento del prompt, ecc.) e si riportino alcune considerazioni generali sull'intero processo.
 
 ## Esercizio 4 - Grafi sparsi e Visita in Ampiezza
 
@@ -345,7 +345,7 @@ typedef struct edge {
 }Edge;
 
 
-Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed,  (*node_compar)(const void*, const void*), (int (*f1)(const void*,const void*),unsigned long (*f2)(const void*) );
+Graph newGraph(size_t node_size, size_t label_size, Bool labelled, Bool directed, int (*node_compar)(const void*, const void*), int (*f1)(const void*,const void*), unsigned long (*f2)(const void*));
 //crea un grafo vuoto i cui nodi saranno grandi node_size byte, e se etichettato (labelled == true)
 //le etichette occuperanno label_size byte, il grafo è diretto se directed == true, 
 //la funzione node_compare serve per poter confrontare due nodi,
@@ -364,7 +364,7 @@ void* getNodes(Graph gr); // recupero dei nodi del grafo -- O(N)
 Edge* getEdges(Graph gr); // recupero degli archi del grafo -- O(N)
 void* getNeighbours(Graph gr, void* n); // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
 void* getLabel(Graph gr, void* n1, void* n2); // recupero dell'etichetta di un arco -- O(1) (*)
-};
+
 ```
 
 _(*)_ quando il grafo è veramente sparso, assumendo che l'operazione venga effettuata su un nodo la cui lista di adiacenza ha una lunghezza in O(1).
@@ -408,12 +408,18 @@ Ogni record contiene i seguenti dati:
 
 **Note:**
 
-- Potete intrepretare le informazioni presenti nelle righe del file come archi **non diretti** (per cui probabilmente vorrete inserire nel vostro grafo sia l'arco di andata che quello di ritorno a fronte di ogni riga letta).
+- Potete interpretare le informazioni presenti nelle righe del file come archi **non diretti** (per cui probabilmente vorrete inserire nel vostro grafo sia l'arco di andata che quello di ritorno a fronte di ogni riga letta).
 - Il file è stato creato a partire da un dataset poco accurato. I dati riportati contengono inesattezze e imprecisioni.
 
 **Si ricorda che il file `italian_dist_graph.csv` (e i file compilati) NON DEVONO ESSERE OGGETTO DI COMMIT SU GIT!**
 
 ### Condizioni per la consegna:
 
-- Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà tutte le classi relative a questo esercizio e al precedente.
-- Includete nella consegna anche un `Makefile` che con il comando `make all` produca i file eseguibili.
+- Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà i file relativi a questo esercizio e al precedente.
+- Includete nella consegna anche un `Makefile` che con il comando `make all` deve produrre all'interno di `ex3-4/bin` due file eseguibili chiamati `main_ex3-4` e `test_ex3-4`. Se avete usato librerie esterne (come Unity) includete anche queste per consentire la corretta compilazione.
+- L'eseguibile `test_ex3-4` non deve richiedere nessun parametro e deve eseguire tutti gli unit test automatizzati prodotti.
+- L'eseguibile `main_ex3-4` deve ricevere come parametri il percorso del file `italian_dist_graph.csv` e il nome di un file di output, e salvare in quest'ultimo i nomi delle località visitate durante una visita in ampiezza del grafo, un nome per riga, partendo da un nodo di partenza specificato. I nomi dei file non devono essere hardcoded, ma devono essere passati come argomenti da linea di comando.
+
+```
+$ ./main_ex3-4 italian_dist_graph.csv  output.txt
+```
