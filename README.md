@@ -431,10 +431,10 @@ Ogni record contiene i seguenti dati:
 - Creare una sottocartella chiamata `ex3-4` all'interno del repository, che conterrà i file relativi a questo esercizio e al precedente.
 - Includete nella consegna anche un `Makefile` che con il comando `make all` deve produrre all'interno di `ex3-4/bin` due file eseguibili chiamati `main_ex3-4` e `test_ex3-4`. Se avete usato librerie esterne (come Unity) includete anche queste per consentire la corretta compilazione.
 - L'eseguibile `test_ex3-4` non deve richiedere nessun parametro e deve eseguire tutti gli unit test automatizzati prodotti.
-- L'eseguibile `main_ex3-4` deve ricevere come parametri il percorso del file `italian_dist_graph.csv` e il nome di un file di output, e salvare in quest'ultimo i nomi delle località visitate durante una visita in ampiezza del grafo, un nome per riga, partendo da un nodo di partenza specificato. I nomi dei file non devono essere hardcoded, ma devono essere passati come argomenti da linea di comando.
+- L'eseguibile `main_ex3-4` deve ricevere come parametri il percorso del file `italian_dist_graph.csv`, il nome della città di partenza e il nome di un file di output, e salvare in quest'ultimo i nomi delle località visitate durante una visita in ampiezza del grafo, un nome per riga, partendo da un nodo di partenza specificato. I nomi dei file non devono essere hardcoded, ma devono essere passati come argomenti da linea di comando.
 
 ```
-$ ./main_ex3-4 italian_dist_graph.csv  output.txt
+$ ./main_ex3-4 italian_dist_graph.csv Torino output.txt
 ```
 
 Si documenti brevemente, in una relazione (README.md su git), le scelte implementative effettuate e i risultati e tempi dell'esecuzione dell'algoritmo rispetto a quanto atteso.
