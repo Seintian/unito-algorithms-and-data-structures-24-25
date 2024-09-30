@@ -8,10 +8,12 @@
 Gli studenti e le studentesse iscritti al secondo anno in un anno accademico precedente il 2024/2025 **possono** svolgere il laboratorio secondo:
 -  le presenti specifiche
 
-o, in alternativa e **entro e non oltre appello di settembre 2025**,
+o, in alternativa e **entro e non oltre l'appello di settembre 2025**,
 
 - le specifiche dell'anno accademico 2023/2024:
 > [https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024](https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024)
+
+Agli studenti che non hanno ancora cominciato a svolgere gli esercizi 3 o 4 delle precedenti specifiche è comunque consigliato di rifarsi alle specifiche nuove.
 
 ## Studenti e studentesse con Algoritmi non di 9 CFU
 
@@ -21,16 +23,17 @@ Gli studenti e le studentesse che hanno nel piano di studi l'insegnamento di Alg
 
 Il progetto di laboratorio può essere svolto individualmente o in gruppo (al più 3 persone). **I membri di uno stesso gruppo devono appartenere tutti allo stesso turno di laboratorio**.
 
-Uno studente o una studentessa, assegnato/a al Turno X può spostarsi al Turno Y, **a patto che trovi un/a collega del turno Y che accetta di spostarsi al turno X**. La richiesta di spostamento deve essere inoltrata via email ai docenti di laboratorio, da parte di una persona che intende effettuare lo scambio, mettendo in cc la persona disposta allo scambio inverso. Lo scambio si intende effettuato solo a seguito di esplicita autorizzazione (via email) da parte dei docenti.
+Uno studente o una studentessa, assegnato/a al Turno X può spostarsi al Turno Y, **a patto che trovi un/a collega del turno Y che accetta di spostarsi al turno X**. La richiesta di spostamento deve essere inoltrata via email ai docenti di laboratorio, da parte di una persona che intende effettuare lo scambio, mettendo in cc la persona disposta allo scambio inverso ed entrambi i docenti coinvolti. Lo scambio si intende effettuato solo a seguito di esplicita autorizzazione (via email) da parte dei docenti.
 E' possibile effettuare un solo spostamento di turno durante uno stesso anno accademico.
 I docenti si riservano di respingere le richieste di spostamento che non dovessero pervenire con congruo anticipo (min. 1 mese) rispetto alla data dello scritto che si intende sostenere.
 
 ## Esame complessivo
+
 Come specificato nella descrizione ufficiale dell'insegnamento (https://laurea.informatica.unito.it/do/corsi.pl/Show?_id=iw3r):
 
 L'esame di Algoritmi e strutture dati consiste in una prova scritta, somministrata mediante la piattaforma Esami, ed in una discussione orale del progetto di laboratorio. Il superamento dello scritto permette di accedere alle prove orali della sessione in cui è stato superato lo scritto. Nel caso in cui questa seconda prova non venga superata entro i termini della sessione, lo scritto dovrà essere ripetuto. Il voto sarà la media pesata dei voti ottenuti nelle due prove scritta ed orale [in base ai crediti associati alle parti di teoria (6 CFU) e di laboratorio (3 CFU), nella media lo scritto peserà 6 e l'orale 3], valutate in 30+1 esimi, essendo comunque necessario il raggiungimento della sufficienza in entrambe le prove.
 
-## Consegna del progetto discussione orale
+## Consegna del progetto e discussione orale
 
 Il  progetto di laboratorio va consegnato mediante Git (vedi sotto) entro e non oltre la data della prova scritta che si intende sostenere. E' vietato sostenere la prova scritta in caso di mancata consegna del progetto di laboratorio.
 
@@ -67,9 +70,9 @@ Ad esempio, si consideri un gruppo di laboratorio costituito dalle studentesse/d
 Durante la scrittura del codice è richiesto di usare in modo appropriato il sistema di versioning Git. Questa richiesta implica quanto segue:
 
 - il progetto di laboratorio va inizializzato "clonando" il repository del laboratorio come descritto nel file Git.md;
-- come è prassi nei moderni ambienti di sviluppo, è richiesto di effettuare commit frequenti. L'ideale è un commit per ogni blocco di lavoro terminato (es. creazione e test di una nuova funzione, soluzione di un baco, creazione di una nuova interfaccia, ...);
+- come è prassi nei moderni ambienti di sviluppo, è richiesto di effettuare commit frequenti, con un nome significativo. L'ideale è un commit per ogni blocco di lavoro terminato (es. creazione e test di una nuova funzione, soluzione di un baco, creazione di una nuova interfaccia, ...);
 - ogni membro del gruppo dovrebbe effettuare il commit delle modifiche che lo hanno visto come principale sviluppatore;
-- al termine del lavoro si dovrà consegnare l'intero repository.
+- al termine del lavoro si dovrà consegnare l'intero repository (dandone accesso al docente).
 
 Il file Git.md contiene un esempio di come usare Git per lo sviluppo degli esercizi proposti per questo laboratorio.
 
@@ -117,11 +120,11 @@ Per "buona qualità" intendiamo codice ben organizzato, ben modularizzato, ben c
 
 - **Importante**: Gli esercizi richiedono (fra le altre cose) di sviluppare codice generico. Nello sviluppare questa parte, si deve assumere di stare sviluppando una libreria generica intesa come fondamento di futuri programmi. Non è pertanto lecito fare assunzioni semplificative; in generale, l'implementazione della libreria generica deve restare separata e non deve essere influenzata in alcun modo dagli usi di essa eventualmente richiesti negli esercizi (ad esempio, se un esercizio dovesse richiedere l'implementazione della struttura dati grafo e quello stesso o un altro esercizio dovesse richiedere l'implementazione, a partire da tale struttura dati, di un algoritmo per il calcolo delle componenti connesse di un grafo, l'implementazione della struttura dati dovrebbe essere separata dall'algoritmo per il calcolo delle componenti connesse e *non* dovrebbe contenere elementi – variabili, procedure, funzioni, definizioni di tipo, ecc. – eventualmente utili a tale algoritmo, ma non essenziali alla struttura dati; analogamente, se un esercizio dovesse richiedere di operare su grafi con nodi di tipo stringa, l'implementazione della struttura dati grafo dovrebbe restare generica e non potrebbe quindi assumere per i nodi il solo tipo stringa).
 - verificare che il codice sia suddiviso correttamente in package o moduli;
-- aggiungere un commento, prima di una definizione, che spieghi il funzionamento dell'oggetto definito. Evitare quando possibile di commentare direttamente il codice interno alle funzioni/metodi implementati (se il codice è ben scritto, i commenti in genere non servono);
+- aggiungere un commento, prima di una definizione, che spieghi il funzionamento dell'oggetto definito, meglio se in formato [doxygen](https://www.doxygen.nl). Evitare quando possibile di commentare direttamente il codice interno alle funzioni/metodi implementati (se il codice è ben scritto, i commenti in genere non servono);
 - la lunghezza di un metodo/funzione è in genere un campanello di allarme: se essa cresce troppo, probabilmente è necessario rifattorizzare il codice spezzando la funzione in più parti. In linea di massima si può consigliare di intervenire quando la funzione cresce sopra le 30 righe (considerando anche commenti e spazi bianchi);
 - sono accettabili commenti in italiano, sebbene siano preferibili in inglese;
 - tutti i nomi (es., nomi di variabili, di metodi, di classi, ecc.) *devono* essere significativi e in inglese;
-- il codice deve essere correttamente indentato; impostare l'indentazione a 2 caratteri (un'indentazione di 4 caratteri è ammessa ma scoraggiata) e impostare l'editor in modo che inserisca "soft tabs" (cioè, deve inserire il numero corretto di spazi invece che un carattere di tabulazione);
+- il codice deve essere correttamente indentato; impostare l'indentazione a 2 o 4 caratteri e impostare l'editor in modo che inserisca "soft tabs" (cioè, deve inserire il numero corretto di spazi invece che un carattere di tabulazione);
 - per dare i nomi agli identificatori, seguire le convenzioni in uso per il linguaggio C:
   - macro e costanti sono tutti in maiuscolo e in formato snake case (es. THE\_MACRO, THE\_CONSTANT); i nomi di tipo (e.g.  struct, typedefs, enums, ...) iniziano con una lettera maiuscola e proseguono in camel case (e.g., TheType, TheStruct); i nomi di funzione iniziano con una lettera minuscola e proseguono in snake case (e.g., the\_function());
 - i file vanno salvati in formato UTF-8.
@@ -131,7 +134,6 @@ Per "buona qualità" intendiamo codice ben organizzato, ben modularizzato, ben c
 In sede di discussione d'esame, sarà facoltà del docente chiedere di eseguire gli algoritmi implementati su dati forniti dal docente stesso. Nel caso questi dati siano memorizzati su file, questi saranno dei csv con la medesima struttura dei dataset forniti e descritti nel testo dell'esercizio. I codici sviluppati dovranno consentire un rapido e semplice adattamento agli input forniti: ad esempio, **una buona implementazione consentirà di inserire in input il nome del file su cui eseguire il test**, mentre una peggiore richiederà di modificare il codice sorgente e una successiva compilazione a fronte della sola modifica del nome del file contenente il dataset.
 
 Per alcune parti degli esercizi sarà anche fornita durante il corso una piattaforma per la valutazione automatica della correttezza del codice prodotto.
-
 
 
 ## Esercizio 1 - Merge Sort e Quick Sort
@@ -211,6 +213,7 @@ Si misurino i tempi di risposta per i due algoritmi, per ciascuno dei tre field 
 $ ./main_ex1 /tmp/data/records.csv /tmp/data/sorted.csv 1
 ```
 
+
 ## Esercizio 2 - Edit distance
 
 ### Testo
@@ -282,6 +285,13 @@ Si implementi un'applicazione che usa la funzione `edit_distance_dyn` per determ
 $ ./main_ex2 /tmp/data/dictionary.txt /tmp/data/correctme.txt
 ```
 
+
+---
+
+**Nota importante**: il testo degli esercizi 3 e 4 **non è ancora definitivo e potrebbe subire variazioni** nei prossimi giorni.
+
+---
+
 ## Esercizio 3 - Tavole hash (con concatenamento)
 
 
@@ -315,6 +325,7 @@ Si richiede che per implementare quanto richiesto dal presente esercizio ci si a
 E' possibile che il processo di sviluppo risulti iterativo, comportando varie interazioni con il sistema LLM.
 
 Si documenti, in una relazione (README.md su git), il suddetto processo di sviluppo nei suoi aspetti principali (prompt iniziale, output prodotto dal sistema, analisi critica dell'output, raffinamento del prompt, ecc.) e si riportino alcune considerazioni generali sull'intero processo.
+
 
 ## Esercizio 4 - Grafi sparsi e Visita in Ampiezza
 
@@ -425,3 +436,5 @@ Ogni record contiene i seguenti dati:
 ```
 $ ./main_ex3-4 italian_dist_graph.csv  output.txt
 ```
+
+Si documenti brevemente, in una relazione (README.md su git), le scelte implementative effettuate e i risultati e tempi dell'esecuzione dell'algoritmo rispetto a quanto atteso.

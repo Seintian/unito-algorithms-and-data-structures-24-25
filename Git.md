@@ -84,7 +84,7 @@ accedere tramite browser aprendo l'URL:
 Una volta effettuato il login, è possibile utilizzare l'interfaccia web per
 creare una copia personale del repository su cui lavorerete. Un membro per ogni
 gruppo acceda all'url:
-  [https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024](https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024)
+  [https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2024-2025](https://gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2024-2025)
 e clicchi sull'icona "Fork repository".
 
 Di default, l'interfaccia web proporrà di impostare i permessi del repository
@@ -119,7 +119,7 @@ repository proposto dai docenti: (nel vostro caso dovrete
 sostituire l'URL con quello che vi siete annotati precedentemente):
 
 ```
- git clone https://audrito@gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2023-2024 
+ git clone https://audrito@gitlab2.educ.di.unito.it/audrito/laboratorio-algoritmi-2024-2025 
 ```
 
 ## Comandi di base per lavorare
@@ -184,7 +184,7 @@ Passo 1: effettuare un pull del progetto dei docenti utilizzando il seguente
          comando:
 
 ```bash
-git pull git@gitlab2.educ.di.unito.it:audrito/laboratorio-algoritmi-2023-2024.git master
+git pull git@gitlab2.educ.di.unito.it:audrito/laboratorio-algoritmi-2024-2025.git master
 ```
 
 Passo 2: effettuare il push della propria versione locale sul proprio repository
