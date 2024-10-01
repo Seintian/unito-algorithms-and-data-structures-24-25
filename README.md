@@ -285,7 +285,6 @@ Si implementi un'applicazione che usa la funzione `edit_distance_dyn` per determ
 $ ./main_ex2 /tmp/data/dictionary.txt /tmp/data/correctme.txt
 ```
 
-
 ---
 
 **Nota importante**: il testo degli esercizi 3 e 4 **non è ancora definitivo e potrebbe subire variazioni** nei prossimi giorni.
@@ -355,29 +354,29 @@ typedef struct edge {
    void* label; //etichetta dell'arco
 }Edge;
 
-
-Graph newGraph(Bool labelled, Bool directed,
-                int (*f1)(const void*,const void*),
-                unsigned long (*f2)(const void*));
+Graph graph_create(Bool labelled, Bool directed,
+                     int (*compare)(const void*, const void*),
+                     unsigned long (*hash)(const void*));
 
 //crea un grafo vuoto, etichettato se labelled == true e diretto se directed == true,
 //le funzioni f1 e f2 sono necessarie per la costruzione della tavola hash che deve essere usata dalla libreria -- O(1)
 
-Bool isDirected(Graph gr);                               // dice se il grafo è diretto o meno -- O(1)
-Bool isLabelled(Graph gr);                               // dice se il grafo è etichettato o meno -- O(1)
-Bool addNode(Graph gr, void* node);                      // aggiunge un nodo -- O(1)
-Bool addEdge(Graph gr, void* n1, void* n2, void* label); // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
-Bool containsNode(Graph gr, void* n);                    // controlla se un nodo è nel grafo -- O(1)
-Bool containsEdge(Graph gr, void* n1, void* n2);         // controlla se un arco è nel grafo -- O(1) (*)
-Bool removeNode(Graph gr, void* n);                      // rimuove un nodo dal grafo -- O(N)
-Bool removeEdge(Graph gr, void* n1, void* n2);           // rimuove un arco dal grafo -- O(1) (*)
-int numNodes(Graph gr);                                  // numero di nodi -- O(1)
-int numEdges(Graph gr);                                  // numero di archi -- O(N)
-void* getNodes(Graph gr);                                // recupero dei nodi del grafo -- O(N)
-Edge* getEdges(Graph gr);                                // recupero degli archi del grafo -- O(N)
-void* getNeighbours(Graph gr, void* n);                  // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
-void* getLabel(Graph gr, void* n1, void* n2);            // recupero dell'etichetta di un arco -- O(1) (*)
-
+Bool graph_is_directed(const Graph gr);                                                           // dice se il grafo è diretto o meno -- O(1)
+Bool graph_is_labelled(const Graph gr);                                                           // dice se il grafo è etichettato o meno -- O(1)
+Bool graph_add_node(Graph gr, const void* node);                                                  // aggiunge un nodo -- O(1)
+Bool graph_add_edge(Graph gr, const void* node1, const void* node2, const void* label);           // aggiunge un arco dati estremi ed etichetta -- O(1) (*)
+Bool graph_contains_node(const Graph gr, const void* node);                                       // controlla se un nodo è nel grafo -- O(1)
+Bool graph_contains_edge(const Graph gr, const void* node1, const void* node2);                   // controlla se un arco è nel grafo -- O(1) (*)
+Bool graph_remove_node(Graph gr, const void* node);                                               // rimuove un nodo dal grafo -- O(N)
+Bool graph_remove_edge(Graph gr, const void* node1, const void* node2);                           // rimuove un arco dal grafo -- O(1) (*)
+int graph_num_nodes(const Graph gr);                                                              // numero di nodi -- O(1)
+int graph_num_edges(const Graph gr);                                                              // numero di archi -- O(N)
+void** graph_get_nodes(const Graph gr);                                                           // recupero dei nodi del grafo -- O(N)
+Edge** graph_get_edges(const Graph gr);                                                           // recupero degli archi del grafo -- O(N)
+void** graph_get_neighbours(const Graph gr, const void* node);                                    // recupero dei nodi adiacenti ad un dato nodo -- O(1) (*)
+int graph_num_neighbours(const Graph gr, const void* node);                                       // recupero del numero di nodi adiacenti ad un dato nodo -- O(1)
+void* graph_get_label(const Graph gr, const void* node1, const void* node2);                      // recupero dell'etichetta di un arco -- O(1) (*)
+void graph_free(Graph gr);
 ```
 
 _(*)_ quando il grafo è veramente sparso, assumendo che l'operazione venga effettuata su un nodo la cui lista di adiacenza ha una lunghezza in O(1).
