@@ -399,7 +399,7 @@ Implementare gli unit-test degli algoritmi secondo le indicazioni suggerite nel 
 Si implementi l'algoritmo di visita in ampiezza secondo il seguente prototipo di funzione
 
 ```
-void * breadth_first_visit(Graph gr, void* start);
+void** breadth_first_visit(Graph gr, void* start, int (*compare)(const void*, const void*), unsigned long (*hash)(const void*));
 //start è il nodo di partenza da cui cominciare la visita, la funzione restituisce l'array dei nodi nell'ordine di visita.
 //eventualmente, la funzione restituisce null se il nodo start non è presente nel grafo gr.
 
@@ -433,7 +433,7 @@ Ogni record contiene i seguenti dati:
 - L'eseguibile `main_ex3-4` deve ricevere come parametri il percorso del file `italian_dist_graph.csv`, il nome della città di partenza e il nome di un file di output, e salvare in quest'ultimo i nomi delle località visitate durante una visita in ampiezza del grafo, un nome per riga, partendo da un nodo di partenza specificato. I nomi dei file non devono essere hardcoded, ma devono essere passati come argomenti da linea di comando.
 
 ```
-$ ./main_ex3-4 italian_dist_graph.csv Torino output.txt
+$ ./main_ex3-4 italian_dist_graph.csv torino output.txt
 ```
 
 Si documenti brevemente, in una relazione (README.md su git), le scelte implementative effettuate e i risultati e tempi dell'esecuzione dell'algoritmo rispetto a quanto atteso.
