@@ -53,3 +53,12 @@ test: $(TEST_TARGET)
 # Clean up build artifacts
 clean:
 	rm -f $(TARGET) $(TEST_TARGET) $(OBJ_DIR)/*.o
+
+help:
+	@echo "Usage: make [all|clean|test|obj|bin|help]"
+	@echo "  all: Compile the main application and test executable"
+	@echo "  clean: Remove build artifacts"
+	@echo "  test: Run tests"
+	@echo "  obj: Create object files in obj/"
+	@echo "  bin: Create executables in bin/"
+	@echo "  help: Display this help message"
