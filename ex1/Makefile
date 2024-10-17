@@ -16,19 +16,21 @@ TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.c, $(OBJ_DIR)/%.o, $(TEST_FILES))
 
 UNITY_SRC = $(UNITY_DIR)/unity.c
 
-TARGET = $(BIN_DIR)/main_ex1
-TEST_TARGET = $(BIN_DIR)/test_ex1
-
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
     RM = del /Q
     MKDIR = mkdir
     SLASH = \\
+    EXE = .exe
 else
     RM = rm -f
     MKDIR = mkdir -p
     SLASH = /
+    EXE =
 endif
+
+TARGET = $(BIN_DIR)/main_ex1$(EXE)
+TEST_TARGET = $(BIN_DIR)/test_ex1$(EXE)
 
 .PHONY: all clean test
 
