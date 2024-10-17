@@ -1,5 +1,20 @@
+# Detect OS and set specific commands
+ifeq ($(OS), Windows_NT)
+    RM = del /Q
+    MKDIR = mkdir
+    SLASH = \\
+    EXE = .exe
+
+else
+    RM = rm -f
+    MKDIR = mkdir -p
+    SLASH = /
+    EXE =
+
+endif
+
 CC = gcc
-UNITY_DIR = ../Resources/C/Unity
+UNITY_DIR = ..$(SLASH)Resources$(SLASH)C$(SLASH)Unity
 CFLAGS = -I$(UNITY_DIR) -Wall -Werror -g
 
 SRC_DIR = src
@@ -7,30 +22,17 @@ TEST_DIR = tests
 BIN_DIR = bin
 OBJ_DIR = obj
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
-TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
+SRC_FILES = $(wildcard $(SRC_DIR)$(SLASH)*.c)
+TEST_FILES = $(wildcard $(TEST_DIR)$(SLASH)*.c)
 
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
-OBJ_FILES := $(filter-out $(OBJ_DIR)/main.o, $(OBJ_FILES))  # Exclude main.o for tests
-TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.c, $(OBJ_DIR)/%.o, $(TEST_FILES))
+OBJ_FILES = $(patsubst $(SRC_DIR)$(SLASH)%.c, $(OBJ_DIR)$(SLASH)%.o, $(SRC_FILES))
+OBJ_FILES := $(filter-out $(OBJ_DIR)$(SLASH)main.o, $(OBJ_FILES))  # Exclude main.o for tests
+TEST_OBJ_FILES = $(patsubst $(TEST_DIR)$(SLASH)%.c, $(OBJ_DIR)$(SLASH)%.o, $(TEST_FILES))
 
-UNITY_SRC = $(UNITY_DIR)/unity.c
+UNITY_SRC = $(UNITY_DIR)$(SLASH)unity.c
 
-# Detect OS and set specific commands
-ifeq ($(OS), Windows_NT)
-    RM = del /Q
-    MKDIR = mkdir
-    SLASH = \\
-    EXE = .exe
-else
-    RM = rm -f
-    MKDIR = mkdir -p
-    SLASH = /
-    EXE =
-endif
-
-TARGET = $(BIN_DIR)/main_ex1$(EXE)
-TEST_TARGET = $(BIN_DIR)/test_ex1$(EXE)
+TARGET = $(BIN_DIR)$(SLASH)main_ex1$(EXE)
+TEST_TARGET = $(BIN_DIR)$(SLASH)test_ex1$(EXE)
 
 .PHONY: all clean test
 
@@ -44,16 +46,16 @@ $(OBJ_DIR):
 	$(MKDIR) $(OBJ_DIR)
 
 # Rule for compiling object files from the source directory
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)$(SLASH)%.o: $(SRC_DIR)$(SLASH)%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Rule for compiling object files from the test directory
-$(OBJ_DIR)/%.o: $(TEST_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)$(SLASH)%.o: $(TEST_DIR)$(SLASH)%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Compile and link the main application
-$(TARGET): $(OBJ_FILES) $(OBJ_DIR)/main.o | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(OBJ_DIR)/main.o
+$(TARGET): $(OBJ_FILES) $(OBJ_DIR)$(SLASH)main.o | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(OBJ_DIR)$(SLASH)main.o
 
 # Compile and link the test executable
 $(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR)
@@ -61,7 +63,7 @@ $(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR)
 
 # Run tests
 test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+	.$(SLASH)$(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
