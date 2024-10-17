@@ -1,5 +1,5 @@
 CC = gcc
-UNITY_DIR = ../vendor/unity
+UNITY_DIR = ../Resources/C/Unity
 CFLAGS = -I$(UNITY_DIR) -Wall -Werror -g
 
 SRC_DIR = src
