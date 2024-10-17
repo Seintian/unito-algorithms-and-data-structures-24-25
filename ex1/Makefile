@@ -19,16 +19,27 @@ UNITY_SRC = $(UNITY_DIR)/unity.c
 TARGET = $(BIN_DIR)/main_ex1
 TEST_TARGET = $(BIN_DIR)/test_ex1
 
+# Detect OS and set specific commands
+ifeq ($(OS), Windows_NT)
+    RM = del /Q
+    MKDIR = mkdir
+    SLASH = \\
+else
+    RM = rm -f
+    MKDIR = mkdir -p
+    SLASH = /
+endif
+
 .PHONY: all clean test
 
 all: $(TARGET) $(TEST_TARGET)
 
 # Create build directory if it does not exist
 $(BIN_DIR):
-	mkdir -p $(BIN_DIR)
+	$(MKDIR) $(BIN_DIR)
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	$(MKDIR) $(OBJ_DIR)
 
 # Rule for compiling object files from the source directory
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
@@ -52,13 +63,11 @@ test: $(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
-	rm -f $(TARGET) $(TEST_TARGET) $(OBJ_DIR)/*.o
+	$(RM) $(TARGET) $(TEST_TARGET) $(OBJ_DIR)$(SLASH)*.o
 
 help:
-	@echo "Usage: make [all|clean|test|obj|bin|help]"
+	@echo "Usage: make [all|clean|test|help]"
 	@echo "  all: Compile the main application and test executable"
 	@echo "  clean: Remove build artifacts"
 	@echo "  test: Run tests"
-	@echo "  obj: Create object files in obj/"
-	@echo "  bin: Create executables in bin/"
 	@echo "  help: Display this help message"
