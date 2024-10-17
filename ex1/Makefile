@@ -1,0 +1,55 @@
+CC = gcc
+UNITY_DIR = ../vendor/unity
+CFLAGS = -I$(UNITY_DIR) -Wall -Werror -g
+
+SRC_DIR = src
+TEST_DIR = tests
+BIN_DIR = bin
+OBJ_DIR = obj
+
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
+
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
+OBJ_FILES := $(filter-out $(OBJ_DIR)/main.o, $(OBJ_FILES))  # Exclude main.o for tests
+TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.c, $(OBJ_DIR)/%.o, $(TEST_FILES))
+
+UNITY_SRC = $(UNITY_DIR)/unity.c
+
+TARGET = $(BIN_DIR)/main_ex1
+TEST_TARGET = $(BIN_DIR)/test_ex1
+
+.PHONY: all clean test
+
+all: $(TARGET) $(TEST_TARGET)
+
+# Create build directory if it does not exist
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# Rule for compiling object files from the source directory
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Rule for compiling object files from the test directory
+$(OBJ_DIR)/%.o: $(TEST_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Compile and link the main application
+$(TARGET): $(OBJ_FILES) $(OBJ_DIR)/main.o | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(OBJ_DIR)/main.o
+
+# Compile and link the test executable
+$(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -o $@ $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC)
+
+# Run tests
+test: $(TEST_TARGET)
+	./$(TEST_TARGET)
+
+# Clean up build artifacts
+clean:
+	rm -f $(TARGET) $(TEST_TARGET) $(OBJ_DIR)/*.o
