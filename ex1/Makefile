@@ -59,9 +59,6 @@ $(TARGET): $(OBJ_FILES) $(OBJ_DIR)/main.o | $(OBJ_DIR)
 $(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC)
 
-win: $(SRC_FILES) | $(BIN_DIR)
-	x86_64-w64-mingw32-gcc -lws2_32 -o bin/main_ex1.exe $(SRC_FILES)
-
 # Run tests
 test: $(TEST_TARGET)
 	./$(TEST_TARGET)
