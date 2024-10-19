@@ -1,11 +1,11 @@
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
-    RM = del /Q
+    RM = rmdir /s /q
     MKDIR = mkdir
     EXE = .exe
 
 else
-    RM = rm -f
+    RM = rm -rf
     MKDIR = mkdir -p
     EXE =
 
@@ -52,11 +52,11 @@ $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Compile and link the main application
-$(TARGET): $(OBJ_FILES) $(OBJ_DIR)/main.o | $(OBJ_DIR)
+$(TARGET): $(OBJ_FILES) $(OBJ_DIR)/main.o | $(OBJ_DIR) $(BIN_DIR)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(OBJ_DIR)/main.o
 
 # Compile and link the test executable
-$(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR)
+$(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR) $(BIN_DIR)
 	$(CC) $(CFLAGS) -o $@ $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC)
 
 # Run tests
@@ -65,7 +65,7 @@ test: $(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
-	$(RM) $(TARGET) $(TEST_TARGET) $(OBJ_DIR)/*.o
+	$(RM) $(OBJ_DIR) $(BIN_DIR)
 
 help:
 	@echo "Usage: make [all|clean|test|help]"
