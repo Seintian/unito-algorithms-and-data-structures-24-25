@@ -207,10 +207,10 @@ Si misurino i tempi di risposta per i due algoritmi, per ciascuno dei tre field 
 - Creare una sottocartella chiamata `ex1` all'interno del repository.
 - La consegna deve obbligatoriamente contenere un `Makefile`. Questo file con il comando `make all` deve produrre all'interno di `ex1/bin` due file eseguibili chiamati `main_ex1` e `test_ex1`. Se avete usato librerie esterne (come Unity) includete anche queste per consentire la corretta compilazione.
 - L'eseguibile `test_ex1` non deve richiedere nessun parametro e deve eseguire tutti gli unit test automatizzati prodotti.
-- L'eseguibile `main_ex1` deve ricevere come parametri il percorso del file CSV contenente i record da ordinare, il percorso del file in cui salvare i record ordinati, e il valore del campo `field` da utilizzare per l'ordinamento. Per esempio:
+- L'eseguibile `main_ex1` deve ricevere come parametri il percorso del file CSV contenente i record da ordinare, il percorso del file in cui salvare i record ordinati, il valore del campo `field` da utilizzare per l'ordinamento, e l'indicazione dell'algoritmo da utilizzare. Per esempio:
 
 ```
-$ ./main_ex1 /tmp/data/records.csv /tmp/data/sorted.csv 1
+$ ./main_ex1 /tmp/data/records.csv /tmp/data/sorted.csv 1 2
 ```
 
 
