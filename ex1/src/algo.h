@@ -29,8 +29,9 @@
  *               It should return a negative value if the first element is less
  *               than the second, zero if they are equal, and a positive value
  *               if the first element is greater than the second.
+ * @param temp Temporary buffer allocated once in the caller used for swaps.
  */
-void insertion_sort(void *base, size_t left, size_t right, size_t size, int (*compar)(const void*, const void*));
+void insertion_sort(void *base, size_t left, size_t right, size_t size, int (*compar)(const void*, const void*), void *temp);
 
 /**
  * @brief Sorts an array using the merge sort algorithm.
