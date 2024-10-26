@@ -209,9 +209,13 @@ int main(int argc, char* argv[]) {
         fclose(infile);
         fclose(outfile);
 
+        fflush(outfile);
+
         if (i < 2) {
             printf("\nPress Enter to continue... ");
             getchar();
+
+            exit(EXIT_SUCCESS);
         }
     }
 

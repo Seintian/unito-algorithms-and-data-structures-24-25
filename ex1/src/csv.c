@@ -38,50 +38,53 @@ size_t count_lines(FILE* file) {
     return n_lines;
 }
 
-// size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
-//     size_t n_read_records = 0;
-
-//     for (size_t i = 0; i < n_records; i++) {
-//         size_t fields_read = fscanf(
-//             infile, 
-//             "%d,%99[^,],%d,%lf\n", 
-//             &(records[i].id), 
-//             records[i].field1, 
-//             &(records[i].field2), 
-//             &(records[i].field3)
-//         );
-
-//         if (fields_read != N_FIELDS_IN_RECORD) {
-//             fprintf(stderr, "Error reading record from CSV file: %zu fields read instead of %zu\n", fields_read, N_FIELDS_IN_RECORD);
-//             fprintf(stderr, "Aborting reading. Read %zu records.\n", n_read_records);
-//             exit(EXIT_FAILURE);
-//         }
-
-//         n_read_records++;
-//     }
-
-//     return n_read_records;
-// }
 size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
-    char line[MAX_LINE_SIZE];
     size_t read_count = 0;
+    char buffer[READING_BUFFER_SIZE];
+    char line[MAX_LINE_SIZE];
+    size_t bytes_read;
+    char *start, *end;
 
-    while (read_count < n_records && fgets(line, sizeof(line), infile)) {
-        int parsed_fields = sscanf(line, recordReadFmt,
-                                   &records[read_count].id,
-                                   records[read_count].field1,
-                                   &records[read_count].field2,
-                                   &records[read_count].field3);
-        
-        if (parsed_fields != N_FIELDS_IN_RECORD) {
-            errno = EINVAL;
+    while ((bytes_read = fread(buffer, 1, sizeof(buffer), infile)) > 0 && read_count < n_records) {
+        start = buffer;
+        end = buffer + bytes_read;
 
-            // fprintf(stderr, "Error reading record from CSV file: %d fields read instead of %d\n", parsed_fields, N_FIELDS_IN_RECORD);
-            // fprintf(stderr, "Line causing error: '%s'\n", line);
-            return read_count;
+        while (start < end && read_count < n_records) {
+            char *newline = memchr(start, '\n', end - start);
+
+            if (newline != NULL) {
+                size_t line_length = newline - start;
+                if (line_length < MAX_LINE_SIZE) {
+                    memcpy(line, start, line_length);
+                    line[line_length] = '\0';
+                    
+                    // Manually parse instead of using sscanf -> faster
+                    char *token = strtok(line, ",");
+                    records[read_count].id = atoi(token);
+
+                    token = strtok(NULL, ",");
+                    strcpy(records[read_count].field1, token);
+
+                    token = strtok(NULL, ",");
+                    records[read_count].field2 = atoi(token);
+
+                    token = strtok(NULL, ",");
+                    records[read_count].field3 = atof(token);
+
+                    read_count++;
+                }
+                start = newline + 1;
+            } 
+            else {
+                // Handle the case where a line extends beyond the buffer size.
+                // Shift unprocessed data to the beginning of the buffer and read more data.
+                break;
+            }
         }
-        
-        read_count++;
+
+        // Handle any leftover data if needed.
+        if (start < end)
+            fseek(infile, -(end - start), SEEK_CUR);
     }
 
     if (ferror(infile)) {
@@ -92,42 +95,56 @@ size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
     return read_count;
 }
 
-// size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
-//     size_t n_wrote_records = 0;
 
-//     for (size_t i = 0; i < n_records; i++) {
-//         fprintf(
-//             outfile, 
-//             "%d,%s,%d,%lf\n", 
-//             records[i].id, 
-//             records[i].field1, 
-//             records[i].field2, 
-//             records[i].field3
-//         );
-
-//         n_wrote_records++;
-//     }
-
-//     return n_wrote_records;
-// }
 size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
-    size_t n_wrote_records;
+    size_t n_wrote_records = 0;
+    char buffer[WRITING_BUFFER_SIZE];
+    char *ptr = buffer;
+    size_t buffer_left = sizeof(buffer);
 
-    for (n_wrote_records = 0; n_wrote_records < n_records; n_wrote_records++) {
-        int result = fprintf(
-            outfile, 
-            recordWriteFmt, 
-            records[n_wrote_records].id, 
-            records[n_wrote_records].field1, 
-            records[n_wrote_records].field2, 
-            records[n_wrote_records].field3
-        );
+    for (size_t i = 0; i < n_records; i++) {
+        int written = snprintf(ptr, buffer_left, recordWriteFmt,
+                               records[i].id,
+                               records[i].field1,
+                               records[i].field2,
+                               records[i].field3);
 
-        if (result < 0) {
-            perror("Error writing to CSV file");
-            exit(EXIT_FAILURE);
+        // If the current record doesn't fit, flush the buffer
+        if (written >= buffer_left) {
+            if (fwrite(buffer, 1, ptr - buffer, outfile) < ptr - buffer) {
+                perror("Error writing to CSV file");
+                exit(EXIT_FAILURE);
+            }
+
+            ptr = buffer;
+            buffer_left = sizeof(buffer);
+
+            // Write the current record directly if it's still too big for the buffer
+            if (written >= sizeof(buffer)) {
+                fprintf(outfile, recordWriteFmt,
+                        records[i].id,
+                        records[i].field1,
+                        records[i].field2,
+                        records[i].field3);
+            } else {
+                snprintf(ptr, buffer_left, recordWriteFmt,
+                         records[i].id,
+                         records[i].field1,
+                         records[i].field2,
+                         records[i].field3);
+            }
         }
+
+        // Move the pointer forward and adjust buffer_left
+        ptr += written;
+        buffer_left -= written;
+        n_wrote_records++;
     }
+
+    // Flush any remaining data in the buffer
+    if (ptr != buffer)
+        fwrite(buffer, 1, ptr - buffer, outfile);
 
     return n_wrote_records;
 }
+

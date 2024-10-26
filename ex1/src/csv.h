@@ -34,6 +34,8 @@ extern const char* recordReadFmt;
 extern const char* recordWriteFmt;
 
 #define N_FIELDS_IN_RECORD 4
+#define READING_BUFFER_SIZE (64 * 1024) // 64 KB
+#define WRITING_BUFFER_SIZE (64 * 1024) // 64 KB
 
 /**
  * @brief Compares two records based on the field1 field.
