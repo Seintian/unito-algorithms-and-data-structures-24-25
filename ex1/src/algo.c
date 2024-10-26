@@ -26,7 +26,6 @@ void merge(void *base, size_t left, size_t mid, size_t right, size_t size, int (
 
     // Copy the left half to temp buffer
     memcpy(temp, (uint8_t *)base + left * size, n1 * size);
-
     // Pointer to the beginning of the right half
     void *R = (uint8_t *)base + (mid + 1) * size;
 
@@ -36,7 +35,8 @@ void merge(void *base, size_t left, size_t mid, size_t right, size_t size, int (
         if (compar((uint8_t *)temp + i * size, (uint8_t *)R + j * size) <= 0) {
             memcpy((uint8_t *)base + k * size, (uint8_t *)temp + i * size, size);
             i++;
-        } else {
+        } 
+        else {
             memcpy((uint8_t *)base + k * size, (uint8_t *)R + j * size, size);
             j++;
         }
@@ -50,44 +50,33 @@ void merge(void *base, size_t left, size_t mid, size_t right, size_t size, int (
         k++;
     }
 
-    // Copy any remaining elements of the right half (already in place)
-    while (j < n2) {
-        memcpy((uint8_t *)base + k * size, (uint8_t *)R + j * size, size);
-        j++;
-        k++;
-    }
+    // No need to copy the remaining elements of the right half, as they are already in place
 }
 
-// Recursive function to divide and merge
-void merge_sort_recursive(void *base, size_t left, size_t right, size_t size, int (*compar)(const void*, const void*), void *temp) {
-    if (right - left <= INSERTION_SORT_THRESHOLD) {
-        insertion_sort(base, left, right, size, compar, temp);
-        return;
-    }
-
-    if (left < right) {
-        size_t mid = left + (right - left) / 2;
-
-        merge_sort_recursive(base, left, mid, size, compar, temp);
-        merge_sort_recursive(base, mid + 1, right, size, compar, temp);
-
-        merge(base, left, mid, right, size, compar, temp);
-    }
-}
-
-// Merge sort function
+// Bottom-up iterative merge sort
 void merge_sort(void *base, size_t n_items, size_t size, int (*compar)(const void*, const void*)) {
     if (base == NULL || n_items == 0 || size == 0 || compar == NULL) 
         return;
 
-    // Allocate half-size temporary buffer
-    void *temp = malloc((n_items / 2 + 1) * size);
+    // Allocate temp buffer for merging
+    void *temp = malloc(n_items * size);
     if (temp == NULL) {
-        perror("Memory allocation failed");
+        fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
 
-    merge_sort_recursive(base, 0, n_items - 1, size, compar, temp);
+    // Start with subarrays of size 1 and double the size in each iteration
+    for (size_t width = 1; width < n_items; width *= 2) {
+        for (size_t i = 0; i < n_items; i += 2 * width) {
+            size_t left = i;
+            size_t mid = (i + width - 1 < n_items) ? i + width - 1 : n_items - 1;
+            size_t right = (i + 2 * width - 1 < n_items) ? i + 2 * width - 1 : n_items - 1;
+
+            if (mid < right)
+                merge(base, left, mid, right, size, compar, temp);
+        }
+    }
+
     free(temp);
 }
 
@@ -95,7 +84,10 @@ void merge_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
 // Helper function that swaps two elements of a generic array knowing their size
 void swap(void *el1, void *el2, size_t size, void *temp) {
     memcpy(temp, el1, size);
-    memcpy(el1, el2, size);
+
+    // memmove is used instead of memcpy to handle overlapping memory regions
+    memmove(el1, el2, size);
+
     memcpy(el2, temp, size);
 }
 
@@ -116,31 +108,31 @@ void median_of_three(void *base, size_t n_items, size_t size, int (*compar)(cons
 		swap(mid, low, size, temp);
 }
 
-// Helper function to partition the array
-size_t partition(void *base, size_t n_items, size_t size, int (*compar)(const void*, const void*), void *temp) {
-    // call to median_of_three in order to choose the pivot (put in base[0])
-	median_of_three(base, n_items, size, compar, temp);
+void three_way_partition(void *base, size_t n_items, size_t size, int (*compar)(const void*, const void*), void *temp, size_t *lt, size_t *gt) {
+    // Choose the pivot using median_of_three and place it in base[0]
+    median_of_three(base, n_items, size, compar, temp);
 
-    size_t i = 1, j = n_items - 1;
-    while (i <= j) {
-        if (compar((uint8_t *)base + size * i, base) <= 0)
-            i++;
+    void *pivot = base;
+    size_t i = 0, j = 0, k = n_items - 1;
 
-        else if (compar((uint8_t *)base + size * j, base) > 0)
-            j--;
+    while (j <= k) {
+        int cmp = compar((uint8_t *)base + size * j, pivot);
 
-        else {
+        if (cmp < 0) {
             swap((uint8_t *)base + size * i, (uint8_t *)base + size * j, size, temp);
-
             i++;
-            j--;
-        }
+            j++;
+        } 
+        else if (cmp > 0) {
+            swap((uint8_t *)base + size * j, (uint8_t *)base + size * k, size, temp);
+            k--;
+        } 
+        else
+            j++;
     }
 
-    swap(base, (uint8_t *)base + size * j, size, temp);
-
-    // return the value of 'j' index, that is the pivot
-    return j;
+    *lt = i; // Elements < pivot
+    *gt = j; // Elements > pivot start here
 }
 
 // Recursive function that sorts the array using quick sort
@@ -153,20 +145,23 @@ void quick_sort_recursive(void *base, size_t n_items, size_t size, int (*compar)
         return;
     }
 
-    size_t pivot = partition(base, n_items, size, compar, temp);
-    size_t right_size = n_items - (pivot + 1);
+    size_t lt, gt;
+    three_way_partition(base, n_items, size, compar, temp, &lt, &gt);
 
-    if (pivot < right_size) {
+    size_t left_size = lt;
+    size_t right_size = n_items - gt;
+
+    if (left_size < right_size) {
         // recursive call on base[0 ... pivot - 1] (smaller)
-        quick_sort_recursive(base, pivot, size, compar, temp);
+        quick_sort_recursive(base, left_size, size, compar, temp);
         // recursive call on base[pivot + 1 ... n_items - 1] (bigger)
-        quick_sort_recursive((uint8_t *)base + size * (pivot + 1), right_size, size, compar, temp);
+        quick_sort_recursive((uint8_t *)base + size * gt, right_size, size, compar, temp);
     }
     else {
         // recursive call on base[pivot + 1 ... n_items - 1] (smaller)
-        quick_sort_recursive((uint8_t *)base + size * (pivot + 1), right_size, size, compar, temp);
+        quick_sort_recursive((uint8_t *)base + size * gt, right_size, size, compar, temp);
         // recursive call on base[0 ... pivot - 1] (bigger)
-        quick_sort_recursive(base, pivot, size, compar, temp);
+        quick_sort_recursive(base, left_size, size, compar, temp);
     }
 }
 
@@ -178,7 +173,7 @@ void quick_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
     // memory allocation for temporary void pointer, used to swap array elements, and the control on malloc's outcome
     void *temp = malloc(size);
     if (!temp) {
-        perror("Memory allocation failed");
+        fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
 

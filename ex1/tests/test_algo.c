@@ -1,15 +1,11 @@
 #include "../src/algo.h"
-#include "../../Resources/C/Unity/unity.h"
+#include "unity.h"
 #include <stdio.h>
 
 
 int int_cmp(const void *a, const void *b) {
     return *(int *)a - *(int *)b;
 }
-
-// SetUp and TearDown functions (are needed by Unity)
-void setUp(void) {}
-void tearDown(void) {}
 
 // Test case for merge_sort
 void test_merge_sort(void) {
@@ -164,30 +160,4 @@ void test_quick_sort_negative_numbers(void) {
     quick_sort(arr, n, sizeof(int), int_cmp);
 
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
-}
-
-int main(void) {
-    UNITY_BEGIN();
-
-    // merge_sort tests
-
-    RUN_TEST(test_merge_sort);
-    RUN_TEST(test_merge_sort_empty);
-    RUN_TEST(test_merge_sort_sorted);
-    RUN_TEST(test_merge_sort_reverse_sorted);
-    RUN_TEST(test_merge_sort_identical_elements);
-    RUN_TEST(test_merge_sort_single_element);
-    RUN_TEST(test_merge_sort_negative_numbers);
-
-    // quick_sort tests
-
-    RUN_TEST(test_quick_sort);
-    RUN_TEST(test_quick_sort_empty);
-    RUN_TEST(test_quick_sort_sorted);
-    RUN_TEST(test_quick_sort_reverse_sorted);
-    RUN_TEST(test_quick_sort_identical_elements);
-    RUN_TEST(test_quick_sort_single_element);
-    RUN_TEST(test_quick_sort_negative_numbers);
-
-    return UNITY_END();
 }
