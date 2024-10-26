@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <stdint.h>
 
 
 /**
@@ -116,7 +117,7 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     size_t n_read_records = read_records(infile, records, n_records);
     end = time(NULL);
 
-    printf("Read %zu records in %lld seconds.\n", n_read_records, end - start);
+    printf("Read %zu records in %lld seconds.\n", n_read_records, (int64_t)end - start);
 
     printf("Sorting records with %s_sort...\n", algo ? "quick" : "merge");
 
@@ -135,7 +136,7 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     }
     end = time(NULL);
 
-    printf("Sorted records in %lld seconds.\n", end - start);
+    printf("Sorted records in %lld seconds.\n", (int64_t)end - start);
 
     printf("Writing %zu sorted records...\n", n_records);
 
@@ -143,7 +144,7 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     size_t n_wrote_records = write_records(outfile, records, n_records);
     end = time(NULL);
 
-    printf("Wrote %zu records in %lld seconds.\n", n_wrote_records, end - start);
+    printf("Wrote %zu records in %lld seconds.\n", n_wrote_records, (int64_t)end - start);
 
     free(records);
 }
@@ -204,7 +205,7 @@ int main(int argc, char* argv[]) {
         sort_records(infile, outfile, i, algo);
         time_t end = time(NULL);
 
-        printf("Total time in %lld seconds.\n", end - start);
+        printf("Total time in %lld seconds.\n", (int64_t)end - start);
 
         fclose(infile);
         fclose(outfile);
