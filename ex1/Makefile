@@ -1,7 +1,7 @@
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
     RM = rmdir /s /q
-    MKDIR = mkdir
+    MKDIR = cmd /c mkdir
     EXE = .exe
 
 else
@@ -72,7 +72,7 @@ $(TEST_TARGET): $(TEST_OBJ_FILES) $(OBJ_FILES) $(UNITY_SRC) | $(OBJ_DIR) $(BIN_D
 
 # Run tests
 test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+	$(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
