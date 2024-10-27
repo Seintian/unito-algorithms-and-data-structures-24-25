@@ -29,7 +29,9 @@ void merge(void *base, size_t left, size_t mid, size_t right, size_t size, int (
     // Pointer to the beginning of the right half
     void *R = (uint8_t *)base + (mid + 1) * size;
 
-    size_t i = 0, j = 0, k = left;
+    size_t i = 0;
+    size_t j = 0;
+    size_t k = left;
 
     while (i < n1 && j < n2) {
         if (compar((uint8_t *)temp + i * size, (uint8_t *)R + j * size) <= 0) {
@@ -84,10 +86,7 @@ void merge_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
 // Helper function that swaps two elements of a generic array knowing their size
 void swap(void *el1, void *el2, size_t size, void *temp) {
     memcpy(temp, el1, size);
-
-    // memmove is used instead of memcpy to handle overlapping memory regions
-    memmove(el1, el2, size);
-
+    memcpy(el1, el2, size);
     memcpy(el2, temp, size);
 }
 
@@ -112,19 +111,25 @@ void three_way_partition(void *base, size_t n_items, size_t size, int (*compar)(
     // Choose the pivot using median_of_three and place it in base[0]
     median_of_three(base, n_items, size, compar, temp);
 
-    void *pivot = base;
-    size_t i = 0, j = 0, k = n_items - 1;
+    const void *pivot = base;
+    size_t i = 0;
+    size_t j = 1;
+    size_t k = n_items - 1;
 
     while (j <= k) {
         int cmp = compar((uint8_t *)base + size * j, pivot);
 
         if (cmp < 0) {
-            swap((uint8_t *)base + size * i, (uint8_t *)base + size * j, size, temp);
+            if (i != j)
+                swap((uint8_t *)base + size * i, (uint8_t *)base + size * j, size, temp);
+
             i++;
             j++;
         } 
         else if (cmp > 0) {
-            swap((uint8_t *)base + size * j, (uint8_t *)base + size * k, size, temp);
+            if (k != j)
+                swap((uint8_t *)base + size * j, (uint8_t *)base + size * k, size, temp);
+
             k--;
         } 
         else
@@ -145,7 +150,8 @@ void quick_sort_recursive(void *base, size_t n_items, size_t size, int (*compar)
         return;
     }
 
-    size_t lt, gt;
+    size_t lt;
+    size_t gt;
     three_way_partition(base, n_items, size, compar, temp, &lt, &gt);
 
     size_t left_size = lt;

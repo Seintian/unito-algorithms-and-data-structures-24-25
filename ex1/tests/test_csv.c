@@ -93,11 +93,11 @@ void test_write_records() {
 
     size_t n = write_records(temp_file, records, 3);
     TEST_ASSERT_EQUAL(3, n);
-    
-    // Read back the file content to check if it was written correctly
+
     rewind(temp_file);
 
-    char buffer[MAX_LINE_SIZE], expected[MAX_LINE_SIZE];
+    char buffer[MAX_LINE_SIZE];
+    char expected[MAX_LINE_SIZE];
 
     fgets(buffer, sizeof(buffer), temp_file);
     sprintf(expected, recordWriteFmt, records[0].id, records[0].field1, records[0].field2, records[0].field3);

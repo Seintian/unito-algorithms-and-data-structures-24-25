@@ -103,8 +103,28 @@ void validate_input(char* input_file, char* output_file, char* algorithm) {
  * @throw `EXIT_FAILURE` if an error occurs during memory allocation.
  */
 void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
+    switch (field) {
+        case 0:
+            compare_records = compare_field1;
+            break;
+
+        case 1:
+            compare_records = compare_field2;
+            break;
+
+        case 2:
+            compare_records = compare_field3;
+            break;
+
+        default:
+            break;
+    }
+
+    printf("\nSorting by field%zu...\n", field + 1);
+
     size_t n_records = count_lines(infile);
-    time_t start, end;
+    time_t start;
+    time_t end;
 
     RecordPtr records = (RecordPtr) malloc(n_records * sizeof(Record));
     if (!records) {
@@ -118,18 +138,18 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     size_t n_read_records = read_records(infile, records, n_records);
     end = time(NULL);
 
-    printf("Read %zu records in %" PRId64 " seconds.\n", n_read_records, (int64_t)end - start);
+    printf("Read %zu records in %" PRId64 " seconds.\n", n_read_records, end - start);
 
     printf("Sorting records with %s_sort...\n", algo ? "quick" : "merge");
 
     start = time(NULL);
     switch (algo) {
         case 0:
-            merge_sort(records, n_records, sizeof(Record), compare_records);
+            merge_sort(records, n_read_records, sizeof(Record), compare_records);
             break;
 
         case 1:
-            quick_sort(records, n_records, sizeof(Record), compare_records);
+            quick_sort(records, n_read_records, sizeof(Record), compare_records);
             break;
 
         default:
@@ -137,15 +157,15 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     }
     end = time(NULL);
 
-    printf("Sorted records in %" PRId64 " seconds.\n", (int64_t)end - start);
+    printf("Sorted records in %" PRId64 " seconds.\n", end - start);
 
-    printf("Writing %zu sorted records...\n", n_records);
+    printf("Writing %zu sorted records...\n", n_read_records);
 
     start = time(NULL);
-    size_t n_wrote_records = write_records(outfile, records, n_records);
+    size_t n_wrote_records = write_records(outfile, records, n_read_records);
     end = time(NULL);
 
-    printf("Wrote %zu records in %" PRId64 " seconds.\n", n_wrote_records, (int64_t)end - start);
+    printf("Wrote %zu records in %" PRId64 " seconds.\n", n_wrote_records, end - start);
 
     free(records);
 }
@@ -183,33 +203,17 @@ int main(int argc, char* argv[]) {
         FILE* outfile = fopen(argv[2], "w");
         size_t algo = atoi(argv[3]);
 
-        switch (i) {
-            case 0:
-                compare_records = compare_field1;
-                break;
-
-            case 1:
-                compare_records = compare_field2;
-                break;
-
-            case 2:
-                compare_records = compare_field3;
-                break;
-
-            default:
-                break;
-        }
-
-        printf("\nSorting by field%zu...\n", i + 1);
-
         time_t start = time(NULL);
         sort_records(infile, outfile, i, algo);
         time_t end = time(NULL);
 
-        printf("Total time in %" PRId64 " seconds.\n", (int64_t)end - start);
+        printf("Total time in %" PRId64 " seconds.\n", end - start);
 
-        fclose(infile);
-        fclose(outfile);
+        if (infile)
+            fclose(infile);
+
+        if (outfile)
+            fclose(outfile);
 
         fflush(outfile);
 
