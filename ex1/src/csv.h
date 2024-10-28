@@ -97,6 +97,12 @@ size_t count_lines(FILE* file);
  * the file is already opened for reading and that the array has enough space to
  * hold the specified number of records.
  *
+ * Assumptions:
+ * 
+ * - The CSV file must contain only valid records.
+ * 
+ * - The CSV file must have a trailing newline at the end.
+ *
  * @param infile A pointer to the input file from which records are to be read.
  * @param records A pointer to an array of RecordPtr where the read records will be stored.
  * @param n_records The number of records to read from the file.

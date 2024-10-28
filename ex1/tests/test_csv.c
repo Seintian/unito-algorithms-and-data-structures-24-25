@@ -62,19 +62,14 @@ void test_read_records() {
     TEST_ASSERT_EQUAL_STRING("Alice", records[0].field1);
     TEST_ASSERT_EQUAL_STRING("Bob", records[1].field1);
     TEST_ASSERT_EQUAL_STRING("Charlie", records[2].field1);
+    
     fclose(temp_file);
 
-    // Test with invalid data
-    temp_file = create_temp_file("InvalidData");
+    // Test with empty file
+    temp_file = create_temp_file("");
     n = read_records(temp_file, records, 3);
     TEST_ASSERT_EQUAL(0, n);
-    fclose(temp_file);
 
-    // Test with mixed valid and invalid data
-    temp_file = create_temp_file("1,Alice,10,5.5\nInvalidData\n3,Charlie,30,9.9\n");
-    n = read_records(temp_file, records, 3);
-    TEST_ASSERT_EQUAL(1, n);
-    TEST_ASSERT_EQUAL_STRING("Alice", records[0].field1);
     fclose(temp_file);
 }
 

@@ -124,74 +124,34 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
     return fields_parsed;
 }
 
-// DEBUG: Does not pass test_read_records in case of invalid data
-// size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
-//     size_t read_count = 0;
-//     char buffer[READING_BUFFER_SIZE];
-//     char line[MAX_LINE_SIZE];
-//     size_t bytes_read;
-//     const char *start;
-//     const char *end;
-//     int fields_parsed;
-//     const char *newline;
-//     size_t line_length;
-
-//     while ((bytes_read = fread(buffer, 1, sizeof(buffer), infile)) > 0 && read_count < n_records) {
-//         start = buffer;
-//         end = buffer + bytes_read;
-
-//         while (start < end && read_count < n_records) {
-//             newline = memchr(start, '\n', end - start);
-//             line_length = newline - start;
-            
-//             fields_parsed = parse_line(start, line_length, line, records + read_count);
-//             if (fields_parsed == N_FIELDS_IN_RECORD)
-//                 read_count++;
-
-//             start = newline + 1;
-
-//             printf("fields_parsed: %d\n", fields_parsed);
-//             if (fields_parsed < N_FIELDS_IN_RECORD)
-//                 break;
-//         }
-
-//         if (fields_parsed < N_FIELDS_IN_RECORD)
-//             break;
-
-//         // Handle any leftover data if needed.
-//         if (start < end)
-//             fseek(infile, -(end - start), SEEK_CUR);
-//     }
-
-//     if (ferror(infile)) {
-//         perror("Error reading from CSV file");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     return read_count;
-// }
 
 size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
     size_t read_count = 0;
+    size_t bytes_read;
+    size_t line_length;
     char buffer[READING_BUFFER_SIZE];
     char line[MAX_LINE_SIZE];
-    size_t bytes_read;
-    const char *start;
-    const char *end;
+    const char* start;
+    const char* end;
+    const char* newline;
+    int fields_parsed;
 
-    while ((bytes_read = fread(buffer, 1, sizeof(buffer), infile)) > 0 && read_count < n_records) {
+    while (read_count < n_records) {
+        bytes_read = fread(buffer, 1, sizeof(buffer), infile);
+        if (bytes_read == 0)
+            break;
+        
         start = buffer;
         end = buffer + bytes_read;
 
         while (start < end && read_count < n_records) {
-            const char *newline = memchr(start, '\n', end - start);
-
+            newline = memchr(start, '\n', end - start);
             if (!newline)
                 break;
 
-            size_t line_length = newline - start;
+            line_length = newline - start;
             
-            int fields_parsed = parse_line(start, line_length, line, &records[read_count]);
+            fields_parsed = parse_line(start, line_length, line, &records[read_count]);
             if (fields_parsed == N_FIELDS_IN_RECORD)
                 read_count++;
 
