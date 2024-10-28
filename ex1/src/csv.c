@@ -155,6 +155,10 @@ size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
             if (fields_parsed == N_FIELDS_IN_RECORD)
                 read_count++;
 
+            else if (fields_parsed == -1) {
+                // line is too long to be a valid record
+            }
+
             start = newline + 1;
         }
 

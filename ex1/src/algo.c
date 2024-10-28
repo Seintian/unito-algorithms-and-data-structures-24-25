@@ -120,8 +120,7 @@ void three_way_partition(void *base, size_t n_items, size_t size, int (*compar)(
         int cmp = compar((uint8_t *)base + size * j, pivot);
 
         if (cmp < 0) {
-            if (i != j)
-                swap((uint8_t *)base + size * i, (uint8_t *)base + size * j, size, temp);
+            swap((uint8_t *)base + size * i, (uint8_t *)base + size * j, size, temp);
 
             i++;
             j++;

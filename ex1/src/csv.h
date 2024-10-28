@@ -1,3 +1,14 @@
+/**
+ * @file csv.h
+ * @brief This file provides the interface for the CSV functions. 
+ * 
+ * This file provides the interface for the CSV functions, 
+ * which read records from a CSV file into an array of type `RecordPtr`,
+ * and write them back to a CSV file.
+ * It also includes the definition of the `Record` structure, 
+ * which represents a record with four fields.
+ */
+
 #ifndef _CSV_H
 #define _CSV_H
 
@@ -54,7 +65,7 @@ int compare_field1(const void* a, const void* b);
 /**
  * @brief Compares two records based on the field1 field.
  *
- * This function compares two records based on the field1 field. It is used as a comparison
+ * This function compares two records based on the field2 field. It is used as a comparison
  * function for the quick_sort and merge_sort functions.
  * 
  * This definition is common to all the compare_fieldX functions.
@@ -68,7 +79,7 @@ int compare_field2(const void* a, const void* b);
 /**
  * @brief Compares two records based on the field1 field.
  *
- * This function compares two records based on the field1 field. It is used as a comparison
+ * This function compares two records based on the field3 field. It is used as a comparison
  * function for the quick_sort and merge_sort functions.
  * 
  * This definition is common to all the compare_fieldX functions.

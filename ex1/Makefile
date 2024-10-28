@@ -13,7 +13,7 @@ endif
 
 CC = gcc
 UNITY_DIR = ../Resources/C/Unity
-CFLAGS = -I$(UNITY_DIR) -Wall -Werror -g
+CFLAGS = -I$(UNITY_DIR) -Wall -Werror -O3
 
 SRC_DIR = src
 TEST_DIR = tests
