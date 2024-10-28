@@ -1,11 +1,9 @@
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
-    RM = cmd /c rmdir /s /q
     MKDIR = cmd /c mkdir
     EXE = .exe
 
 else
-    RM = rm -rf
     MKDIR = mkdir -p
     EXE =
 
@@ -14,6 +12,7 @@ endif
 CC = gcc
 UNITY_DIR = ../Resources/C/Unity
 CFLAGS = -I$(UNITY_DIR) -Wall -Werror -O3
+RM = rm -rf
 
 SRC_DIR = src
 TEST_DIR = tests
@@ -76,7 +75,8 @@ test: $(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
-	$(RM) $(OBJ_DIR) $(BIN_DIR)
+	@if [ -d $(OBJ_DIR) ]; then $(RM) $(OBJ_DIR); fi
+	@if [ -d $(BIN_DIR) ]; then $(RM) $(BIN_DIR); fi
 	@echo "Build artifacts have been removed (/obj, /bin)."
 
 # Generate compilation database
