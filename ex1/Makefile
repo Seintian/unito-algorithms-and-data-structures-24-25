@@ -54,11 +54,11 @@ build: $(TARGET) $(TEST_TARGET)
 	@echo "Executables have been built."
 
 # Rule for compiling object files from the source directory
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(SRC_DIR)/*.h | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Rule for compiling object files from the test directory
-$(OBJ_DIR)/%.o: $(TEST_DIR)/%.c $(SRC_DIR)/*.h | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(TEST_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Compile and link the main application
