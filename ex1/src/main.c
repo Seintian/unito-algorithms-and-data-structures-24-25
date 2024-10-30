@@ -8,15 +8,16 @@
  * parsing command line arguments and executing the appropriate functionality.
  *
  * Usage:
- *   ./application <input_file> <output_file> <algorithm>
+ *   ./application <input_file> <output_file> <algorithm> <field>
  *
  * Options:
  *   <input_file>   Path to the input CSV file.
  *   <output_file>  Path to the output CSV file (must be different from input_file).
  *   <algorithm>    Sorting algorithm to use (0 for merge sort, 1 for quick sort).
+ *   <field>        Field to be used as the key for sorting (0 for field1, 1 for field2, 2 for field3).
  *
  * Example:
- *   ./application input.csv output.csv 0
+ *   ./application input.csv output.csv 0 1
  *
  * The main function handles the initialization and execution of the application
  * based on the provided command line arguments.
@@ -55,7 +56,7 @@ int (*compare_records)(const void* a, const void* b);
  * @param algorithm Algorithm to be used (0 for merge sort, 1 for quick sort).
  * @throw `EXIT_FAILURE` if any of the input arguments is invalid.
  */
-void validate_input(char* input_file, char* output_file, char* algorithm) {
+void validate_input(char* input_file, char* output_file, char* algorithm, char* field) {
     if (strcmp(input_file, output_file) == 0) {
         printf("Error: input_file and output_file cannot be the same " \
                "-> input_file: %s, output_file: %s\n", input_file, output_file);
@@ -83,6 +84,15 @@ void validate_input(char* input_file, char* output_file, char* algorithm) {
         fclose(output);
 
         printf("Error: invalid algorithm (expected 0 or 1) -> %s\n", algorithm);
+        exit(EXIT_FAILURE);
+    }
+
+    int fld = atoi(field);
+    if (fld < 0 || fld > 2) {
+        fclose(input);
+        fclose(output);
+
+        printf("Error: invalid field (expected 0, 1, or 2) -> %s\n", field);
         exit(EXIT_FAILURE);
     }
 
@@ -183,45 +193,40 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
  *         `EXIT_FAILURE` if the input arguments are invalid.
  */
 int main(int argc, char* argv[]) {
-    if (argc != 4) {
+    if (argc != 5) {
         printf("Usage:\n");
-        printf("  %s <input_file> <output_file> <algorithm>\n\n", argv[0]);
+        printf("  %s <input_file> <output_file> <algorithm> <field>\n\n", argv[0]);
         printf("Options:\n");
         printf("  <input_file>   path to the input file\n");
         printf("  <output_file>  path to the output file (different from input_file)\n");
-        printf("  <algorithm>    0 for merge sort, 1 for quick sort\n\n");
+        printf("  <algorithm>    0 for merge sort, 1 for quick sort\n");
+        printf("  <field>        0 for field1, 1 for field2, 2 for field3\n\n");
         printf("Example:\n");
-        printf("  %s input.csv output.csv 0\n", argv[0]);
+        printf("  %s input.csv output.csv 0 1\n", argv[0]);
 
         return EXIT_FAILURE;
     }
 
-    validate_input(argv[1], argv[2], argv[3]);
+    validate_input(argv[1], argv[2], argv[3], argv[4]);
 
-    for (size_t i = 0; i < 3; i++) {
-        FILE* infile = fopen(argv[1], "r");
-        FILE* outfile = fopen(argv[2], "w");
-        size_t algo = atoi(argv[3]);
+    FILE* infile = fopen(argv[1], "r");
+    FILE* outfile = fopen(argv[2], "w");
+    size_t algo = atoi(argv[3]);
+    size_t field = atoi(argv[4]);
 
-        time_t start = time(NULL);
-        sort_records(infile, outfile, i, algo);
-        time_t end = time(NULL);
+    time_t start = time(NULL);
+    sort_records(infile, outfile, field, algo);
+    time_t end = time(NULL);
 
-        printf("Total time in %" PRId64 " seconds.\n", end - start);
+    printf("Total time in %" PRId64 " seconds.\n", end - start);
 
-        if (infile)
-            fclose(infile);
+    if (infile)
+        fclose(infile);
 
-        if (outfile)
-            fclose(outfile);
+    if (outfile)
+        fclose(outfile);
 
-        fflush(outfile);
-
-        if (i < 2) {
-            printf("\nPress Enter to continue... ");
-            getchar();
-        }
-    }
+    fflush(outfile);
 
     return EXIT_SUCCESS;
 }

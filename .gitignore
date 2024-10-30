@@ -6,5 +6,6 @@
 .history
 
 perf.data
+vgcore.*
 
 compile_commands.json
