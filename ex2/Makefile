@@ -1,15 +1,19 @@
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
+    RM = cmd /c rmdir /s /q
+    MKDIR = cmd /c mkdir
     EXE = .exe
+
 else
+    RM = rm -rf
+    MKDIR = mkdir -p
     EXE =
+
 endif
 
 CC = gcc
 UNITY_DIR = ../Resources/C/Unity
 CFLAGS = -I$(UNITY_DIR) -Wall -Werror -O3
-RM = rm -rf
-MKDIR = mkdir -p
 
 SRC_DIR = src
 TEST_DIR = tests
@@ -73,12 +77,19 @@ test: $(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
-	$(RM) $(BUILD_DIR) $(BIN_DIR) $(DOC_DIR) Doxyfile compile_commands.json
+	$(RM) $(OBJ_DIR) $(BIN_DIR) $(BUILD_DIR) $(DOC_DIR) compile_commands.json Doxyfile
 	@echo "Build artifacts, documentation and IDE plugin's configuration have been removed."
+
 
 # Generate compilation database
 compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
 	@echo "[" > $@
+	@if [ "$(OS)" = "Windows_NT" ]; then \
+		CWD=$$cd; \
+	else \
+		CWD=$$(pwd); \
+	fi; \
+
 	@for file in $(SRC_FILES) $(TEST_FILES); do \
 		echo "  {" >> $@; \
 		echo "    \"directory\": \"$(shell pwd)\"," >> $@; \
