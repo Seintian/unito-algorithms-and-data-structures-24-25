@@ -1,6 +1,8 @@
 **/bin/
 **/obj/
 **/data/
+**/doc/
+**/build/
 
 .vscode
 .history
@@ -9,3 +11,5 @@ perf.data
 vgcore.*
 
 compile_commands.json
+
+Doxyfile

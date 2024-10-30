@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "io.h"
 
 
 /**
@@ -21,18 +22,17 @@ void validate_input(const char* dictionary, const char* to_correct) {
         exit(EXIT_FAILURE);
     }
 
-    const FILE* dictionary_fp = fopen(dictionary, "r");
+    FILE* dictionary_fp = fopen(dictionary, "r");
     if (!dictionary_fp) {
         printf("Error: dictionary file does not exist -> %s\n", dictionary);
         exit(EXIT_FAILURE);
     }
 
-    const FILE* to_correct_fp = fopen(to_correct, "w");
+    FILE* to_correct_fp = fopen(to_correct, "r");
     if (!to_correct_fp) {
-        fclose(dictionary);
+        fclose(dictionary_fp);
 
-        printf("Error: to_correct file cannot be created " \
-               "-> dictionary: %s, to_correct: %s\n", dictionary, to_correct);
+        printf("Error: to_correct file does not exist -> %s\n", to_correct);
         exit(EXIT_FAILURE);
     }
 
@@ -67,8 +67,48 @@ int main(int argc, const char * argv[]) {
 
     validate_input(argv[1], argv[2]);
 
-    // TODO: use the edit_distance algorithm to correct the text in the to_correct file 
-    // (print the corrected words with infos)
+    FILE* dictionary_fp = fopen(argv[1], "r");
+    if (dictionary_fp == NULL) {
+        perror("Unable to open dictionary file");
+        return EXIT_FAILURE;
+    }
+
+    // Determine number of words in dictionary for memory allocation
+    int word_count = count_lines(dictionary_fp);
+    if (word_count < 1) {
+        fclose(dictionary_fp);
+        fprintf(stderr, "Error: No words in dictionary.\n");
+
+        return EXIT_FAILURE;
+    }
+
+    char** dictionary = malloc(sizeof(char*) * word_count);
+    int words_in_dictionary = read_dictionary(dictionary_fp, &dictionary);
+    if (words_in_dictionary < 1)
+        return EXIT_FAILURE;
+    
+    FILE* to_correct_fp = fopen(argv[2], "r");
+    if (to_correct_fp == NULL) {
+        perror("Unable to open to_correct file");
+        return EXIT_FAILURE;
+    }
+
+    int words_in_to_correct = count_words(to_correct_fp);
+    if (words_in_to_correct < 1) {
+        fclose(dictionary_fp);
+        fclose(to_correct_fp);
+        fprintf(stderr, "Error: No words in to_correct file.\n");
+
+        return EXIT_FAILURE;
+    }
+
+    char** to_correct = malloc(sizeof(char*) * words_in_to_correct);
+    int words_read = read_to_correct(to_correct_fp, &to_correct);
+    if (words_read < 1)
+        return EXIT_FAILURE;
+
+    fclose(to_correct_fp);
+    fclose(dictionary_fp);
 
     return EXIT_SUCCESS;
 }
