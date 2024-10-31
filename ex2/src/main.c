@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "io.h"
+#include "edit_distance.h"
 
 
 /**
@@ -38,6 +39,21 @@ void validate_input(const char* dictionary, const char* to_correct) {
 
     fclose(dictionary_fp);
     fclose(to_correct_fp);
+}
+
+void find_closest_word(const char* word, char** dictionary, int words_in_dictionary, const char** closest_word, int* min_distance) {
+    for (int i = 0; i < words_in_dictionary; i++) {
+        const char* dict_word = dictionary[i];
+        int distance = edit_distance_dyn(word, dict_word);
+
+        if (*min_distance == -1 || distance < *min_distance) {
+            *min_distance = distance;
+            *closest_word = dict_word;
+
+            if (distance == 0)
+                break;
+        }
+    }
 }
 
 /**
@@ -106,6 +122,25 @@ int main(int argc, const char * argv[]) {
     int words_read = read_to_correct(to_correct_fp, &to_correct);
     if (words_read < 1)
         return EXIT_FAILURE;
+    
+    const char* word;
+    int min_distance;
+    const char* closest_word;
+    for (int i = 0; i < words_in_to_correct; i++) {
+        word = to_correct[i];
+        min_distance = -1;
+        closest_word = NULL;
+
+        find_closest_word(word, dictionary, words_in_dictionary, &closest_word, &min_distance);
+
+        printf(
+            "Word: \"%s\", closest word: \"%s\", distance: %d (%s)\n", 
+            word, 
+            closest_word, 
+            min_distance,
+            min_distance == 0 ? "exact match" : "approximate match"
+        );
+    }
 
     fclose(to_correct_fp);
     fclose(dictionary_fp);

@@ -84,12 +84,6 @@ clean:
 # Generate compilation database
 compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
 	@echo "[" > $@
-	@if [ "$(OS)" = "Windows_NT" ]; then \
-		CWD=$$cd; \
-	else \
-		CWD=$$(pwd); \
-	fi; \
-
 	@for file in $(SRC_FILES) $(TEST_FILES); do \
 		echo "  {" >> $@; \
 		echo "    \"directory\": \"$(shell pwd)\"," >> $@; \
@@ -99,6 +93,7 @@ compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
 	done
 	@sed -i '$$ s/,$$//' $@ # Remove the last comma
 	@echo "]" >> $@
+	@echo "Compilation database generated in compile_commands.json"
 
 # Doxygen documentation generation
 doc: Doxyfile $(SRC_FILES) $(TEST_FILES)

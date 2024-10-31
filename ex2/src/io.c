@@ -8,7 +8,6 @@ int count_lines(FILE* file_fp) {
 
     int lines = 0;
     int ch;
-
     while (!feof(file_fp)) {
         ch = fgetc(file_fp);
         if (ch == '\n')
@@ -28,8 +27,6 @@ int count_words(FILE* file) {
     char line[MAX_LINE_LENGTH];
     const char* delimiters = " \t\n,.!?;:\"()[]{}<>-";
 
-    fseek(file, 0, SEEK_SET);
-
     while (fgets(line, MAX_LINE_LENGTH, file) != NULL) {
         char* saveptr;
         const char* token = strtok_r(line, delimiters, &saveptr);
@@ -43,6 +40,7 @@ int count_words(FILE* file) {
     return word_count;
 }
 
+
 void free_matrix(char** matrix, int total_rows) {
     if (matrix == NULL)
         return;
@@ -52,6 +50,16 @@ void free_matrix(char** matrix, int total_rows) {
 
     free(matrix);
 }
+
+void to_lower(char *str) {
+    while (*str) {
+        if (*str >= 'A' && *str <= 'Z')
+            *str += 'a' - 'A';
+
+        str++;
+    }
+}
+
 
 int read_dictionary(FILE* dictionary_fp, char*** dictionary) {
     if (dictionary_fp == NULL || dictionary == NULL)
@@ -101,7 +109,7 @@ int read_to_correct(FILE* to_correct_fp, char*** to_correct) {
     const char *delimiters = " \t\n,.!?;:\"()[]{}<>-";
     while (words_read < total_words && fgets(line, MAX_LINE_LENGTH, to_correct_fp)) {
         char *saveptr;
-        const char *word = strtok_r(line, delimiters, &saveptr);
+        char *word = strtok_r(line, delimiters, &saveptr);
 
         while (words_read < total_words && word != NULL) {
             (*to_correct)[words_read] = malloc(strlen(word) + 1);
@@ -110,6 +118,8 @@ int read_to_correct(FILE* to_correct_fp, char*** to_correct) {
 
                 return -1;
             }
+
+            to_lower(word); // Dictionary's only got lowercase words
 
             strcpy((*to_correct)[words_read++], word);
 
