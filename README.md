@@ -285,11 +285,6 @@ Si implementi un'applicazione che usa la funzione `edit_distance_dyn` per determ
 $ ./main_ex2 /tmp/data/dictionary.txt /tmp/data/correctme.txt
 ```
 
----
-
-**Nota importante**: il testo degli esercizi 3 e 4 **non è ancora definitivo e potrebbe subire variazioni** nei prossimi giorni.
-
----
 
 ## Esercizio 3 - Tavole hash (con concatenamento)
 
@@ -317,7 +312,17 @@ void hash_table_free(HashTable*);
 
 Implementare avvalendosi del supporto di un sistema basato su un Large Language Model (LLM), quale, ad esempio, ChatGPT (si veda sotto), gli unit-test degli algoritmi secondo le indicazioni suggerite nel documento [Unit Testing](UnitTesting.md).
 
-### Uso di sistema basato su un Large Language Model:
+### Uso delle funzioni implementate
+
+All'indirizzo:
+
+> [https://datacloud.di.unito.it/index.php/s/Ti4Mz7j4Xtjn3Db](https://datacloud.di.unito.it/index.php/s/Ti4Mz7j4Xtjn3Db)
+
+potete trovare un file (`iliade.txt`) contenente l'Iliade di Omero in inglese.
+
+Avvalendosi di un sistema basato su LLM, scrivere un programma che utilizza l'hash table implementata per calcolare la parola di lunghezza almeno pari ad un valore minimo dato che sia più frequente nel file di testo dato.
+
+### Uso di sistema basato su un Large Language Model
 
 Si richiede che per implementare quanto richiesto dal presente esercizio ci si avvalga del supporto di un sistema basato su un Large Language Model, quale, ad esempio, ChatGPT.
 
@@ -325,6 +330,23 @@ E' possibile che il processo di sviluppo risulti iterativo, comportando varie in
 
 Si documenti, in una relazione (README.md su git), il suddetto processo di sviluppo nei suoi aspetti principali (prompt iniziale, output prodotto dal sistema, analisi critica dell'output, raffinamento del prompt, ecc.) e si riportino alcune considerazioni generali sull'intero processo.
 
+### Condizioni per la consegna:
+
+- Creare una sottocartella chiamata `ex3` all'interno del repository.
+- La consegna deve obbligatoriamente contenere un `Makefile`. Questo file con il comando `make all` deve produrre all'interno di `ex3/bin` due file eseguibili chiamati `main_ex3` e `test_ex3`. Se avete usato librerie esterne (come Unity) includete anche queste per consentire la corretta compilazione.
+- L'eseguibile `test_ex3` non deve richiedere nessun parametro e deve eseguire tutti gli unit test automatizzati prodotti.
+- L'eseguibile `main_ex3` deve ricevere come parametri il percorso del file di testo da usare e la lunghezza minima delle parole da considerare. Per esempio:
+
+```
+$ ./main_ex3 /tmp/data/iliade.txt 6
+```
+
+
+---
+
+**Nota importante**: il testo dell'esercizio 4 **non è ancora definitivo e potrebbe subire variazioni** nei prossimi giorni.
+
+---
 
 ## Esercizio 4 - Grafi sparsi e Visita in Ampiezza
 
