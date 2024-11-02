@@ -342,12 +342,6 @@ $ ./main_ex3 /tmp/data/iliade.txt 6
 ```
 
 
----
-
-**Nota importante**: il testo dell'esercizio 4 **non è ancora definitivo e potrebbe subire variazioni** nei prossimi giorni.
-
----
-
 ## Esercizio 4 - Grafi sparsi e Visita in Ampiezza
 
 ### Linguaggio richiesto: C
