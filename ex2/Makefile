@@ -1,6 +1,6 @@
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
-    RM = cmd /c if exist $(1) rmdir /s /q $(1)
+    RM = powershell -Command "if (Test-Path '$(1)') { Remove-Item -Recurse -Force '$(1)' }"
     MKDIR = cmd /c mkdir
     EXE = .exe
 
@@ -77,11 +77,12 @@ test: $(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
-	$(call RM, $(BIN_DIR))
-	$(call RM, $(BUILD_DIR))
-	$(call RM, $(DOC_DIR))
-	$(call RM, compile_commands.json)
-	$(call RM, Doxyfile)
+	$(call RM,$(BIN_DIR))
+	$(call RM,$(BUILD_DIR))
+	$(call RM,$(DOC_DIR))
+	$(call RM,compile_commands.json)
+	$(call RM,Doxyfile)
+	$(call RM,Doxyfile.bak)
 	@echo "Build artifacts, documentation and IDE plugin's configuration have been removed."
 
 
