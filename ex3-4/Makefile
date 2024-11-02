@@ -1,11 +1,11 @@
 # Detect OS and set specific commands
 ifeq ($(OS), Windows_NT)
-    RM = cmd /c rmdir /s /q
+    RM = cmd /c if exist $(1) rmdir /s /q $(1)
     MKDIR = cmd /c mkdir
     EXE = .exe
 
 else
-    RM = rm -rf
+    RM = rm -rf $(1)
     MKDIR = mkdir -p
     EXE =
 
@@ -77,7 +77,11 @@ test: $(TEST_TARGET)
 
 # Clean up build artifacts
 clean:
-	$(RM) $(OBJ_DIR) $(BIN_DIR) $(BUILD_DIR) $(DOC_DIR) compile_commands.json Doxyfile
+	$(call RM, $(BIN_DIR))
+	$(call RM, $(BUILD_DIR))
+	$(call RM, $(DOC_DIR))
+	$(call RM, compile_commands.json)
+	$(call RM, Doxyfile)
 	@echo "Build artifacts, documentation and IDE plugin's configuration have been removed."
 
 
