@@ -1,173 +1,184 @@
-#include "test_hashtable.h"
+#include "unity.h"
 #include "../src/hashtable.h"
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 
-// Comparison function
-int compare(const void* a, const void* b) {
-    return strcmp((const char*)a, (const char*)b);
+// Hash function for testing
+unsigned long simple_hash(const void* key) {
+    return (unsigned long)key % 100;
 }
 
-// Hash function
-unsigned long hash_func(const void* key) {
-    const char* str = (const char*)key;
-    unsigned long hash = 5381;
-    int c;
-    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
-    return hash;
+// Compare function for testing
+int int_compare(const void* a, const void* b) {
+    return (int)(long)a - (int)(long)b;
 }
 
-// Function to apply to each key-value pair
-void my_function(void* key, void* value) {
-    printf("Key: %s, Value: %s\n", (char*)key, (char*)value);
+// Variables for use in tests
+HashTable* table;
+
+void setUp(void) {
+    table = hash_table_create(int_compare, simple_hash);
 }
 
+void tearDown(void) {
+    hash_table_free(table);
+}
 
-void test_hash_table_create() {
-    HashTable* table = hash_table_create(compare, hash_func);
+// Test creation of hash table
+void test_hash_table_create(void) {
     TEST_ASSERT_NOT_NULL(table);
     TEST_ASSERT_EQUAL(0, hash_table_size(table));
-    hash_table_free(table);
+    TEST_ASSERT_EQUAL(16, hash_table_capacity(table));
 }
 
-void test_hash_table_put() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    TEST_ASSERT_EQUAL_STRING("value1", hash_table_get(table, "key1"));
-    TEST_ASSERT_EQUAL(1, hash_table_size(table));
-    hash_table_free(table);
+// Test insertion and retrieval
+void test_hash_table_put_and_get(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table, (void*)2, (void*)200);
+
+    TEST_ASSERT_EQUAL((void*)100, hash_table_get(table, (void*)1));
+    TEST_ASSERT_EQUAL((void*)200, hash_table_get(table, (void*)2));
 }
 
-void test_hash_table_get() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    TEST_ASSERT_EQUAL_STRING("value1", hash_table_get(table, "key1"));
-    TEST_ASSERT_NULL(hash_table_get(table, "key2")); // Non-existent key
-    hash_table_free(table);
+// Test update of an existing key
+void test_hash_table_update_existing_key(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table, (void*)1, (void*)150);
+
+    TEST_ASSERT_EQUAL((void*)150, hash_table_get(table, (void*)1));
 }
 
-void test_hash_table_contains_key() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    TEST_ASSERT_TRUE(hash_table_contains_key(table, "key1"));
-    TEST_ASSERT_FALSE(hash_table_contains_key(table, "key2"));
-    hash_table_free(table);
+// Test check for key existence
+void test_hash_table_contains_key(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+
+    TEST_ASSERT_TRUE(hash_table_contains_key(table, (void*)1));
+    TEST_ASSERT_FALSE(hash_table_contains_key(table, (void*)99));
 }
 
-void test_hash_table_remove() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    hash_table_remove(table, "key1");
-    TEST_ASSERT_NULL(hash_table_get(table, "key1"));
-    TEST_ASSERT_EQUAL(0, hash_table_size(table));
-    hash_table_free(table);
+// Test removing a key-value pair
+void test_hash_table_remove(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_remove(table, (void*)1);
+
+    TEST_ASSERT_FALSE(hash_table_contains_key(table, (void*)1));
+    TEST_ASSERT_NULL(hash_table_get(table, (void*)1));
 }
 
-void test_hash_table_size() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    TEST_ASSERT_EQUAL(1, hash_table_size(table));
-    hash_table_free(table);
-}
+// Test retrieval of all keys
+void test_hash_table_keyset(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table, (void*)2, (void*)200);
 
-void test_hash_table_keyset() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    hash_table_put(table, "key2", "value2");
     void** keys = hash_table_keyset(table);
-    TEST_ASSERT_EQUAL_STRING("key1", (char*)keys[0]);
-    TEST_ASSERT_EQUAL_STRING("key2", (char*)keys[1]);
+    TEST_ASSERT_NOT_NULL(keys);
+    TEST_ASSERT_EQUAL_PTR((void*)1, keys[0]);
+    TEST_ASSERT_EQUAL_PTR((void*)2, keys[1]);
     free(keys);
-    hash_table_free(table);
 }
 
-void test_hash_table_free() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    hash_table_free(table);
-}
+// Test retrieval of all values
+void test_hash_table_values(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table, (void*)2, (void*)200);
 
-void test_hash_table_resize() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    for (int i = 0; i < 100; i++) {
-        char key[10];
-        sprintf(key, "key%d", i);
-        hash_table_put(table, key, "value");
-    }
-    TEST_ASSERT_EQUAL(100, hash_table_size(table));
-    hash_table_free(table);
-}
-
-void test_hash_table_load_factor() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    float load_factor = hash_table_load_factor(table);
-    TEST_ASSERT(load_factor > 0.0);
-    hash_table_free(table);
-}
-
-void test_hash_table_replace() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    hash_table_replace(table, "key1", "new_value");
-    TEST_ASSERT_EQUAL_STRING("new_value", hash_table_get(table, "key1"));
-    hash_table_free(table);
-}
-
-void test_hash_table_clear() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    hash_table_clear(table);
-    TEST_ASSERT_EQUAL(0, hash_table_size(table));
-    hash_table_free(table);
-}
-
-void test_hash_table_map() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    // Assuming a function applies and updates elements
-    hash_table_map(table, my_function);
-    hash_table_free(table);
-}
-
-void test_hash_table_values() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
-    hash_table_put(table, "key2", "value2");
     void** values = hash_table_values(table);
-    TEST_ASSERT_EQUAL_STRING("value1", (char*)values[0]);
-    TEST_ASSERT_EQUAL_STRING("value2", (char*)values[1]);
+    TEST_ASSERT_NOT_NULL(values);
+    TEST_ASSERT_EQUAL_PTR((void*)100, values[0]);
+    TEST_ASSERT_EQUAL_PTR((void*)200, values[1]);
     free(values);
-    hash_table_free(table);
 }
 
-void test_hash_table_equals() {
-    HashTable* table1 = hash_table_create(compare, hash_func);
-    HashTable* table2 = hash_table_create(compare, hash_func);
-    hash_table_put(table1, "key1", "value1");
-    hash_table_put(table2, "key1", "value1");
-    TEST_ASSERT_TRUE(hash_table_equals(table1, table2));
-    hash_table_free(table1);
+// Test clear all elements from the hash table
+void test_hash_table_clear(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_clear(table);
+
+    TEST_ASSERT_EQUAL(0, hash_table_size(table));
+    TEST_ASSERT_FALSE(hash_table_contains_key(table, (void*)1));
+}
+
+// Test hash table load factor
+void test_hash_table_load_factor(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    float load_factor = hash_table_load_factor(table);
+    TEST_ASSERT_FLOAT_WITHIN(0.1, 0.0625, load_factor);
+}
+
+// Test replacing a value for an existing key
+void test_hash_table_replace(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_replace(table, (void*)1, (void*)300);
+
+    TEST_ASSERT_EQUAL((void*)300, hash_table_get(table, (void*)1));
+}
+
+void map_function(const void* key, const void* value) {
+    int new_value = (int)(long)value * 2;
+    hash_table_replace(table, key, (void*)(long)new_value);
+}
+
+void test_hash_table_map(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table, (void*)2, (void*)200);
+
+    hash_table_map(table, map_function);
+
+    TEST_ASSERT_EQUAL((void*)200, hash_table_get(table, (void*)1));
+    TEST_ASSERT_EQUAL((void*)400, hash_table_get(table, (void*)2));
+}
+
+// Test hash table equality check
+void test_hash_table_equals(void) {
+    HashTable* table2 = hash_table_create(int_compare, simple_hash);
+
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table2, (void*)1, (void*)100);
+
+    TEST_ASSERT_TRUE(hash_table_equals(table, table2));
+
+    hash_table_put(table2, (void*)2, (void*)200);
+    TEST_ASSERT_FALSE(hash_table_equals(table, table2));
+
     hash_table_free(table2);
 }
 
-void test_hash_table_copy() {
-    HashTable* table = hash_table_create(compare, hash_func);
-    hash_table_put(table, "key1", "value1");
+// Test deep copy of hash table
+void test_hash_table_copy(void) {
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(table, (void*)2, (void*)200);
+
     HashTable* copy = hash_table_copy(table);
-    TEST_ASSERT_EQUAL_STRING("value1", hash_table_get(copy, "key1"));
-    hash_table_free(table);
+    TEST_ASSERT_TRUE(hash_table_equals(table, copy));
+
     hash_table_free(copy);
 }
 
-void test_hash_table_merge() {
-    HashTable* dest = hash_table_create(compare, hash_func);
-    HashTable* source = hash_table_create(compare, hash_func);
-    hash_table_put(source, "key1", "value1");
-    hash_table_merge(dest, source);
-    TEST_ASSERT_EQUAL_STRING("value1", hash_table_get(dest, "key1"));
-    hash_table_free(dest);
+// Test merging two hash tables
+void test_hash_table_merge(void) {
+    HashTable* source = hash_table_create(int_compare, simple_hash);
+
+    hash_table_put(table, (void*)1, (void*)100);
+    hash_table_put(source, (void*)2, (void*)200);
+
+    hash_table_merge(table, source);
+
+    TEST_ASSERT_EQUAL((void*)100, hash_table_get(table, (void*)1));
+    TEST_ASSERT_EQUAL((void*)200, hash_table_get(table, (void*)2));
+
     hash_table_free(source);
+}
+
+// Test resizing and rehashing
+void test_hash_table_resized(void) {
+    // Insert enough elements to exceed the load factor threshold
+    for (int i = 0; i < 20; i++) {
+        hash_table_put(table, (void*)(long)i, (void*)(long)(i * 10));
+    }
+
+    // Verify that all keys are accessible after resizing
+    for (int i = 0; i < 20; i++) {
+        TEST_ASSERT_EQUAL((void*)(long)(i * 10), hash_table_get(table, (void*)(long)i));
+    }
 }
