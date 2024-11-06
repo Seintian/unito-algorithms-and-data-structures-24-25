@@ -30,8 +30,8 @@ TEST_BUILD_FILES = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(TEST_FILES))
 
 UNITY_SRC = $(UNITY_DIR)/unity.c
 
-TARGET = $(BIN_DIR)/main_ex2$(EXE)
-TEST_TARGET = $(BIN_DIR)/test_ex2$(EXE)
+TARGET = $(BIN_DIR)/main_ex1$(EXE)
+TEST_TARGET = $(BIN_DIR)/test_ex1$(EXE)
 
 .PHONY: all clean test compile build_bin compile_commands.json doc Doxyfile help
 

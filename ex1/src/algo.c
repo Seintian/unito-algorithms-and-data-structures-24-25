@@ -110,38 +110,42 @@ void median_of_three(void *base, size_t n_items, size_t size, int (*compar)(cons
 void three_way_partition(void *base, size_t n_items, size_t size, int (*compar)(const void*, const void*), void *temp, size_t *lt, size_t *gt) {
     // Choose the pivot using median_of_three and place it in base[0]
     median_of_three(base, n_items, size, compar, temp);
-
-    const void *pivot = base;
-    size_t i = 0;
+    
+    void* pivot = base;
+    size_t low = 1;
     size_t j = 1;
-    size_t k = n_items - 1;
+    size_t high = n_items - 1;
 
-    while (j <= k) {
+    while (j <= high) {
         int cmp = compar((uint8_t *)base + size * j, pivot);
 
         if (cmp < 0) {
-            swap((uint8_t *)base + size * i, (uint8_t *)base + size * j, size, temp);
-
-            i++;
+            if (low != j) 
+                swap((uint8_t *)base + size * low, (uint8_t *)base + size * j, size, temp);
+    
+            low++;
             j++;
         } 
         else if (cmp > 0) {
-            if (k != j)
-                swap((uint8_t *)base + size * j, (uint8_t *)base + size * k, size, temp);
-
-            k--;
+            if (high != j)
+                swap((uint8_t *)base + size * j, (uint8_t *)base + size * high, size, temp);
+                
+            high--;
         } 
         else
             j++;
     }
-
-    *lt = i; // Elements < pivot
-    *gt = j; // Elements > pivot start here
+    
+    if (low - 1) // NB: if there are no elements in base[1 ... n_items - 1] that are smaller than the pivot the swap is not taken
+        swap(pivot, (uint8_t *)base + size * (low - 1), size, temp);
+    
+    *lt = low; // Elements < pivot
+    *gt = high; // Elements > pivot start here
 }
 
 // Recursive function that sorts the array using quick sort
 void quick_sort_recursive(void *base, size_t n_items, size_t size, int (*compar)(const void*, const void*), void *temp) {
-    if (n_items < 1)
+    if (n_items <= 1)
         return;
     
     if (n_items <= INSERTION_SORT_THRESHOLD) {
@@ -152,20 +156,20 @@ void quick_sort_recursive(void *base, size_t n_items, size_t size, int (*compar)
     size_t lt;
     size_t gt;
     three_way_partition(base, n_items, size, compar, temp, &lt, &gt);
-
+    
     size_t left_size = lt;
-    size_t right_size = n_items - gt;
+    size_t right_size = n_items - (gt + 1);
 
     if (left_size < right_size) {
-        // recursive call on base[0 ... pivot - 1] (smaller)
+        // recursive call on base[0 ... lt - 1] (smaller portion)
         quick_sort_recursive(base, left_size, size, compar, temp);
-        // recursive call on base[pivot + 1 ... n_items - 1] (bigger)
-        quick_sort_recursive((uint8_t *)base + size * gt, right_size, size, compar, temp);
+        // recursive call on base[gt + 1 ... n_items - 1] (bigger portion)
+        quick_sort_recursive((uint8_t *)base + size * (gt + 1), right_size, size, compar, temp);
     }
     else {
-        // recursive call on base[pivot + 1 ... n_items - 1] (smaller)
-        quick_sort_recursive((uint8_t *)base + size * gt, right_size, size, compar, temp);
-        // recursive call on base[0 ... pivot - 1] (bigger)
+        // recursive call on base[gt + 1 ... n_items - 1] (smaller portion)
+        quick_sort_recursive((uint8_t *)base + size * (gt + 1), right_size, size, compar, temp);
+        // recursive call on base[0 ... lt - 1] (bigger portion)
         quick_sort_recursive(base, left_size, size, compar, temp);
     }
 }
