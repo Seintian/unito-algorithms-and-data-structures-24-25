@@ -1,4 +1,4 @@
-#include "../src/algo.h"
+#include "algo.h"
 #include "unity.h"
 #include <stdio.h>
 

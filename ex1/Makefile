@@ -13,7 +13,8 @@ endif
 
 CC = gcc
 UNITY_DIR = ../Resources/C/Unity
-CFLAGS = -I$(UNITY_DIR) -Wall -Werror -O3
+LIB_DIR = lib
+CFLAGS = -I$(UNITY_DIR) -I$(LIB_DIR) -Wall -Werror -O3
 
 SRC_DIR = src
 TEST_DIR = tests
@@ -85,16 +86,15 @@ clean:
 	$(call RM,Doxyfile.bak)
 	@echo "Build artifacts, documentation and IDE plugin's configuration have been removed."
 
-
 # Generate compilation database
 compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
 	@echo "[" > $@
 	@for file in $(SRC_FILES) $(TEST_FILES); do \
-		echo "  {" >> $@; \
-		echo "    \"directory\": \"$(shell pwd)\"," >> $@; \
-		echo "    \"command\": \"$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/$$(basename $$file).o $$file\"," >> $@; \
-		echo "    \"file\": \"$$file\"" >> $@; \
-		echo "  }," >> $@; \
+		echo "    {" >> $@; \
+		echo "        \"directory\": \"$(CURDIR)\"," >> $@; \
+		echo "        \"command\": \"$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/$$(basename $$file).o $$file\"," >> $@; \
+		echo "        \"file\": \"$$file\"" >> $@; \
+		echo "    }," >> $@; \
 	done
 	@sed -i '$$ s/,$$//' $@ # Remove the last comma
 	@echo "]" >> $@
@@ -112,7 +112,7 @@ Doxyfile:
 	@sed -i 's|OUTPUT_DIRECTORY *=|OUTPUT_DIRECTORY = $(DOC_DIR)|' Doxyfile
 	@sed -i 's|GENERATE_LATEX *= YES|GENERATE_LATEX = NO|' Doxyfile
 	@sed -i 's|EXTRACT_ALL *= NO|EXTRACT_ALL = YES|' Doxyfile
-	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex2"|' Doxyfile
+	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex1"|' Doxyfile
 	@echo "Doxyfile created and configured."
 
 help:

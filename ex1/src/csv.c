@@ -4,7 +4,9 @@
 #include <ctype.h>
 
 
-const char* recordReadFmt = "%d,%99[^,],%d,%lf\n";
+#define USE_BASE_IO_FUNCTIONS 1
+
+const char* recordReadFmt = "%d,%239[^,],%d,%lf\n";
 const char* recordWriteFmt = "%d,%s,%d,%lf\n";
 
 int compare_field1(const void* a, const void* b) {
@@ -96,6 +98,12 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
 
         switch (fields_parsed) {
             case 1:
+                record -> field1 = malloc(strlen(token) + 1);
+                if (record -> field1 == NULL) {
+                    perror("Error allocating memory for field1");
+                    exit(EXIT_FAILURE);
+                }
+
                 strcpy(record -> field1, token);
                 if (strlen(record -> field1) == 0)
                     return fields_parsed;
@@ -124,6 +132,8 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
     return fields_parsed;
 }
 
+#ifdef USE_BASE_IO_FUNCTIONS
+#   if USE_BASE_IO_FUNCTIONS == 0
 
 size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
     size_t read_count = 0;
@@ -140,7 +150,7 @@ size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
         bytes_read = fread(buffer, 1, sizeof(buffer), infile);
         if (bytes_read == 0)
             break;
-        
+
         start = buffer;
         end = buffer + bytes_read;
 
@@ -157,6 +167,8 @@ size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
 
             else if (fields_parsed == -1) {
                 // line is too long to be a valid record
+                fprintf(stderr, "Error: line is too long to be a valid record\n");
+                exit(EXIT_FAILURE);
             }
 
             start = newline + 1;
@@ -175,11 +187,10 @@ size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
     return read_count;
 }
 
-
 size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
     size_t n_wrote_records = 0;
     char buffer[WRITING_BUFFER_SIZE];
-    char *ptr = buffer;
+    char* ptr = buffer;
     size_t buffer_left = sizeof(buffer);
 
     for (size_t i = 0; i < n_records; i++) {
@@ -193,18 +204,19 @@ size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
             records[i].field3
         );
 
-        // If the current record doesn't fit, flush the buffer
         if (written >= buffer_left) {
+            // Flush the buffer
             if (fwrite(buffer, 1, ptr - buffer, outfile) < ptr - buffer) {
                 perror("Error writing to CSV file");
                 exit(EXIT_FAILURE);
             }
 
+            // Reset the buffer pointer and size
             ptr = buffer;
             buffer_left = sizeof(buffer);
 
-            // Write the current record directly if it's still too big for the buffer
-            if (written >= sizeof(buffer))
+            // Write the current record directly if it's still too large
+            if (written >= sizeof(buffer)) {
                 fprintf(
                     outfile, 
                     recordWriteFmt,
@@ -214,21 +226,25 @@ size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
                     records[i].field3
                 );
 
-            else
-                snprintf(
-                    ptr, 
-                    buffer_left, 
-                    recordWriteFmt,
-                    records[i].id,
-                    records[i].field1,
-                    records[i].field2,
-                    records[i].field3
-                );
+                continue; // Skip the pointer update below for this record
+            }
+
+            // Retry writing the current record after flush
+            written = snprintf(
+                ptr,
+                buffer_left,
+                recordWriteFmt,
+                records[i].id,
+                records[i].field1,
+                records[i].field2,
+                records[i].field3
+            );
         }
 
-        // Move the pointer forward and adjust buffer_left
+        // Update the buffer pointer and remaining size
         ptr += written;
         buffer_left -= written;
+
         n_wrote_records++;
     }
 
@@ -239,3 +255,59 @@ size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
     return n_wrote_records;
 }
 
+#else
+
+size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
+    size_t read_count = 0;
+    char* temp_buffer = malloc(MAX_FIELD1_SIZE);
+    if (temp_buffer == NULL) {
+        perror("Error allocating memory for temp_buffer");
+        exit(EXIT_FAILURE);
+    }
+
+    for (; read_count < n_records; read_count++) {
+        if (fscanf(
+            infile, 
+            recordReadFmt, 
+            &records[read_count].id, 
+            temp_buffer, 
+            &records[read_count].field2, 
+            &records[read_count].field3
+        ) != N_FIELDS_IN_RECORD)
+            break;
+
+        records[read_count].field1 = malloc(strlen(temp_buffer) + 1);
+        if (records[read_count].field1 == NULL) {
+            perror("Error allocating memory for field1");
+            exit(EXIT_FAILURE);
+        }
+
+        strcpy(records[read_count].field1, temp_buffer);
+    }
+
+    free(temp_buffer);
+
+    return read_count;
+}
+
+size_t write_records(FILE* outfile, RecordPtr records, size_t n_records) {
+    size_t n_wrote_records = 0;
+
+    for (; n_wrote_records < n_records; n_wrote_records++)
+        if (
+            fprintf(
+                outfile, 
+                recordWriteFmt,
+                records[n_wrote_records].id,
+                records[n_wrote_records].field1,
+                records[n_wrote_records].field2,
+                records[n_wrote_records].field3
+            ) == 0
+        )
+            break;
+
+    return n_wrote_records;
+}
+
+#   endif
+#endif

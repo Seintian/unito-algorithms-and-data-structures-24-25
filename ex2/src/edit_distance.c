@@ -86,7 +86,7 @@ int edit_distance_dyn_recursive(
     const char* s2, const int len_s2, size_t j,
     int** memo
 ) {
-    if (memo != NULL && memo[i][j] != NOT_SET_IN_MEMO)
+    if (memo != NULL && memo[i] != NULL && memo[i][j] != NOT_SET_IN_MEMO)
         return memo[i][j];
 
     if (*s1 == '\0')

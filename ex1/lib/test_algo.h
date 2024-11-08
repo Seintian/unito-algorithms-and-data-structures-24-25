@@ -1,7 +1,7 @@
 #ifndef _TEST_ALGO_H
 #define _TEST_ALGO_H
 
-#include "../src/algo.h"
+#include "algo.h"
 #include "unity.h"
 
 

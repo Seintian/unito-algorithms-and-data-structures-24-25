@@ -1,7 +1,7 @@
 #ifndef _TEST_CSV_H
 #define _TEST_CSV_H
 
-#include "../src/csv.h"
+#include "csv.h"
 #include "unity.h"
 
 

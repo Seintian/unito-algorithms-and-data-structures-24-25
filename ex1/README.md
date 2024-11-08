@@ -15,18 +15,18 @@ We performed sorting on all three fields independently and recorded the time tak
 #### Merge Sort
 
 | Field Sorted By | Reading (sec) | Sorting (sec) | Writing (sec) | Total Time (sec) |
-|-----------------|---------------|---------------|---------------|----------------|
-| `field1`        | 8             | **13**        | 17            | 38             |
-| `field2`        | 8             | **12**        | 17            | 38             |
-| `field3`        | 8             | **13**        | 17            | 39             |
+|-----------------|---------------|---------------|---------------|------------------|
+| `field1`        | 8             | **13**        | 17            | 38               |
+| `field2`        | 8             | **12**        | 17            | 38               |
+| `field3`        | 8             | **13**        | 17            | 39               |
 
 #### Quick Sort
 
 | Field Sorted By | Reading (sec) | Sorting (sec) | Writing (sec) | Total Time (sec) |
-|-----------------|---------------|---------------|---------------|----------------|
-| `field1`        | 8             | **7**         | 18            | 34             |
-| `field2`        | 8             | **16**        | 18            | 43             |
-| `field3`        | 8             | **17**        | 18            | 44             |
+|-----------------|---------------|---------------|---------------|------------------|
+| `field1`        | 8             | **7**         | 18            | 34               |
+| `field2`        | 8             | **16**        | 18            | 43               |
+| `field3`        | 8             | **17**        | 18            | 44               |
 
 ### Optimizations Considered in the Algorithms
 
@@ -72,5 +72,5 @@ We performed sorting on all three fields independently and recorded the time tak
 Both sorting algorithms have their strengths and weaknesses depending on the nature of the data. Based on the analysis:
 
 - **Quick Sort** demonstrates superior performance on `field1` due to the presence of many repeated string values. The use of **three-way partitioning** allows Quick Sort to efficiently handle duplicates by sorting them in linear time, thus reducing the overall complexity and speeding up the process. This technique avoids unnecessary comparisons by grouping equal elements together, making Quick Sort exceptionally fast for `field1`.
-  
+
 - **Merge Sort** proves to be more consistent across different fields, with predictable time performance regardless of data distribution. This stability makes it a reliable choice when the data lacks repeated values or when maintaining a stable sort is important.

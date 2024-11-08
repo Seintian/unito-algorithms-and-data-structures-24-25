@@ -17,7 +17,8 @@
 #include <stdio.h>
 
 
-#define MAX_LINE_SIZE 128
+#define MAX_LINE_SIZE 256
+#define MAX_FIELD1_SIZE 240
 
 /**
  * @brief Structure representing a record with four fields.
@@ -30,12 +31,12 @@
  * 
  *    ID,field1,field2,field3
  * 
- * where ID is an integer, field1 is a string with at most 99 characters, field2 is an integer,
+ * where ID is an integer, field1 is a string with at most 239 characters, field2 is an integer,
  * and field3 is a double.
  */
 typedef struct _Record {
     int id;
-    char field1[100];
+    char* field1;
     int field2;
     double field3;
 

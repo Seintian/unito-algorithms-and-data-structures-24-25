@@ -1,5 +1,5 @@
 #include "unity.h"
-#include "../src/hashtable.h"
+#include "hashtable.h"
 #include <string.h>
 #include <stdlib.h>
 

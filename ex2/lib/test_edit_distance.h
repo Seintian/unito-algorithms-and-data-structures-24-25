@@ -1,5 +1,5 @@
 #include "unity.h"
-#include "../src/edit_distance.h"
+#include "edit_distance.h"
 
 
 void test_edit_distance_identical_strings_recursive(void);
