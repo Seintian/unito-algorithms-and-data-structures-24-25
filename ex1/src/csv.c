@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 
-#define USE_BASE_IO_FUNCTIONS 1
+#define USE_BASE_IO_FUNCTIONS 0
 
 const char* recordReadFmt = "%d,%239[^,],%d,%lf\n";
 const char* recordWriteFmt = "%d,%s,%d,%lf\n";
@@ -98,15 +98,15 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
 
         switch (fields_parsed) {
             case 1:
-                record -> field1 = malloc(strlen(token) + 1);
+                size_t len = strlen(token);
+
+                record -> field1 = malloc(len + 1);
                 if (record -> field1 == NULL) {
                     perror("Error allocating memory for field1");
                     exit(EXIT_FAILURE);
                 }
 
                 strcpy(record -> field1, token);
-                if (strlen(record -> field1) == 0)
-                    return fields_parsed;
 
                 break;
 

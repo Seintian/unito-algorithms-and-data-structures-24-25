@@ -4,6 +4,7 @@
 // Function prototypes for hash table tests
 void test_hash_table_create(void);
 void test_hash_table_put_and_get(void);
+void test_hash_table_resized(void);
 void test_hash_table_update_existing_key(void);
 void test_hash_table_contains_key(void);
 void test_hash_table_remove(void);

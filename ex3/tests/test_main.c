@@ -1,5 +1,6 @@
 #include "unity.h"
 #include "test_hashtable.h"
+#include "test_prime.h"
 
 
 int main() {
@@ -8,6 +9,7 @@ int main() {
     // hash table tests: basic operations
     RUN_TEST(test_hash_table_create);
     RUN_TEST(test_hash_table_put_and_get);
+    RUN_TEST(test_hash_table_resized);
     RUN_TEST(test_hash_table_update_existing_key);
     RUN_TEST(test_hash_table_contains_key);
     RUN_TEST(test_hash_table_remove);
@@ -21,6 +23,11 @@ int main() {
     RUN_TEST(test_hash_table_copy);
     RUN_TEST(test_hash_table_merge);
     RUN_TEST(test_hash_table_resized);
+
+    // prime number tests
+
+    RUN_TEST(test_is_prime);
+    RUN_TEST(test_next_prime);
 
     return UNITY_END();
 }
