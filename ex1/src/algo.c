@@ -1,3 +1,8 @@
+/**
+ * @file algo.c
+ * @brief Implementation file for the merge_sort and the quick_sort functions.
+ */
+
 #include "algo.h"
 #include <stdio.h>
 #include <string.h>

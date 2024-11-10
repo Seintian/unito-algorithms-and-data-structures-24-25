@@ -1,3 +1,11 @@
+/**
+ * @file csv_operations.c
+ * @brief This file contains the implementation of CSV reading, writing, and comparison functions.
+ *
+ * This file provides functions to read and write CSV records into an array, compare records
+ * based on different fields, count lines in a file, and handle whitespace trimming.
+ */
+
 #include "csv.h"
 #include <errno.h>
 #include <string.h>
@@ -51,6 +59,14 @@ size_t count_lines(FILE* file) {
     return n_lines;
 }
 
+/**
+ * @brief Trims leading and trailing whitespace characters from a string.
+ * 
+ * This function modifies the input string by removing any leading or trailing whitespace characters.
+ * It uses `isspace` to check for whitespace and adjusts the string accordingly.
+ *
+ * @param str The string to be trimmed.
+ */
 void trim_whitespace(char* str) {
     char* end;
 
@@ -67,6 +83,18 @@ void trim_whitespace(char* str) {
     *(end + 1) = '\0';
 }
 
+/**
+ * @brief Parses a line from a CSV file into a record.
+ * 
+ * This function parses a line of CSV data into a `Record` structure. It tokenizes the line by commas,
+ * trims whitespace, and assigns the values to the respective fields in the record.
+ *
+ * @param start The starting position of the line in the input buffer.
+ * @param length The length of the line.
+ * @param line A temporary buffer used to store the line.
+ * @param record Pointer to the record where the parsed data will be stored.
+ * @return The number of fields successfully parsed, or -1 if there was an error (e.g., line is too long).
+ */
 int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
     if (length >= MAX_LINE_SIZE) 
         return -1;

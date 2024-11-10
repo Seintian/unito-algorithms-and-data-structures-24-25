@@ -1,7 +1,70 @@
+/**
+ * @file main.c
+ * @brief Command Line Interface (CLI) application for text correction using edit distance.
+ *
+ * @mainpage Text Correction CLI Application
+ *
+ * @section overview Overview
+ * This project is a Command Line Interface (CLI) application designed for correcting text by finding the closest word from a dictionary using the edit distance algorithm. The user provides a dictionary file and a text file to be corrected. The program suggests the closest matches for misspelled words by calculating the edit distance between the words in the text and the dictionary.
+ *
+ * @section usage Usage
+ * The application is executed with the following command:
+ * ```
+ * ./bin/main_ex2(.exe) <dictionary_path> <to_correct_path>
+ * ```
+ * - `<dictionary_path>`: Path to the dictionary file containing valid words.
+ * - `<to_correct_path>`: Path to the file containing the words that need correction.
+ *
+ * Example:
+ * ```
+ * ./bin/main_ex2(.exe) data/dictionary.txt data/correctme.txt
+ * ```
+ *
+ * @section file_structure File Structure
+ *
+ * - **main.c**: Contains the main entry point of the application, which validates input arguments, reads dictionary and to-correct files, and performs the word correction using the edit distance algorithm.
+ * - **text_io.h**: Provides functions for reading files, such as reading the dictionary and the words to be corrected, as well as counting lines in a file and reading words.
+ * - **edit_distance.h**: Declares the `edit_distance_dyn` function used to compute the edit distance between two words.
+ *
+ * @section modules Modules and Functions
+ *
+ * - **Input Validation**: The function `validate_input` checks the validity of the input files, ensuring that the dictionary and to-correct files are different and can be opened.
+ * - **Word Correction**:
+ *   - `find_closest_word`: Uses the `edit_distance_dyn` algorithm to find the closest word from the dictionary for a given word.
+ * - **File Operations**:
+ *   - `count_lines`: Counts the number of lines (words) in a file.
+ *   - `read_dictionary`: Reads words from the dictionary file into an array.
+ *   - `read_to_correct`: Reads words from the file to be corrected.
+ * - **Edit Distance Algorithm**: The `edit_distance_dyn` function is used to compute the distance between two words, guiding the correction process.
+ *
+ * @section error_handling Error Handling
+ *
+ * The application validates:
+ * - The dictionary and to-correct files are not the same.
+ * - The dictionary file exists and can be read.
+ * - The to-correct file exists and can be read.
+ * - The dictionary and to-correct files contain words.
+ *
+ * If any validation fails, the application prints an error message and exits with `EXIT_FAILURE`.
+ *
+ * @section performance Performance
+ * The edit distance algorithm has a time complexity of O(m * n), where `m` is the length of the first word and `n` is the length of the second word. This means that the algorithm performs efficiently on words of average length but may experience slower performance on longer words.
+ *
+ * @section compilation Compilation Instructions
+ * To compile the application, use:
+ * ```
+ * make all
+ * ```
+ * To compile and execute the tests, use:
+ * ```
+ * make test
+ * ```
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "io.h"
+#include "text_io.h"
 #include "edit_distance.h"
 
 

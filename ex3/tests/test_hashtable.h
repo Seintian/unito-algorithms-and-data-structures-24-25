@@ -1,3 +1,8 @@
+/**
+ * @file test_hashtable.h
+ * @brief Function prototypes for hash table tests.
+ */
+
 #ifndef _TEST_HASHTABLE_H_
 #define _TEST_HASHTABLE_H_
 

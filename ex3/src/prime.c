@@ -1,5 +1,9 @@
+/**
+ * @file prime.c
+ * @brief Implementation of functions for prime number operations.
+ */
+
 #include "prime.h"
-#include <math.h>
 
 
 int is_prime(int n) {

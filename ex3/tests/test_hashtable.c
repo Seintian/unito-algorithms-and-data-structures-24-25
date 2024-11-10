@@ -1,3 +1,8 @@
+/**
+ * @file test_hashtable.c
+ * @brief Unit tests for the hash table implementation.
+ */
+
 #include "unity.h"
 #include "hashtable.h"
 #include "prime.h"
@@ -146,10 +151,10 @@ void test_hash_table_equals(void) {
     hash_table_put(table, "key1", "value1");
     hash_table_put(table2, "key1", "value1");
 
-    TEST_ASSERT_TRUE(hash_table_equals(table, table2));
+    TEST_ASSERT_TRUE(hash_table_equals(table, table2, string_compare));
 
     hash_table_put(table2, "key2", "value2");
-    TEST_ASSERT_FALSE(hash_table_equals(table, table2));
+    TEST_ASSERT_FALSE(hash_table_equals(table, table2, string_compare));
 
     hash_table_free(table2);
 }
@@ -160,7 +165,7 @@ void test_hash_table_copy(void) {
     hash_table_put(table, "key2", "value2");
 
     HashTable* copy = hash_table_copy(table);
-    TEST_ASSERT_TRUE(hash_table_equals(table, copy));
+    TEST_ASSERT_TRUE(hash_table_equals(table, copy, string_compare));
 
     hash_table_free(copy);
 }

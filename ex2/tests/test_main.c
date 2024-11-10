@@ -1,3 +1,10 @@
+/**
+ * @file test_main.c
+ * @brief Entry point for the unit tests.
+ * 
+ * This file contains the main function that runs the unit tests for the edit_distance algorithm in recursive and dynamic versions.
+ */
+
 #include "unity.h"
 #include "test_edit_distance.h"
 

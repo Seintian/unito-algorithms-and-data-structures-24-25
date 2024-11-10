@@ -1,3 +1,8 @@
+/**
+ * @file edit_distance.c
+ * @brief Implementation file for edit distance algorithms.
+ */
+
 #include "edit_distance.h"
 #include <string.h>
 #include <stdlib.h>

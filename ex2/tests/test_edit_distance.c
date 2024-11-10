@@ -1,3 +1,8 @@
+/**
+ * @file test_edit_distance.c
+ * @brief Unit tests' implementation for the edit_distance algorithm.
+ */
+
 #include "test_edit_distance.h"
 
 

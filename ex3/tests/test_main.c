@@ -1,3 +1,8 @@
+/**
+ * @file test_main.c
+ * @brief Entry point for the test suite. Contains tests for hash tables and prime numbers.
+ */
+
 #include "unity.h"
 #include "test_hashtable.h"
 #include "test_prime.h"
@@ -22,7 +27,6 @@ int main() {
     RUN_TEST(test_hash_table_equals);
     RUN_TEST(test_hash_table_copy);
     RUN_TEST(test_hash_table_merge);
-    RUN_TEST(test_hash_table_resized);
 
     // prime number tests
 

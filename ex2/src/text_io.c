@@ -1,5 +1,9 @@
-#include "io.h"
-#include <string.h>
+/**
+ * @file text_io.c
+ * @brief Input/Output functions for reading files.
+ */
+
+#include "text_io.h"
 
 
 int count_lines(FILE* file_fp) {
@@ -40,8 +44,17 @@ int count_words(FILE* file) {
     return word_count;
 }
 
-
-void free_matrix(char** matrix, int total_rows) {
+/**
+ * @brief Frees a dynamically allocated matrix.
+ *
+ * This function frees the memory allocated for a 2D matrix, assuming
+ * that the matrix was dynamically allocated. It also frees each individual
+ * row of the matrix before freeing the matrix itself.
+ *
+ * @param matrix The matrix to free.
+ * @param total_rows The number of rows in the matrix.
+ */
+static void free_matrix(char** matrix, int total_rows) {
     if (matrix == NULL)
         return;
 
@@ -51,7 +64,15 @@ void free_matrix(char** matrix, int total_rows) {
     free(matrix);
 }
 
-void to_lower(char *str) {
+/**
+ * @brief Converts a string to lowercase.
+ *
+ * This function converts all the characters in the provided string to 
+ * lowercase. It modifies the original string.
+ *
+ * @param str The string to convert to lowercase.
+ */
+static void to_lower(char *str) {
     while (*str) {
         if (*str >= 'A' && *str <= 'Z')
             *str += 'a' - 'A';

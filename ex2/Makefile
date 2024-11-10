@@ -103,7 +103,7 @@ compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
 # Doxygen documentation generation
 doc: Doxyfile $(SRC_FILES) $(TEST_FILES)
 	@doxygen Doxyfile
-	@echo "Documentation generated in $(DOC_DIR)"
+	@echo "Documentation generated in ./$(DOC_DIR)"
 
 # Create Doxyfile if it doesn't exist
 Doxyfile:
@@ -113,6 +113,7 @@ Doxyfile:
 	@sed -i 's|GENERATE_LATEX *= YES|GENERATE_LATEX = NO|' Doxyfile
 	@sed -i 's|EXTRACT_ALL *= NO|EXTRACT_ALL = YES|' Doxyfile
 	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex2"|' Doxyfile
+	@sed -i 's|INPUT *=|INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)|' Doxyfile
 	@echo "Doxyfile created and configured."
 
 help:

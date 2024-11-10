@@ -42,10 +42,24 @@ typedef struct _Record {
 
 } Record, *RecordPtr;
 
+#define N_FIELDS_IN_RECORD 4
+
+/**
+ * @brief Format string for reading a record from a CSV file.
+ * 
+ * This format string is used in `fscanf` for reading each record with the fields: 
+ * ID (integer), field1 (string), field2 (integer), field3 (double).
+ */
 extern const char* recordReadFmt;
+
+/**
+ * @brief Format string for writing a record to a CSV file.
+ * 
+ * This format string is used in `fprintf` for writing a record with the fields: 
+ * ID (integer), field1 (string), field2 (integer), field3 (double).
+ */
 extern const char* recordWriteFmt;
 
-#define N_FIELDS_IN_RECORD 4
 #define READING_BUFFER_SIZE (64 * 1024) // 64 KB
 #define WRITING_BUFFER_SIZE (64 * 1024) // 64 KB
 
@@ -63,6 +77,7 @@ extern const char* recordWriteFmt;
  *         and a positive value if the first record is greater than the second.
  */
 int compare_field1(const void* a, const void* b);
+
 /**
  * @brief Compares two records based on the field1 field.
  *
@@ -77,6 +92,7 @@ int compare_field1(const void* a, const void* b);
  *         and a positive value if the first record is greater than the second.
  */
 int compare_field2(const void* a, const void* b);
+
 /**
  * @brief Compares two records based on the field1 field.
  *
