@@ -109,11 +109,19 @@ doc: Doxyfile $(SRC_FILES) $(TEST_FILES)
 Doxyfile:
 	@echo "Generating Doxyfile..."
 	@doxygen -g
+ifeq ($(OS), Windows_NT)
+	powershell -Command "(Get-Content Doxyfile) -replace 'OUTPUT_DIRECTORY\s*=.*', 'OUTPUT_DIRECTORY = $(DOC_DIR)' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'GENERATE_LATEX\s*= YES', 'GENERATE_LATEX = NO' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'EXTRACT_ALL\s*= NO', 'EXTRACT_ALL = YES' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'PROJECT_NAME\s*=.*\"My Project\"', 'PROJECT_NAME = \"Laboratorio Algoritmi 2024-2025 - Ex3\"' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'INPUT\s*=.*', 'INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)' | Set-Content Doxyfile"
+else
 	@sed -i 's|OUTPUT_DIRECTORY *=|OUTPUT_DIRECTORY = $(DOC_DIR)|' Doxyfile
 	@sed -i 's|GENERATE_LATEX *= YES|GENERATE_LATEX = NO|' Doxyfile
 	@sed -i 's|EXTRACT_ALL *= NO|EXTRACT_ALL = YES|' Doxyfile
 	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex3"|' Doxyfile
 	@sed -i 's|INPUT *=|INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)|' Doxyfile
+endif
 	@echo "Doxyfile created and configured."
 
 help:
