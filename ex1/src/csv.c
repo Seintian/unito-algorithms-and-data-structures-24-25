@@ -59,6 +59,9 @@ size_t count_lines(FILE* file) {
     return n_lines;
 }
 
+#ifdef USE_BASE_IO_FUNCTIONS
+#   if USE_BASE_IO_FUNCTIONS == 0
+
 /**
  * @brief Trims leading and trailing whitespace characters from a string.
  * 
@@ -125,7 +128,7 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
         trim_whitespace(token);
 
         switch (fields_parsed) {
-            case 1:
+            case 1: {
                 size_t len = strlen(token);
 
                 record -> field1 = malloc(len + 1);
@@ -137,21 +140,21 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
                 strcpy(record -> field1, token);
 
                 break;
-
-            case 2:
+            }
+            case 2: {
                 record -> field2 = atoi(token);
                 if (record -> field2 == 0 && errno == EINVAL)
                     return fields_parsed;
 
                 break;
-
-            case 3:
+            }
+            case 3: {
                 record -> field3 = atof(token);
                 if (record -> field3 == 0 && errno == EINVAL)
                     return fields_parsed;
 
                 break;
-            
+            }
             default:
                 break;
         }
@@ -159,9 +162,6 @@ int parse_line(const char* start, size_t length, char* line, RecordPtr record) {
 
     return fields_parsed;
 }
-
-#ifdef USE_BASE_IO_FUNCTIONS
-#   if USE_BASE_IO_FUNCTIONS == 0
 
 size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
     size_t read_count = 0;

@@ -12,7 +12,6 @@
 #ifndef _CSV_H
 #define _CSV_H
 
-#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 

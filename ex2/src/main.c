@@ -81,14 +81,14 @@
  */
 void validate_input(const char* dictionary, const char* to_correct) {
     if (strcmp(dictionary, to_correct) == 0) {
-        printf("Error: dictionary and to_correct cannot be the same " \
+        fprintf(stderr, "Error: dictionary and to_correct cannot be the same " \
                "-> dictionary: %s, to_correct: %s\n", dictionary, to_correct);
         exit(EXIT_FAILURE);
     }
 
     FILE* dictionary_fp = fopen(dictionary, "r");
     if (!dictionary_fp) {
-        printf("Error: dictionary file does not exist -> %s\n", dictionary);
+        fprintf(stderr, "Error: dictionary file does not exist -> %s\n", dictionary);
         exit(EXIT_FAILURE);
     }
 
@@ -96,7 +96,7 @@ void validate_input(const char* dictionary, const char* to_correct) {
     if (!to_correct_fp) {
         fclose(dictionary_fp);
 
-        printf("Error: to_correct file does not exist -> %s\n", to_correct);
+        fprintf(stderr, "Error: to_correct file does not exist -> %s\n", to_correct);
         exit(EXIT_FAILURE);
     }
 
@@ -133,13 +133,13 @@ void find_closest_word(const char* word, char** dictionary, int words_in_diction
  */
 int main(int argc, const char * argv[]) {
     if (argc < 3) {
-        printf("Usage:\n");
-        printf("  %s <dictionary_path> <to_correct_path>\n", argv[0]);
-        printf("Options:\n");
-        printf("  <dictionary_path> Path to the dictionary file.\n");
-        printf("  <to_correct_path> Path to the file containing the text to correct.\n");
-        printf("Example:\n");
-        printf("  %s data/dictionary.txt data/correctme.txt\n", argv[0]);
+        fprintf(stderr, "Usage:\n");
+        fprintf(stderr, "  %s <dictionary_path> <to_correct_path>\n", argv[0]);
+        fprintf(stderr, "Options:\n");
+        fprintf(stderr, "  <dictionary_path> Path to the dictionary file.\n");
+        fprintf(stderr, "  <to_correct_path> Path to the file containing the text to correct.\n");
+        fprintf(stderr, "Example:\n");
+        fprintf(stderr, "  %s data/dictionary.txt data/correctme.txt\n", argv[0]);
 
         return EXIT_FAILURE;
     }

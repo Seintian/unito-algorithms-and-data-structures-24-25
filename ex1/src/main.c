@@ -84,7 +84,6 @@
 
 #include "algo.h"
 #include "csv.h"
-#include <stdio.h>
 #include <time.h>
 #include <string.h>
 #include <stdint.h>
@@ -117,14 +116,23 @@ int (*compare_records)(const void* a, const void* b);
  */
 void validate_input(char* input_file, char* output_file, char* algorithm, char* field) {
     if (strcmp(input_file, output_file) == 0) {
-        printf("Error: input_file and output_file cannot be the same " \
-               "-> input_file: %s, output_file: %s\n", input_file, output_file);
+        fprintf(
+            stderr,
+            "Error: input_file and output_file cannot be the same "
+            "-> input_file: %s, output_file: %s\n",
+            input_file,
+            output_file
+        );
         exit(EXIT_FAILURE);
     }
 
     FILE* input = fopen(input_file, "r");
     if (!input) {
-        printf("Error: input file does not exist -> %s\n", input_file);
+        fprintf(
+            stderr,
+            "Error: input file does not exist -> %s\n",
+            input_file
+        );
         exit(EXIT_FAILURE);
     }
 
@@ -132,8 +140,11 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
     if (!output) {
         fclose(input);
 
-        printf("Error: output file cannot be created " \
-               "-> input_file: %s, output_file: %s\n", input_file, output_file);
+        fprintf(
+            stderr,
+            "Error: output file cannot be created "
+            "-> input_file: %s, output_file: %s\n", input_file, output_file
+        );
         exit(EXIT_FAILURE);
     }
 
@@ -142,7 +153,11 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
         fclose(input);
         fclose(output);
 
-        printf("Error: invalid algorithm (expected 0 or 1) -> %s\n", algorithm);
+        fprintf(
+            stderr,
+            "Error: invalid algorithm (expected 0 or 1) -> %s\n",
+            algorithm
+        );
         exit(EXIT_FAILURE);
     }
 
@@ -151,7 +166,11 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
         fclose(input);
         fclose(output);
 
-        printf("Error: invalid field (expected 0, 1, or 2) -> %s\n", field);
+        fprintf(
+            stderr,
+            "Error: invalid field (expected 0, 1, or 2) -> %s\n",
+            field
+        );
         exit(EXIT_FAILURE);
     }
 
@@ -253,15 +272,15 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
  */
 int main(int argc, char* argv[]) {
     if (argc != 5) {
-        printf("Usage:\n");
-        printf("  %s <input_file> <output_file> <algorithm> <field>\n\n", argv[0]);
-        printf("Options:\n");
-        printf("  <input_file>   path to the input file\n");
-        printf("  <output_file>  path to the output file (different from input_file)\n");
-        printf("  <algorithm>    0 for merge sort, 1 for quick sort\n");
-        printf("  <field>        0 for field1, 1 for field2, 2 for field3\n\n");
-        printf("Example:\n");
-        printf("  %s input.csv output.csv 0 1\n", argv[0]);
+        fprintf(stderr, "Usage:\n");
+        fprintf(stderr, "  %s <input_file> <output_file> <algorithm> <field>\n\n", argv[0]);
+        fprintf(stderr, "Options:\n");
+        fprintf(stderr, "  <input_file>   path to the input file\n");
+        fprintf(stderr, "  <output_file>  path to the output file (different from input_file)\n");
+        fprintf(stderr, "  <algorithm>    0 for merge sort, 1 for quick sort\n");
+        fprintf(stderr, "  <field>        0 for field1, 1 for field2, 2 for field3\n\n");
+        fprintf(stderr, "Example:\n");
+        fprintf(stderr, "  %s input.csv output.csv 0 1\n", argv[0]);
 
         return EXIT_FAILURE;
     }
