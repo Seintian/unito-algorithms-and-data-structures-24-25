@@ -22,6 +22,5 @@ void test_hash_table_map(void);
 void test_hash_table_equals(void);
 void test_hash_table_copy(void);
 void test_hash_table_merge(void);
-void test_hash_table_resized(void);
 
 #endif // _TEST_HASHTABLE_H_

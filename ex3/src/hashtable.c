@@ -176,12 +176,13 @@ void hash_table_put(HashTable* table, const void* key, const void* value) {
     }
     
     float load_factor = hash_table_load_factor(table);
-    if (load_factor > LOAD_FACTOR_UP_THRESHOLD) {
-        if (hash_table_resize(table, table -> capacity * 2) == RETURN_FAILURE 
-            && load_factor > LOAD_FACTOR_UP_TOLERANCE) {
-            fprintf(stderr, "Error in hash_table_put(): Hash table is too full and resizing failed.\n");
-            exit(EXIT_FAILURE);
-        }
+    if (
+        load_factor > LOAD_FACTOR_UP_THRESHOLD
+        && hash_table_resize(table, table -> capacity * 2) == RETURN_FAILURE 
+        && load_factor > LOAD_FACTOR_UP_TOLERANCE
+    ) {
+        fprintf(stderr, "Error in hash_table_put(): Hash table is too full and resizing failed.\n");
+        exit(EXIT_FAILURE);
     }
 
     unsigned long hash = table -> hash_func(key) % table -> capacity;
@@ -343,7 +344,7 @@ void hash_table_free(HashTable* table) {
 
 float hash_table_load_factor(const HashTable* table) {
     if (table == NULL)
-        return (float)RETURN_FAILURE;
+        return (float) RETURN_FAILURE;
 
     return (float) table -> size / (float) table -> capacity;
 }

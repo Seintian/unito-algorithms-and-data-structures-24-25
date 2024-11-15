@@ -69,10 +69,171 @@
 #include <stdio.h>
 #include <string.h>
 #include "hashtable.h"
+#include "text_io.h"
 
+
+void find_max_word(const HashTable* table, int min_length) {
+    void** keys = hash_table_keyset(table);
+    if (!keys) {
+        fprintf(stderr, "Error: failed to get keys from hash table\n");
+        return;
+    }
+
+    void** values = hash_table_values(table);
+    if (!values) {
+        fprintf(stderr, "Error: failed to get values from hash table\n");
+        free(keys);
+        return;
+    }
+
+    char* max_word = NULL;
+    int max_freq = 0;
+
+    for (size_t i = 0; i < hash_table_size(table); i++) {
+        char* word = (char*) keys[i];
+        int freq = *(int*) values[i];
+
+        if (strlen(word) >= min_length && freq > max_freq) {
+            max_word = word;
+            max_freq = freq;
+        }
+    }
+
+    if (max_word)
+        printf("Most frequent word with at least %d characters: %s (%d occurrences)\n", min_length, max_word, max_freq);
+
+    else
+        printf("No words with at least %d characters found\n", min_length);
+
+    free(keys);
+    free(values);
+}
+
+void free_key_value(const void* key, const void* value) {
+    free((void*) key);
+    free((void*) value);
+}
+
+/**
+ * @brief Inserts a word into the hash table.
+ *
+ * This function inserts a word into the hash table. If the word is already in the hash table,
+ * the frequency of the word is incremented. If the word is not in the hash table, it is added
+ * with a frequency of 1.
+ *
+ * @param table Pointer to the hash table.
+ * @param word The word to insert.
+ * @return 0 if successful, -1 if an error occurs.
+ */
+void clear_words_hash_table(HashTable* table) {
+    if (table == NULL) {
+        fprintf(stderr, "Error: hash table is NULL\n");
+        return;
+    }
+
+    hash_table_map(table, free_key_value);
+    hash_table_free(table);
+}
+
+/**
+ * @brief Hash function for strings.
+ *
+ * This function generates a hash value for a given string.
+ * It uses the djb2 algorithm to calculate the hash value.
+ *
+ * @param key The string to hash.
+ * @return The hash value of the string.
+ */
+unsigned long hash_string(const void* key) {
+    const char* str = (const char*) key;
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *str++)) {
+        hash = ((hash << 5) + hash) + c;
+    }
+
+    return hash;
+}
+
+/**
+ * @brief Comparison function for strings.
+ *
+ * This function compares two strings and returns the result.
+ *
+ * @param a The first string to compare.
+ * @param b The second string to compare.
+ * @return 0 if the strings are equal, non-zero otherwise.
+ */
+int compare_string(const void* a, const void* b) {
+    return strcmp((const char*) a, (const char*) b);
+}
+
+/**
+ * @brief Validates the input arguments.
+ *
+ * This function validates the input arguments of the program.
+ * It checks if the text file path is valid and if the minimum word length is a positive integer.
+ *
+ * @param text_path Path to the text file.
+ * @param min_word_length Minimum length of words.
+ * @throw `EXIT_FAILURE` if any of the input arguments is invalid.
+ */
+void validate_input(const char* text_path, const char* min_word_length) {
+    FILE* text_fp = fopen(text_path, "r");
+    if (!text_fp) {
+        fprintf(stderr, "Error: dictionary file does not exist -> %s\n", text_path);
+        exit(EXIT_FAILURE);
+    }
+
+    int min_length = atoi(min_word_length);
+    if (min_length < 0) {
+        fprintf(stderr, "Error: minimum word length must be a positive integer -> %s\n", min_word_length);
+        exit(EXIT_FAILURE);
+    }
+
+    fclose(text_fp);
+}
 
 int main(int argc, char* argv[]) {
-    printf("Hello, World!\n");
+    if (argc < 3) {
+        fprintf(stderr, "Usage:\n");
+        fprintf(stderr, "  %s <text_path> <min_word_length>\n", argv[0]);
+        fprintf(stderr, "Options:\n");
+        fprintf(stderr, "  <text_path> Path to the text file.\n");
+        fprintf(stderr, "  <min_word_length> Minimum length of words.\n");
+        fprintf(stderr, "Example:\n");
+        fprintf(stderr, "  %s data/iliade.txt 6\n", argv[0]);
+
+        return EXIT_FAILURE;
+    }
+
+    validate_input(argv[1], argv[2]);
+
+    HashTable* table = hash_table_create(&compare_string, &hash_string);
+    if (!table) {
+        fprintf(stderr, "Error: failed to create hash table\n");
+        return EXIT_FAILURE;
+    }
+
+    FILE* text_fp = fopen(argv[1], "r");
+    if (!text_fp) {
+        perror("Error: failed to open text file");
+        return EXIT_FAILURE;
+    }
+
+    printf("Reading text file...\n");
+    if (read_text(text_fp, &table) == -1) {
+        fprintf(stderr, "Error: failed to read text file\n");
+        return EXIT_FAILURE;
+    }
+
+    printf("Finding most frequent word with at least %d characters...\n", atoi(argv[2]));
+    find_max_word((const HashTable*) table, atoi(argv[2]));
+
+    printf("Freeing memory...\n");
+    fclose(text_fp);
+    clear_words_hash_table(table);
 
     return EXIT_SUCCESS;
 }
