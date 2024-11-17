@@ -1,0 +1,97 @@
+# Report on the Development of the LLM-Based Program for Word Frequency Analysis in a Text File
+
+## 1. Introduction
+
+In this exercise, the goal was to write a program that uses a hash table implemented in C to calculate the most frequent word in a text file, with a length equal to or greater than a given minimum value. The implementation leveraged a system based on a Large Language Model (LLM), such as ChatGPT, to support the writing and refinement of the code. This process was iterative and involved various steps to improve the understanding and functionality of the program.
+
+## 2. Development Process
+
+### 2.1 Initial Prompt
+
+The initial prompt included several inquiries to understand what needed to be implemented and how to do so.
+
+1. **What is a hash table?**
+2. **What structs compose it?**
+3. **How does separate chaining work? What other methods exist for handling collisions?**
+4. **Integrate separate chaining in the local implementation (.c), keeping the types opaque in the .h and the basic function declarations.**
+
+Following these prompts, the LLM provided answers that included basic theory about the hash table structure, followed by example code snippets. Specifically, the initial output contained:
+
+- **Theory**: an explanation of hash table concepts and separate chaining as a collision handling technique.
+- **Code**: a first version of the code with basic operations for a hash table, including `insert()`, `search()`, and `delete()` functions.
+
+The initial output also included a basic structure for the hash table, with an array of pointers and a linked list for each slot as the foundation for separate chaining.
+
+### 2.2 Results Obtained
+
+The first output produced by the LLM concerned the definition and implementation of the hash table with separate chaining. The resulting code implemented:
+
+- **Hash Table**: a struct containing an array of pointers to lists of elements.
+- **Collision Handling (Separate Chaining)**: a technique where collisions are managed using linked lists, with each element in the hash table being a pointer to a list of elements with the same hash value.
+
+This initial version of the code included fundamental operations:
+
+- **Insert**: inserts a word into the hash table.
+- **Search**: searches for a word in the hash table.
+- **Delete**: removes a word from the hash table.
+
+However, additional features were necessary to make the implementation more efficient and robust:
+
+- **Test Suite**: The initial code did not include an automated test suite to verify the correct functionality of the basic hash table operations.
+- **Dynamic Resizing**: The hash table did not grow or shrink dynamically based on the number of elements. Logic for automatic resizing needed to be implemented.
+
+### 2.3 Critical Analysis of the Output
+
+Since we proceeded with specific and constructive prompts, the initial output, consisting of a few lines of code overall, did not show significant flaws.
+
+On the contrary, the LLM responses were quite comprehensive not only in terms of code but also, and especially, from a theoretical perspective.
+
+### 2.4 Prompt Refinement
+
+Following the first output, we queried the AI to add the missing features:
+
+1. **Implement dynamic resizing** of the hash table so that it automatically grows when the capacity exceeds a certain threshold and shrinks when the number of elements drops below another threshold.
+2. **Create a test suite** to verify the functionality of all implemented functions, including insertion, search, deletion, and resizing tests.
+
+The refined prompt led to an improved version of the code that correctly implemented dynamic resizing and a robust test suite for fundamental operations.
+
+### 2.5 Issues Encountered During Development
+
+At the end of the project, while writing `main.c`, some issues arose that had not been anticipated:
+
+1. **Memory Leaks**: These occurred in the `read_text` function, where memory was allocated for all words read from the file. However, in the `insert_word` function, only new words were managed, while pointers for existing words (duplicates) were lost. This led to an accumulation of unreleased memory, causing memory leaks.
+
+2. **Error in the `resize` Function**: The test suite generated an error during hash table resizing. Initially, the code resized the entire hash table by creating a new table from scratch. After further queries, the problem was identified and the function was corrected to operate directly on the `buckets` array, allocating a new one and rehashing all the nodes from the original array. This made the function simpler and more efficient, avoiding the creation of a new table each time the hash table was resized and solving a bug present in the original version.
+
+The LLM is not infallible: some bugs in the code were introduced by the AI. Therefore, we refined our prompts iteratively to resolve them, but in some cases, the AI could not find the solution. This highlights the importance of fully understanding the code generated by the LLM: some bugs can only be resolved by us.
+
+### 2.6 Final Improvements
+
+Further modifications included:
+
+- **Optimization of dynamic resizing**: the table now doubled its size when capacity was exceeded and halved when the number of elements dropped below a certain limit.
+- **Creation of documentation** to describe the functioning of the hash table and the implemented operations, with a particular focus on the tests.
+
+## 3. Conclusions
+
+The development process proved to be highly iterative, with continuous improvement of the hash table thanks to interaction with the LLM system. Collaboration with the language model allowed:
+
+- Efficient writing and refinement of the code.
+- Solving issues related to memory leaks, dynamic resizing, and handling `const` parameters.
+- Creating a robust test suite to ensure the correct functionality of the basic hash table operations.
+
+The final program is now complete and fully meets the requirements, allowing the calculation of the most frequent word in a text file that meets the specified minimum length, using a dynamic hash table.
+
+## 4. Final Thoughts
+
+The use of an LLM system significantly simplified the writing and improvement of the code. Although the model provided a solid base, continuous interaction and code refinement were essential to solve specific issues such as memory management, dynamic resizing, and test creation.
+
+The tasks for which the AI was effective and helpful:
+
+- **Test suite**: excellent at generating unit tests;
+- **Documentation**: generates almost always correct documentation starting from a function signature;
+- **Learning**: explains theory well, so when prompted with small, specific questions, it proves very helpful.
+
+The use of an LLM system made the development process faster and allowed for effective problem-solving during the creation of the program. The ability to obtain real-time suggestions and corrections accelerated learning and code improvement, although some optimizations were necessary to adapt to the project's specifics.
+
+The iterative work with the LLM system confirmed that, while the model provides a solid starting point, human interaction is essential to solve complex details and enhance the overall code quality.

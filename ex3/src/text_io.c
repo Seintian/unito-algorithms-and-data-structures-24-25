@@ -3,8 +3,6 @@
  * @brief Input/Output functions for reading files.
  */
 
-#define _GNU_SOURCE
-
 #define LOWER_WORDS 0
 
 #include "text_io.h"
@@ -23,7 +21,7 @@
  * @param word The word to insert.
  * @return 0 if successful, -1 if an error occurs.
  */
-int insert_word(HashTable* table, const char* word) {
+static int insert_word(HashTable* table, const char* word) {
     if (table == NULL || word == NULL)
         return -1;
 
@@ -32,12 +30,16 @@ int insert_word(HashTable* table, const char* word) {
         (*freq)++;
 
     else {
+        const char* new_word = strdup(word);
+        if (!new_word)
+            return -1;
+
         int* new_freq = (int*) malloc(sizeof(int));
         if (!new_freq)
             return -1;
 
         *new_freq = 1;
-        hash_table_put(table, word, new_freq);
+        hash_table_put(table, new_word, new_freq);
     }
 
     return 0;
@@ -121,7 +123,7 @@ int read_text(FILE* text_fp, HashTable** table) {
             trim_whitespace(token);
 
             if (strlen(token) > 0)
-                insert_word(*table, strdup(token));
+                insert_word(*table, token);
 
             token = strtok_r(NULL, delimiters, &saveptr);
         }

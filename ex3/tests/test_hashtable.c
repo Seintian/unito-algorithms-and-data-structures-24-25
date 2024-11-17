@@ -12,7 +12,7 @@
 
 
 // Hash function for testing with strings
-unsigned long string_hash(const void* key) {
+static unsigned long string_hash(const void* key) {
     const char* str = (const char*)key;
     unsigned long hash = 5381;
     int c;
@@ -23,7 +23,7 @@ unsigned long string_hash(const void* key) {
 }
 
 // Compare function for strings
-int string_compare(const void* a, const void* b) {
+static int string_compare(const void* a, const void* b) {
     return strcmp((const char*)a, (const char*)b);
 }
 

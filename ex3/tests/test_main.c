@@ -6,6 +6,7 @@
 #include "unity.h"
 #include "test_hashtable.h"
 #include "test_prime.h"
+#include "test_text_io.h"
 
 
 int main() {
@@ -32,6 +33,15 @@ int main() {
 
     RUN_TEST(test_is_prime);
     RUN_TEST(test_next_prime);
+
+    // text_io tests
+
+    RUN_TEST(test_count_words_valid_file);
+    RUN_TEST(test_count_words_null_file);
+    RUN_TEST(test_read_text_valid_file);
+    RUN_TEST(test_read_text_null_file);
+    RUN_TEST(test_insert_word_existing_word);
+    RUN_TEST(test_insert_word_new_word);
 
     return UNITY_END();
 }
