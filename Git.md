@@ -165,7 +165,7 @@ git push # aggiornamento della copia remota
 ```
 
 
-[Pro Git]: https://progit.org
+[Pro Git]: http://git-scm.com/book
 [commit]: http://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
 
 ## Aggiornamento della propria versione del progetto
