@@ -96,7 +96,7 @@ perché qualcuno ne ha copiato il contenuto.
 Aggiungete ora i membri del gruppo *e i docenti di laboratorio* al gruppo di
 sviluppo del progetto con ruolo "developer" (trovate l'opzione seguendo i menù
 Settings -> Members a partire dalla pagina del vostro repository). I nickname
-dei docenti di laboratorio sono "pozzato", "magro", "audrito" e "micalizi".
+dei docenti di laboratorio sono "drago", "magro", "audrito" e "micalizi".
 
 L'avere a disposizione una copia del laboratorio non è ancora sufficiente per
 poter iniziare a lavorare: è infatti necessario creare una copia locale alla
@@ -165,7 +165,7 @@ git push # aggiornamento della copia remota
 ```
 
 
-[Pro Git]: https://progit.org
+[Pro Git]: http://git-scm.com/book
 [commit]: http://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
 
 ## Aggiornamento della propria versione del progetto
