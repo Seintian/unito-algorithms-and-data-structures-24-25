@@ -1,0 +1,143 @@
+# Detect OS and set specific commands
+ifeq ($(OS), Windows_NT)
+    RM = powershell -Command "if (Test-Path '$(1)') { Remove-Item -Recurse -Force '$(1)' }"
+    MKDIR = cmd /c mkdir
+    EXE = .exe
+
+else
+    RM = rm -rf $(1)
+    MKDIR = mkdir -p
+    EXE =
+
+endif
+
+CC = gcc
+UNITY_DIR = ../Resources/C/Unity
+LIB_DIR = lib
+CFLAGS = -I$(UNITY_DIR) -I$(LIB_DIR) -Wall -Werror -O3
+
+SRC_DIR = src
+TEST_DIR = tests
+BIN_DIR = bin
+BUILD_DIR = build
+DOC_DIR = doc
+
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
+
+BUILD_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
+BUILD_FILES := $(filter-out $(BUILD_DIR)/main.o, $(BUILD_FILES))
+TEST_BUILD_FILES = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(TEST_FILES))
+
+UNITY_SRC = $(UNITY_DIR)/unity.c
+
+TARGET = $(BIN_DIR)/main_ex3-4$(EXE)
+TEST_TARGET = $(BIN_DIR)/test_ex3-4$(EXE)
+
+.PHONY: all clean test compile build_bin compile_commands.json doc Doxyfile help
+
+# Default target
+all: $(TARGET) $(TEST_TARGET)
+	@echo "All targets have been built ($(TARGET), $(TEST_TARGET))."
+
+# Create build directory if it does not exist
+$(BIN_DIR):
+	$(MKDIR) $(BIN_DIR)
+
+# Create object directory if it does not exist
+$(BUILD_DIR):
+	$(MKDIR) $(BUILD_DIR)
+
+# Rule for compiling object files
+compile: $(BUILD_FILES) $(TEST_BUILD_FILES)
+	@echo "Object files have been compiled."
+
+# Rule for creating executables
+build_bin: $(TARGET) $(TEST_TARGET)
+	@echo "Executables have been built."
+
+# Rule for compiling object files from the source directory
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Rule for compiling object files from the test directory
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# Compile and link the main application
+$(TARGET): $(BUILD_FILES) $(BUILD_DIR)/main.o | $(BUILD_DIR) $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $(BUILD_FILES) $(BUILD_DIR)/main.o
+
+# Compile and link the test executable
+$(TEST_TARGET): $(TEST_BUILD_FILES) $(BUILD_FILES) $(UNITY_SRC) | $(BUILD_DIR) $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $(TEST_BUILD_FILES) $(BUILD_FILES) $(UNITY_SRC)
+
+# Run tests
+test: $(TEST_TARGET)
+	$(TEST_TARGET)
+
+# Clean up build artifacts
+clean:
+	$(call RM,$(BIN_DIR))
+	$(call RM,$(BUILD_DIR))
+	$(call RM,$(DOC_DIR))
+	$(call RM,compile_commands.json)
+	$(call RM,Doxyfile)
+	$(call RM,Doxyfile.bak)
+	@echo "Build artifacts, documentation and IDE plugin's configuration have been removed."
+
+# Generate compilation database
+compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
+	@echo "[" > $@
+	@for file in $(SRC_FILES) $(TEST_FILES); do \
+		echo "    {" >> $@; \
+		echo "        \"directory\": \"$(CURDIR)\"," >> $@; \
+		echo "        \"command\": \"$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/$$(basename $$file).o $$file\"," >> $@; \
+		echo "        \"file\": \"$$file\"" >> $@; \
+		echo "    }," >> $@; \
+	done
+	@sed -i '$$ s/,$$//' $@ # Remove the last comma
+	@echo "]" >> $@
+	@echo "Compilation database generated in compile_commands.json"
+
+# Doxygen documentation generation
+doc: Doxyfile $(SRC_FILES) $(TEST_FILES)
+	@doxygen Doxyfile
+	@echo "Documentation generated in ./$(DOC_DIR)"
+
+# Create Doxyfile if it doesn't exist
+Doxyfile:
+	@echo "Generating Doxyfile..."
+	@doxygen -g
+ifeq ($(OS), Windows_NT)
+	powershell -Command "(Get-Content Doxyfile) -replace 'OUTPUT_DIRECTORY\s*=.*', 'OUTPUT_DIRECTORY = $(DOC_DIR)' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'GENERATE_LATEX\s*= YES', 'GENERATE_LATEX = NO' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'EXTRACT_ALL\s*= NO', 'EXTRACT_ALL = YES' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'PROJECT_NAME\s*=.*\"My Project\"', 'PROJECT_NAME = \"Laboratorio Algoritmi 2024-2025 - Ex3-4\"' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'INPUT\s*=.*', 'INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)' | Set-Content Doxyfile"
+else
+	@sed -i 's|OUTPUT_DIRECTORY *=|OUTPUT_DIRECTORY = $(DOC_DIR)|' Doxyfile
+	@sed -i 's|GENERATE_LATEX *= YES|GENERATE_LATEX = NO|' Doxyfile
+	@sed -i 's|EXTRACT_ALL *= NO|EXTRACT_ALL = YES|' Doxyfile
+	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex3-4"|' Doxyfile
+	@sed -i 's|INPUT *=|INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)|' Doxyfile
+endif
+	@echo "Doxyfile created and configured."
+
+help:
+	@echo "Usage: make [all|clean|test|build_bin|compile_commands.json|doc|Doxyfile|help]"
+	@echo "  all: Compile the main application and test executable"
+	@echo "  clean: Remove build artifacts"
+	@echo "  test: Run tests"
+	@echo "  build_bin: Create the executables from the object files"
+	@echo "  compile_commands.json: Generate a compilation database for Development Environment Integration"
+	@echo "  doc: Generate Doxygen documentation"
+	@echo "  Doxyfile: Generate a Doxyfile for Doxygen documentation generation"
+	@echo "  help: Display this help message"
+
+# Include automatic dependencies generated by the compiler
+-include $(BUILD_FILES:.o=.d)
+
+# Dependency generation rule
+$(BUILD_DIR)/%.d: $(SRC_DIR)/%.c $(TEST_DIR)/%.c | $(BUILD_DIR)
+	@$(CC) $(CFLAGS) -M $< -MF $@ -MT $@

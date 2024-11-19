@@ -131,7 +131,7 @@ void find_closest_word(const char* word, char** dictionary, int words_in_diction
  * @return `EXIT_SUCCESS` if the program executed successfully,
  *         `EXIT_FAILURE` if the input arguments are invalid.
  */
-int main(int argc, const char * argv[]) {
+int main(int argc, const char* argv[]) {
     if (argc < 3) {
         fprintf(stderr, "Usage:\n");
         fprintf(stderr, "  %s <dictionary_path> <to_correct_path>\n", argv[0]);
