@@ -82,12 +82,15 @@
  * ```
  */
 
+#include "error_logger.h"
 #include "algo.h"
 #include "csv.h"
 #include <time.h>
 #include <string.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 
 /**
@@ -115,37 +118,29 @@ int (*compare_records)(const void* a, const void* b);
  * @throw `EXIT_FAILURE` if any of the input arguments is invalid.
  */
 void validate_input(char* input_file, char* output_file, char* algorithm, char* field) {
-    if (strcmp(input_file, output_file) == 0) {
-        fprintf(
-            stderr,
-            "Error: input_file and output_file cannot be the same "
-            "-> input_file: %s, output_file: %s\n",
+    if (strcmp(input_file, output_file) == 0)
+        raise_error(
+            "input_file and output_file cannot be the same "
+            "-> input_file: %s, output_file: %s",
             input_file,
             output_file
         );
-        exit(EXIT_FAILURE);
-    }
 
     FILE* input = fopen(input_file, "r");
-    if (!input) {
-        fprintf(
-            stderr,
-            "Error: input file does not exist -> %s\n",
+    if (!input)
+        raise_error(
+            "input file does not exist -> %s",
             input_file
         );
-        exit(EXIT_FAILURE);
-    }
 
     FILE* output = fopen(output_file, "w");
     if (!output) {
         fclose(input);
 
-        fprintf(
-            stderr,
-            "Error: output file cannot be created "
-            "-> input_file: %s, output_file: %s\n", input_file, output_file
+        raise_error(
+            "output file cannot be created "
+            "-> input_file: %s, output_file: %s", input_file, output_file
         );
-        exit(EXIT_FAILURE);
     }
 
     int algo = atoi(algorithm);
@@ -153,12 +148,10 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
         fclose(input);
         fclose(output);
 
-        fprintf(
-            stderr,
-            "Error: invalid algorithm (expected 0 or 1) -> %s\n",
+        raise_error(
+            "invalid algorithm (expected 0 or 1) -> %s",
             algorithm
         );
-        exit(EXIT_FAILURE);
     }
 
     int fld = atoi(field);
@@ -166,12 +159,10 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
         fclose(input);
         fclose(output);
 
-        fprintf(
-            stderr,
-            "Error: invalid field (expected 0, 1, or 2) -> %s\n",
+        raise_error(
+            "invalid field (expected 0, 1, or 2) -> %s",
             field
         );
-        exit(EXIT_FAILURE);
     }
 
     fclose(input);
@@ -215,10 +206,8 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     time_t end;
 
     RecordPtr records = (RecordPtr) malloc(n_records * sizeof(Record));
-    if (!records) {
-        fprintf(stderr, "Error allocating memory for records in CSV file\n");
-        exit(EXIT_FAILURE);
-    }
+    if (!records)
+        raise_error("Memory allocation failed");
 
     printf("Reading %zu records...\n", n_records);
 

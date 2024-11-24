@@ -3,11 +3,13 @@
  * @brief Implementation of a generic hash table data structure.
  */
 
+#include "error_logger.h"
 #include "hashtable.h"
 #include "prime.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
 
 /** @brief Initial capacity for the hash table. 
  * 
@@ -128,6 +130,7 @@ static HashTable* hash_table_create_sized(
     table -> buckets = (HashNode**) calloc(table -> capacity, sizeof(HashNode*));
     if (!table -> buckets) {
         free(table);
+
         return NULL;
     }
 
@@ -170,20 +173,16 @@ HashTable* hash_table_create(int (*compare)(const void*, const void*), unsigned 
 // Basic hash table operations
 
 void hash_table_put(HashTable* table, const void* key, const void* value) {
-    if (table == NULL) {
-        fprintf(stderr, "Error in hash_table_put(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (table == NULL)
+        raise_error("Hash table is NULL.");
     
     float load_factor = hash_table_load_factor(table);
     if (
         load_factor > LOAD_FACTOR_UP_THRESHOLD
         && hash_table_resize(table, table -> capacity * 2) == RETURN_FAILURE 
         && load_factor > LOAD_FACTOR_UP_TOLERANCE
-    ) {
-        fprintf(stderr, "Error in hash_table_put(): Hash table is too full and resizing failed.\n");
-        exit(EXIT_FAILURE);
-    }
+    )
+        raise_error("Hash table is too full and resizing failed.");
 
     unsigned long hash = table -> hash_func(key) % table -> capacity;
     HashNode* node = table -> buckets[hash];
@@ -207,19 +206,15 @@ void hash_table_put(HashTable* table, const void* key, const void* value) {
 }
 
 void hash_table_remove(HashTable* table, const void* key) {
-    if (table == NULL) {
-        fprintf(stderr, "Error in hash_table_remove(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (table == NULL)
+        raise_error("Hash table is NULL.");
 
     if (
         hash_table_load_factor(table) < LOAD_FACTOR_DOWN_THRESHOLD
         && table -> capacity / 2 >= INITIAL_CAPACITY
         && hash_table_resize(table, table -> capacity / 2) == RETURN_FAILURE
-    ) {
-        fprintf(stderr, "Error in hash_table_remove(): Hash table is too empty and resizing failed.\n");
-        exit(EXIT_FAILURE);
-    }
+    )
+        raise_error("Hash table is too empty and resizing failed.");
 
     unsigned long hash = table -> hash_func(key);
     int index = hash % table -> capacity;
@@ -306,10 +301,8 @@ void** hash_table_keyset(const HashTable* table) {
 }
 
 void hash_table_clear(HashTable* table) {
-    if (table == NULL) {
-        fprintf(stderr, "Error in hash_table_clear(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (table == NULL)
+        raise_error("Hash table is NULL.");
 
     if (hash_table_size(table) == 0)
         return;
@@ -330,10 +323,8 @@ void hash_table_clear(HashTable* table) {
 }
 
 void hash_table_free(HashTable* table) {
-    if (table == NULL) {
-        fprintf(stderr, "Error in hash_table_free(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (table == NULL)
+        raise_error("Hash table is NULL.");
 
     hash_table_clear(table);
     free(table -> buckets);
@@ -350,10 +341,8 @@ float hash_table_load_factor(const HashTable* table) {
 }
 
 void hash_table_replace(const HashTable* table, const void* key, const void* new_value) {
-    if (table == NULL) {
-        fprintf(stderr, "Error in hash_table_replace(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (table == NULL)
+        raise_error("Hash table is NULL.");
 
     unsigned long hash = table -> hash_func(key);
     int index = hash % table -> capacity;
@@ -370,10 +359,8 @@ void hash_table_replace(const HashTable* table, const void* key, const void* new
 }
 
 void hash_table_map(const HashTable* table, void (*func)(const void* key, const void* value)) {
-    if (table == NULL) {
-        fprintf(stderr, "Error in hash_table_map(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (table == NULL)
+        raise_error("Hash table is NULL.");
 
     for (int i = 0; i < table -> capacity; i++) {
         HashNode* node = table -> buckets[i];
@@ -437,10 +424,8 @@ int hash_table_equals(
 }
 
 void hash_table_merge(HashTable* dest, const HashTable* source) {
-    if (dest == NULL || source == NULL) {
-        fprintf(stderr, "Error in hash_table_merge(): Hash table is NULL.\n");
-        exit(EXIT_FAILURE);
-    }
+    if (dest == NULL || source == NULL)
+        raise_error("Hash table is NULL.");
 
     for (int i = 0; i < source -> capacity; i++) {
         HashNode* node = source -> buckets[i];
