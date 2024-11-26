@@ -5,9 +5,11 @@
 
 #define LOWER_WORDS 0
 
-#include "text_io.h"
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
+#include "hashtable.h"
+#include "text_io.h"
 
 
 /**
