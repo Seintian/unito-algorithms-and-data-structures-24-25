@@ -45,3 +45,39 @@ void test_graph_add_edge() {
 
     graph_free(graph);
 }
+
+void test_graph_contains_node() {
+    Graph graph = graph_create(0, 0, compare_ints, hash_ints);
+    int node = 1;
+
+    TEST_ASSERT_EQUAL(0, graph_contains_node(graph, &node));
+    graph_add_node(graph, &node);
+    TEST_ASSERT_EQUAL(1, graph_contains_node(graph, &node));
+
+    graph_free(graph);
+}
+
+void test_graph_contains_edge() {
+    Graph graph = graph_create(0, 1, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2, label = 100;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+
+    TEST_ASSERT_EQUAL(0, graph_contains_edge(graph, &node1, &node2));
+    graph_add_edge(graph, &node1, &node2, &label);
+    TEST_ASSERT_EQUAL(1, graph_contains_edge(graph, &node1, &node2));
+
+    graph_free(graph);
+}
+
+void test_graph_remove_node() {
+    Graph graph = graph_create(0, 0, compare_ints, hash_ints);
+    int node = 1;
+
+    graph_add_node(graph, &node);
+    TEST_ASSERT_EQUAL(1, graph_remove_node(graph, &node));
+    TEST_ASSERT_EQUAL(0, graph_remove_node(graph, &node));
+
+    graph_free(graph);
+}
