@@ -170,3 +170,28 @@ void test_graph_num_nodes() {
 
     graph_free(graph);
 }
+
+void test_graph_num_edges() {
+    Graph graph = graph_create(1, 1, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2, label = 100;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+    graph_add_edge(graph, &node1, &node2, &label);
+
+    TEST_ASSERT_EQUAL(1, graph_num_edges(graph));
+
+    graph_free(graph);
+}
+
+void test_graph_free() {
+    Graph graph = graph_create(1, 1, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2, label = 100;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+    graph_add_edge(graph, &node1, &node2, &label);
+
+    graph_free(graph);
+    TEST_PASS();
+}
