@@ -81,3 +81,50 @@ void test_graph_remove_node() {
 
     graph_free(graph);
 }
+
+void test_graph_remove_edge() {
+    Graph graph = graph_create(1, 1, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2, label = 100;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+    graph_add_edge(graph, &node1, &node2, &label);
+
+    TEST_ASSERT_EQUAL(1, graph_remove_edge(graph, &node1, &node2));
+    TEST_ASSERT_EQUAL(0, graph_remove_edge(graph, &node1, &node2));
+
+    graph_free(graph);
+}
+
+void test_graph_get_nodes() {
+    Graph graph = graph_create(0, 0, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+
+    void** nodes = graph_get_nodes(graph);
+    TEST_ASSERT_NOT_NULL(nodes);
+    TEST_ASSERT_EQUAL(2, graph_num_nodes(graph));
+
+    free(nodes);
+    graph_free(graph);
+}
+
+void test_graph_get_edges() {
+    Graph graph = graph_create(1, 1, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2, label = 100;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+    graph_add_edge(graph, &node1, &node2, &label);
+
+    Edge** edges = graph_get_edges(graph);
+    TEST_ASSERT_NOT_NULL(edges);
+    TEST_ASSERT_EQUAL(1, graph_num_edges(graph));
+    TEST_ASSERT_EQUAL(&node1, edges[0]->source);
+    TEST_ASSERT_EQUAL(&node2, edges[0]->dest);
+
+    free(edges);
+    graph_free(graph);
+}
