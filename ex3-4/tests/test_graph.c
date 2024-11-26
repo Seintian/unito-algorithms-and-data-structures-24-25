@@ -1,0 +1,47 @@
+#include "graph.h"
+#include "test_graph.h"
+#include "unity.h"
+#include <stdlib.h>
+#include <string.h>
+
+// Helper functions for tests
+static int compare_ints(const void* a, const void* b) {
+    return *(int*)a - *(int*)b;
+}
+
+static unsigned long hash_ints(const void* key) {
+    return (unsigned long)(*(int*)key);
+}
+
+void test_graph_create() {
+    Graph graph = graph_create(1, 1, compare_ints, hash_ints);
+    TEST_ASSERT_NOT_NULL(graph);
+    TEST_ASSERT_EQUAL(1, graph_is_directed(graph));
+    TEST_ASSERT_EQUAL(1, graph_is_labelled(graph));
+    graph_free(graph);
+}
+
+void test_graph_add_node() {
+    Graph graph = graph_create(0, 0, compare_ints, hash_ints);
+    int node = 1;
+
+    TEST_ASSERT_EQUAL(1, graph_add_node(graph, &node));
+    TEST_ASSERT_EQUAL(0, graph_add_node(graph, &node)); // Duplicate node
+    TEST_ASSERT_EQUAL(1, graph_contains_node(graph, &node));
+
+    graph_free(graph);
+}
+
+void test_graph_add_edge() {
+    Graph graph = graph_create(1, 1, compare_ints, hash_ints);
+    int node1 = 1, node2 = 2, label = 100;
+
+    graph_add_node(graph, &node1);
+    graph_add_node(graph, &node2);
+
+    TEST_ASSERT_EQUAL(1, graph_add_edge(graph, &node1, &node2, &label));
+    TEST_ASSERT_EQUAL(0, graph_add_edge(graph, &node1, &node2, &label)); // Duplicate edge
+    TEST_ASSERT_EQUAL(1, graph_contains_edge(graph, &node1, &node2));
+
+    graph_free(graph);
+}
