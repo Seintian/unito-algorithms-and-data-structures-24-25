@@ -1,18 +1,6 @@
 #ifndef _GRAPH_H
 #define _GRAPH_H
 
-/**
- * @brief Enum to define return status codes.
- * 
- * RETURN_FAILURE: Indicates a failure with a value of -1.
- * RETURN_SUCCESS: Indicates success with a value of 0.
- */
-typedef enum _ReturnType {
-    RETURN_FAILURE = -1,
-    RETURN_SUCCESS = 0
-
-} ReturnType;
-
 typedef struct graph *Graph;
 
 /**
@@ -132,7 +120,7 @@ int graph_remove_edge(Graph gr, const void* node1, const void* node2);
  * @brief Gets the number of nodes in the graph.
  * 
  * @param gr The graph to check.
- * @return integer representing the number of nodes in the graph, or RETURN_FAILURE on failure.
+ * @return integer representing the number of nodes in the graph, RETURN_FAILURE on failure.
  */
 int graph_num_nodes(const Graph gr);
 
@@ -165,7 +153,7 @@ Edge** graph_get_edges(const Graph gr);
  * 
  * @param gr The graph to check.
  * @param node The node to get neighbours for.
- * @return void** representing an array of pointers to the neighbours of node, or NULL on failure.
+ * @return void** representing an array of pointers to the neighbours of node, NULL if node is not in the graph, or on failure.
  */
 void** graph_get_neighbours(const Graph gr, const void* node);
 
@@ -174,7 +162,7 @@ void** graph_get_neighbours(const Graph gr, const void* node);
  * 
  * @param gr The graph to check.
  * @param node The node to get the number of neighbours for.
- * @return integer representing the number of neighbours of node, or RETURN_FAILURE on failure.
+ * @return integer representing the number of neighbours of node, RETURN_FAILURE if node is not in the graph, or on failure.
  */
 int graph_num_neighbours(const Graph gr, const void* node);
 
