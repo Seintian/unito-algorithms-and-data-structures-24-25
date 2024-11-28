@@ -391,3 +391,50 @@ int graph_num_neighbours(const Graph graph, const void* node) {
 
     return hash_table_size(edges);
 }
+
+void* graph_get_label(
+    const Graph graph,
+    const void* node1,
+    const void* node2
+) {
+    if (!graph || !node1 || !node2 || !graph -> labelled)
+        return NULL;
+    
+    const HashTable* edges = hash_table_get(graph -> nodes, node1);
+    if (!edges)
+        return NULL;
+
+    Edge* edge = hash_table_get(edges, node2);
+    if (!edge)
+        return NULL;
+
+    return edge -> label;
+}
+
+void graph_free(Graph graph) {
+    if (!graph) {
+        fprintf(stderr, "ERROR in graph_free(): received NULL pointer as Graph to free\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int num_nodes = hash_table_size(graph -> nodes);
+    if (!num_nodes)
+        return;
+
+    HashTable** edges = (HashTable**) hash_table_values2(graph -> nodes);
+    if (!edges) {
+        fprintf(stderr, "ERROR in graph_free(): unable to allocate resources to free graph at\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < num_nodes; i++) {
+        if (free_node_edges(edges[i]) == RETURN_FAILURE) {
+            fprintf(stderr, "ERROR in graph_free(): unattended error occurred, no data has been freed\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    free(edges);
+    hash_table_free(graph -> nodes);
+    free(graph);
+}
