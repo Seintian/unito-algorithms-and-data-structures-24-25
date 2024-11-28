@@ -321,3 +321,73 @@ void** graph_get_nodes(const Graph graph) {
 
     return hash_table_keyset(graph -> nodes);
 }
+
+Edge** graph_get_edges(const Graph graph) {
+    if (!graph)
+        return NULL;
+
+    size_t num_edges = graph_num_edges(graph);
+    if (num_edges == 0)
+        return NULL;
+
+    Edge** total_edges = (Edge**) malloc(sizeof(Edge*) * num_edges);
+    if (!total_edges)
+        return NULL;
+
+    HashTable** edges = (HashTable**) hash_table_values2(graph -> nodes);
+    if (!edges) {
+        free(total_edges);
+        return NULL;
+    }
+
+    int num_nodes = hash_table_size(graph -> nodes);
+    size_t k = 0; // control if k >= num_edges should not be necessary
+    for (int i = 0; i < num_nodes; i++) {
+        int num_neighbours = hash_table_size(edges[i]);
+        Edge** neighbours = num_neighbours > 0
+                            ? (Edge**) hash_table_values2(edges[i])
+                            : NULL;
+        if (!neighbours && num_neighbours > 0) {
+            free(edges);
+            free(total_edges);
+            return NULL;
+        }
+
+        for (size_t j = 0; j < num_neighbours; j++) {
+            if (graph -> directed
+             || (   !graph -> directed
+                 && graph->compare(neighbours[j]->source, neighbours[j]->dest) < 0
+                )
+            )
+                total_edges[k++] = neighbours[j];
+        }
+
+        free(neighbours);
+    }
+
+    free(edges);
+
+    return total_edges;
+}
+
+void** graph_get_neighbours(const Graph graph, const void* node) {
+    if (!graph || !node)
+        return NULL;
+    
+    const HashTable* edges = hash_table_get(graph -> nodes, node);
+    if (!edges)
+        return NULL;
+
+    return hash_table_keyset(edges);
+}
+
+int graph_num_neighbours(const Graph graph, const void* node) {
+    if (!graph || !node)
+        return RETURN_FAILURE;
+
+    const HashTable* edges = hash_table_get(graph -> nodes, node);
+    if (!edges)
+        return RETURN_FAILURE;
+
+    return hash_table_size(edges);
+}
