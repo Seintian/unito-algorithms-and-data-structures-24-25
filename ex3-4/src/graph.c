@@ -128,3 +128,83 @@ int graph_is_labelled(const Graph graph) {
 
     return graph -> labelled;
 }
+
+int graph_add_node(Graph graph, const void* node) {
+    if (!graph || !node)
+        return RETURN_FAILURE;
+
+    if (hash_table_contains_key(graph -> nodes, node))
+        return 0;
+
+    HashTable* edges = hash_table_create(graph -> compare, graph -> hash);
+    if (!edges)
+        return RETURN_FAILURE;
+    
+    hash_table_put(graph -> nodes, node, edges);
+
+    return 1;
+}
+
+int graph_add_edge( 
+    Graph graph,
+    const void* node1,
+    const void* node2,
+    const void* label
+) {
+    if (!graph || !node1 || !node2)
+        return RETURN_FAILURE;
+
+    HashTable* edges_node1 = (HashTable*) hash_table_get(graph -> nodes, node1);
+    if (!edges_node1)
+        return RETURN_FAILURE;
+
+    HashTable* edges_node2 = graph->directed
+                            ? NULL  
+                            : (HashTable*) hash_table_get(graph -> nodes, node2);
+    if (!edges_node2 && !graph->directed)
+        return RETURN_FAILURE;
+
+    if (
+        hash_table_contains_key(edges_node1, node2)
+     || (   
+            !graph->directed
+         && hash_table_contains_key(edges_node2, node1)
+        )
+    )
+        return 0;
+
+    const void* edge_label = graph->labelled
+                        ? label
+                        : NULL;
+
+    Edge* edge_node1 = edge_create(node1, node2, edge_label);
+    if (!edge_node1)
+        return RETURN_FAILURE;
+    
+    Edge* edge_node2 = graph->directed
+                            ? NULL  
+                            : edge_create(node2, node1, edge_label);
+    if (!edge_node2 && !graph->directed) {
+        free(edge_node1);
+
+        return RETURN_FAILURE;
+    }
+
+    hash_table_put(edges_node1, node2, edge_node1);
+    graph -> num_edges++;
+
+    if (graph -> directed)
+        return 1;
+
+    hash_table_put(edges_node2, node1, edge_node2);
+    graph -> num_edges++;
+
+    return 1;
+}
+
+int graph_contains_node(const Graph graph, const void* node) {
+    if (!graph || !node)
+        return RETURN_FAILURE;
+
+    return hash_table_contains_key(graph -> nodes, node);
+}
