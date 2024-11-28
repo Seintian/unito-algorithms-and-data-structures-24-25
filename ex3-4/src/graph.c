@@ -438,3 +438,59 @@ void graph_free(Graph graph) {
     hash_table_free(graph -> nodes);
     free(graph);
 }
+
+static int free_node_edges(HashTable* edges) {
+    if (!edges)
+        return RETURN_FAILURE;
+    
+    size_t num_edges = hash_table_size(edges);
+    if (num_edges == 0) {
+        hash_table_free(edges);
+        return 0;
+    }
+
+    Edge** edges_array = (Edge**) hash_table_values2(edges);
+    if (!edges_array)
+        return RETURN_FAILURE;
+
+    for (size_t i = 0; i < num_edges; i++)
+        free(edges_array[i]);
+
+    free(edges_array);
+    hash_table_free(edges);
+
+    return num_edges;
+}
+
+static int remove_edge_between_nodes(Graph graph, const void* source, const void* dest) {
+    HashTable* edges = hash_table_get(graph->nodes, source);
+    if (!edges)
+        return RETURN_FAILURE;
+
+    if (!hash_table_contains_key(edges, dest))
+        return 0;
+
+    Edge* edge = hash_table_get(edges, dest);
+    if (!edge)
+        return RETURN_FAILURE;
+    free(edge);
+    hash_table_remove(edges, dest);
+
+    return 1; 
+}
+
+static Edge* edge_create(
+    const void* source,
+    const void* dest,
+    const void* label
+) {
+    Edge* e = (Edge*) malloc(sizeof(Edge));
+    if (!e)
+        return NULL;
+
+    e -> source = (void*) source;
+    e -> dest = (void*) dest;
+    e -> label = (void*) label;
+
+    return e;
+}
