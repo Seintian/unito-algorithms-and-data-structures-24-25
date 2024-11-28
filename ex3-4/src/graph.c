@@ -298,3 +298,26 @@ int graph_remove_edge(
     
     return result;
 }
+
+int graph_num_nodes(const Graph graph) {
+    if (!graph)
+        return -1;
+
+    return hash_table_size(graph -> nodes);
+}
+
+int graph_num_edges(const Graph graph) {
+    if (!graph)
+        return -1;
+
+    return graph -> directed
+        ? graph -> num_edges
+        : graph -> num_edges / 2;
+}
+
+void** graph_get_nodes(const Graph graph) {
+    if (!graph)
+        return NULL;
+
+    return hash_table_keyset(graph -> nodes);
+}
