@@ -208,3 +208,93 @@ int graph_contains_node(const Graph graph, const void* node) {
 
     return hash_table_contains_key(graph -> nodes, node);
 }
+
+int graph_contains_edge(
+    const Graph graph,
+    const void* node1,
+    const void* node2
+) {
+    if (!graph || !node1 || !node2)
+        return RETURN_FAILURE;
+
+    if (
+        !hash_table_contains_key(graph -> nodes, node1)
+     || !hash_table_contains_key(graph -> nodes, node2)
+    )
+        return 0;
+
+    const HashTable* edges = (HashTable*) hash_table_get(graph -> nodes, node1);
+    if (!edges)
+        return RETURN_FAILURE;
+
+    return hash_table_contains_key(edges, node2);
+}
+
+int graph_remove_node(Graph graph, const void* node) {
+    if (!graph || !node)
+        return RETURN_FAILURE;
+
+    if (!hash_table_contains_key(graph -> nodes, node))
+        return 0;
+
+    HashTable* node_edges = hash_table_get(graph -> nodes, node);
+    if (!node_edges)
+        return RETURN_FAILURE;
+    
+    int removed_edges = free_node_edges(node_edges);
+    if (removed_edges == RETURN_FAILURE)
+        return RETURN_FAILURE;
+
+    hash_table_remove(graph -> nodes, node);  
+
+    HashTable** all_edges = (HashTable**) hash_table_values2(graph -> nodes);
+    if (!all_edges)
+        return RETURN_FAILURE;
+    
+    int num_nodes = hash_table_size(graph -> nodes);
+    for (int i = 0; i < num_nodes; i++) {
+        if (!hash_table_contains_key(all_edges[i], node))
+            continue;
+
+        free(hash_table_get(all_edges[i], node));
+
+        hash_table_remove(all_edges[i], node);
+        removed_edges++;
+    }
+
+    free(all_edges);
+
+    graph -> num_edges -= removed_edges; 
+
+    return 1;
+}
+
+int graph_remove_edge(
+    Graph graph,
+    const void* node1,
+    const void* node2
+) {
+    if (!graph || !node1 || !node2)
+        return RETURN_FAILURE;
+
+    if (
+        !hash_table_contains_key(graph -> nodes, node1)
+     || !hash_table_contains_key(graph -> nodes, node2)
+    )
+        return 0;
+
+    int result = remove_edge_between_nodes(graph, node1, node2);
+    if (result != 1)
+        return result;
+
+    graph -> num_edges--;
+
+    if (graph -> directed)
+        return 1;
+    
+    result = remove_edge_between_nodes(graph, node2, node1);
+    if (result == 1)
+        graph -> num_edges--;
+    
+    return result;
+}
