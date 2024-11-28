@@ -2,19 +2,24 @@
 #define _TEST_GRAPH_H
 
 // Test functions for graph module
-void test_graph_create();
-void test_graph_add_node();
-void test_graph_add_edge();
-void test_graph_contains_node();
-void test_graph_contains_edge();
-void test_graph_remove_node();
-void test_graph_remove_edge();
-void test_graph_get_nodes();
-void test_graph_get_edges();
-void test_graph_get_neighbours();
-void test_graph_get_label();
-void test_graph_num_nodes();
-void test_graph_num_edges();
-void test_graph_free();
+void test_graph_creation(void);
+
+void test_graph_add_node(void);
+
+void test_graph_add_edge(void);
+
+void test_graph_remove_edge(void);
+
+void test_graph_remove_node(void);
+
+void test_graph_get_neighbours(void);
+
+void test_graph_get_label(void);
+
+void test_graph_free(void);
+
+void test_graph_complex(void);
+
+void test_graph_free_exhaustive(void);
 
 #endif // _TEST_GRAPH_H
