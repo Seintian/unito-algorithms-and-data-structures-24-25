@@ -1,5 +1,6 @@
 #include "graph.h"
 #include "hashtable.h" // HashTable's INITIAL_CAPACITY is 2
+#include "error_logger.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -47,32 +48,6 @@ static int remove_edge_between_nodes(Graph graph, const void* source, const void
  *         allocation fails.
  */
 static Edge* edge_create(const void* source, const void* dest, const void* label);
-
-
-void** hash_table_values2(const HashTable* table) {
-    size_t size = hash_table_size(table);
-    if (size == 0) {
-        return NULL;
-    }
-
-    void** keys = hash_table_keyset(table);
-    if (!keys)
-        return NULL;
-
-    void** values = (void**) malloc(sizeof(void*) * size);
-    if (!values) {
-        free(keys);
-        return NULL;
-    }
-
-    for (size_t i = 0; i < size; i++) {
-        values[i] = hash_table_get(table, keys[i]);
-    }
-
-    free(keys);
-
-    return values;
-}
 
 struct graph {
     HashTable* nodes;
@@ -247,7 +222,7 @@ int graph_remove_node(Graph graph, const void* node) {
 
     hash_table_remove(graph -> nodes, node);  
 
-    HashTable** all_edges = (HashTable**) hash_table_values2(graph -> nodes);
+    HashTable** all_edges = (HashTable**) hash_table_values(graph -> nodes);
     if (!all_edges)
         return RETURN_FAILURE;
     
@@ -334,7 +309,7 @@ Edge** graph_get_edges(const Graph graph) {
     if (!total_edges)
         return NULL;
 
-    HashTable** edges = (HashTable**) hash_table_values2(graph -> nodes);
+    HashTable** edges = (HashTable**) hash_table_values(graph -> nodes);
     if (!edges) {
         free(total_edges);
         return NULL;
@@ -345,7 +320,7 @@ Edge** graph_get_edges(const Graph graph) {
     for (int i = 0; i < num_nodes; i++) {
         int num_neighbours = hash_table_size(edges[i]);
         Edge** neighbours = num_neighbours > 0
-                            ? (Edge**) hash_table_values2(edges[i])
+                            ? (Edge**) hash_table_values(edges[i])
                             : NULL;
         if (!neighbours && num_neighbours > 0) {
             free(edges);
@@ -413,7 +388,7 @@ void* graph_get_label(
 
 void graph_free(Graph graph) {
     if (!graph) {
-        fprintf(stderr, "ERROR in graph_free(): received NULL pointer as Graph to free\n");
+        raise_error("graph_free(): graph is NULL.");
         exit(EXIT_FAILURE);
     }
 
@@ -421,15 +396,15 @@ void graph_free(Graph graph) {
     if (!num_nodes)
         return;
 
-    HashTable** edges = (HashTable**) hash_table_values2(graph -> nodes);
+    HashTable** edges = (HashTable**) hash_table_values(graph -> nodes);
     if (!edges) {
-        fprintf(stderr, "ERROR in graph_free(): unable to allocate resources to free graph at\n");
+        raise_error("graph_free(): unable to allocate memory in order to free graph.");
         exit(EXIT_FAILURE);
     }
 
     for (int i = 0; i < num_nodes; i++) {
         if (free_node_edges(edges[i]) == RETURN_FAILURE) {
-            fprintf(stderr, "ERROR in graph_free(): unattended error occurred, no data has been freed\n");
+            raise_error("graph_free(): unable to allocate memory in order to free graph.");
             exit(EXIT_FAILURE);
         }
     }
@@ -449,7 +424,7 @@ static int free_node_edges(HashTable* edges) {
         return 0;
     }
 
-    Edge** edges_array = (Edge**) hash_table_values2(edges);
+    Edge** edges_array = (Edge**) hash_table_values(edges);
     if (!edges_array)
         return RETURN_FAILURE;
 
