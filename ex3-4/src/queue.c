@@ -59,3 +59,58 @@ void* queue_first(Queue q) {
 
     return q -> front -> data;
 }
+
+ReturnType queue_enqueue(Queue q, void* el) {
+    if (!q) 
+        return RETURN_FAILURE;
+
+    QueueElem newElem = (QueueElem) malloc(sizeof(struct queueElem));
+    if (!newElem)
+        return RETURN_FAILURE;
+
+    newElem -> data = el;
+    newElem -> next = NULL;
+
+    if (!q -> rear) {
+        q -> front = q -> rear = newElem;
+
+        return RETURN_SUCCESS;
+    }
+
+    q -> rear -> next = newElem;
+    q -> rear = newElem;
+
+    return RETURN_SUCCESS;
+}
+
+ReturnType queue_dequeue(Queue q) {
+    if (!q || !q -> front)
+        return RETURN_FAILURE; 
+
+    QueueElem tmp = q -> front;
+
+    q -> front = q -> front -> next;
+
+    if (!q -> front)
+        q -> rear = NULL;
+
+    free(tmp);
+
+    return RETURN_SUCCESS;
+}
+
+ReturnType queue_free(Queue q) {
+    if (!q) 
+        return RETURN_FAILURE;
+
+    QueueElem current = q -> front;
+    while (current) {
+        QueueElem tmp = current;
+        current = current -> next;
+        free(tmp);
+    }
+
+    free(q);
+
+    return RETURN_SUCCESS;
+}
