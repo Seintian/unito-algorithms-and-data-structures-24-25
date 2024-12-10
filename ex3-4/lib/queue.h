@@ -61,13 +61,13 @@ ReturnType queue_enqueue(Queue q, void* el);
 /**
  * @brief Dequeues an element from the queue.
  *
- * This function removes the front element from the queue and updates the front
- * and rear pointers accordingly.
+ * This function removes the front element from the queue, updates the front
+ * and rear pointers accordingly, and returns its data.
  *
  * @param q A pointer to the queue from which to dequeue an element.
- * @return RETURN_SUCCESS if the element was successfully dequeued, RETURN_FAILURE if the queue was NULL or empty.
+ * @return A pointer to the data of the dequeued element, or NULL if the queue is empty or NULL.
  */
-ReturnType queue_dequeue(Queue q);
+void* queue_dequeue(Queue q);
 
 /**
  * @brief Frees the queue.

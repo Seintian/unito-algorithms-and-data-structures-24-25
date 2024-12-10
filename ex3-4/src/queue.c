@@ -64,39 +64,40 @@ ReturnType queue_enqueue(Queue q, void* el) {
     if (!q) 
         return RETURN_FAILURE;
 
-    QueueElem newElem = (QueueElem) malloc(sizeof(struct queueElem));
-    if (!newElem)
+    QueueElem new_el = (QueueElem) malloc(sizeof(struct queueElem));
+    if (!new_el)
         return RETURN_FAILURE;
 
-    newElem -> data = el;
-    newElem -> next = NULL;
+    new_el -> data = el;
+    new_el -> next = NULL;
 
     if (!q -> rear) {
-        q -> front = q -> rear = newElem;
+        q -> front = q -> rear = new_el;
 
         return RETURN_SUCCESS;
     }
 
-    q -> rear -> next = newElem;
-    q -> rear = newElem;
+    q -> rear -> next = new_el;
+    q -> rear = new_el;
 
     return RETURN_SUCCESS;
 }
 
-ReturnType queue_dequeue(Queue q) {
+void* queue_dequeue(Queue q) {
     if (!q || !q -> front)
-        return RETURN_FAILURE; 
+        return NULL; 
 
-    QueueElem tmp = q -> front;
+    QueueElem tmp_ptr = q -> front;
+    void* tmp_data = q -> front -> data;
 
     q -> front = q -> front -> next;
 
     if (!q -> front)
         q -> rear = NULL;
 
-    free(tmp);
+    free(tmp_ptr);
 
-    return RETURN_SUCCESS;
+    return tmp_data;
 }
 
 ReturnType queue_free(Queue q) {
