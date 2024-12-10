@@ -291,9 +291,6 @@ void test_graph_free_exhaustive(void) {
     TEST_ASSERT_EQUAL(expected_nodes, returned_count);
     free(nodes_returned);
 
-    /*Edge** edges = (Edge**)graph_get_edges(graph);
-    free(edges[0]);*/
-    
     // Free the graph
     graph_free(graph);
 
@@ -301,6 +298,4 @@ void test_graph_free_exhaustive(void) {
     for (int i = 0; i < num_nodes; i++) {
         free_node(nodes[i]);
     }
-
-    printf("test_graph_free_exhaustive passed\n");
 }

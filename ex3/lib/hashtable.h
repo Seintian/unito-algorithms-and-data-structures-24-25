@@ -22,6 +22,22 @@ typedef struct HashNode HashNode;
 typedef struct HashTable HashTable;
 
 /**
+ * @brief Creates a new hash table with a specified base capacity.
+ * 
+ * @param compare Function pointer for comparing keys.
+ * @param hash_func Function pointer for hashing keys.
+ * @param base_capacity The base capacity for the new hash table.
+ * @return Pointer to the created hash table, or NULL if memory allocation fails.
+ * 
+ * @note The actual capacity of the hash table will be the next prime number greater than or equal to the base capacity.
+ */
+HashTable* hash_table_create_sized(
+    int (*compare)(const void*, const void*),
+    unsigned long (*hash_func)(const void*),
+    int base_capacity
+);
+
+/**
  * @brief creates a new HashTable
  * 
  * Initializes a new hash table with the given comparison and hash functions.
@@ -40,6 +56,7 @@ HashTable* hash_table_create(int (*compare)(const void*, const void*), unsigned 
  * Inserts a key-value pair into the hash table. If the key already exists, the value is updated.
  * If the load factor exceeds the threshold, the table is resized.
  * 
+ * @note The table is resized as follows:
  * ```
  * table -> capacity = next_prime(table -> capacity * 2)
  * ```
@@ -77,6 +94,7 @@ int hash_table_contains_key(const HashTable* table, const void* key);
  * 
  * Removes a key-value pair from the hash table. If the load factor falls below the threshold, the table is resized.
  * 
+ * @note The table is resized as follows:
  * ```
  * table -> capacity = next_prime(table -> capacity / 2)
  * ```

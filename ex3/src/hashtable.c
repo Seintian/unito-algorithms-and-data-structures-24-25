@@ -79,20 +79,6 @@ struct HashTable {
 static HashNode* hash_node_create(const void* key, const void* value);
 
 /**
- * @brief Creates a new hash table with a specified base capacity.
- * 
- * @param compare Function pointer for comparing keys.
- * @param hash_func Function pointer for hashing keys.
- * @param base_capacity The base capacity for the new hash table.
- * @return Pointer to the created hash table, or NULL if memory allocation fails.
- */
-static HashTable* hash_table_create_sized(
-    int (*compare)(const void*, const void*),
-    unsigned long (*hash_func)(const void*),
-    int base_capacity
-);
-
-/**
  * @brief Resizes the hash table to a new capacity.
  * 
  * @param table Pointer to the hash table.
@@ -113,7 +99,7 @@ static HashNode* hash_node_create(const void* key, const void* value) {
     return node;
 }
 
-static HashTable* hash_table_create_sized(
+HashTable* hash_table_create_sized(
     int (*compare)(const void*, const void*),
     unsigned long (*hash_func)(const void*),
     int base_capacity
@@ -262,7 +248,18 @@ int hash_table_contains_key(const HashTable* table, const void* key) {
     if (table == NULL)
         return RETURN_FAILURE;
 
-    return hash_table_get(table, key) != NULL;
+    unsigned long hash = table -> hash_func(key);
+    int index = hash % table -> capacity;
+    HashNode* node = table -> buckets[index];
+
+    while (node) {
+        if (table -> compare(node -> key, key) == 0)
+            return 1;
+
+        node = node -> next;
+    }
+
+    return 0;
 }
 
 int hash_table_size(const HashTable* table) {
