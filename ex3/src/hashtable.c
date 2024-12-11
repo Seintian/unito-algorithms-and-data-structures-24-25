@@ -248,8 +248,7 @@ int hash_table_contains_key(const HashTable* table, const void* key) {
     if (table == NULL)
         return RETURN_FAILURE;
 
-    unsigned long hash = table -> hash_func(key);
-    int index = hash % table -> capacity;
+    int index = table -> hash_func(key) % table -> capacity;
     HashNode* node = table -> buckets[index];
 
     while (node) {

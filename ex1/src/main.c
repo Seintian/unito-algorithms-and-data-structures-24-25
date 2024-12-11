@@ -114,10 +114,11 @@ int (*compare_records)(const void* a, const void* b);
  *
  * @param input_file Path to the input file.
  * @param output_file Path to the output file.
- * @param algorithm Algorithm to be used (0 for merge sort, 1 for quick sort).
+ * @param algorithm Algorithm to be used (1 for merge sort, 2 for quick sort).
+ * @param field Field to be used as the key for sorting (1 for field1, 2 for field2, 3 for field3).
  * @throw `EXIT_FAILURE` if any of the input arguments is invalid.
  */
-void validate_input(char* input_file, char* output_file, char* algorithm, char* field) {
+void validate_input(char* input_file, char* output_file, char* field, char* algorithm) {
     if (strcmp(input_file, output_file) == 0)
         raise_error(
             "input_file and output_file cannot be the same "
@@ -143,25 +144,25 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
         );
     }
 
-    int algo = atoi(algorithm);
-    if (algo != 0 && algo != 1) {
+    int fld = atoi(field);
+    if (fld < 1 || fld > 3) {
         fclose(input);
         fclose(output);
 
         raise_error(
-            "invalid algorithm (expected 0 or 1) -> %s",
-            algorithm
+            "invalid field (expected 1, 2, or 3) -> %s",
+            field
         );
     }
 
-    int fld = atoi(field);
-    if (fld < 0 || fld > 2) {
+    int algo = atoi(algorithm);
+    if (algo != 1 && algo != 2) {
         fclose(input);
         fclose(output);
 
         raise_error(
-            "invalid field (expected 0, 1, or 2) -> %s",
-            field
+            "invalid algorithm (expected 1 or 2) -> %s",
+            algorithm
         );
     }
 
@@ -177,21 +178,21 @@ void validate_input(char* input_file, char* output_file, char* algorithm, char* 
  *
  * @param infile Pointer to the input file.
  * @param outfile Pointer to the output file.
- * @param field Field to be used as the key for sorting.
- * @param algo Algorithm to be used (0 for merge sort, 1 for quick sort).
+ * @param field Field to be used as the key for sorting (1 for field1, 2 for field2, 3 for field3).
+ * @param algo Algorithm to be used (1 for merge sort, 2 for quick sort).
  * @throw `EXIT_FAILURE` if an error occurs during memory allocation.
  */
 void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     switch (field) {
-        case 0:
+        case 1:
             compare_records = compare_field1;
             break;
 
-        case 1:
+        case 2:
             compare_records = compare_field2;
             break;
 
-        case 2:
+        case 3:
             compare_records = compare_field3;
             break;
 
@@ -199,7 +200,7 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
             break;
     }
 
-    printf("\nSorting by field%zu...\n", field + 1);
+    printf("\nSorting by field%zu...\n", field);
 
     size_t n_records = count_lines(infile);
     time_t start;
@@ -217,15 +218,15 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
 
     printf("Read %zu records in %" PRId64 " seconds.\n", n_read_records, end - start);
 
-    printf("Sorting records with %s_sort...\n", algo ? "quick" : "merge");
+    printf("Sorting records with %s_sort...\n", algo == 2 ? "quick" : "merge");
 
     start = time(NULL);
     switch (algo) {
-        case 0:
+        case 1:
             merge_sort(records, n_read_records, sizeof(Record), compare_records);
             break;
 
-        case 1:
+        case 2:
             quick_sort(records, n_read_records, sizeof(Record), compare_records);
             break;
 
@@ -262,14 +263,14 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
 int main(int argc, char* argv[]) {
     if (argc != 5) {
         fprintf(stderr, "Usage:\n");
-        fprintf(stderr, "  %s <input_file> <output_file> <algorithm> <field>\n\n", argv[0]);
+        fprintf(stderr, "  %s <input_file> <output_file> <field> <algorithm>\n\n", argv[0]);
         fprintf(stderr, "Options:\n");
         fprintf(stderr, "  <input_file>   path to the input file\n");
         fprintf(stderr, "  <output_file>  path to the output file (different from input_file)\n");
-        fprintf(stderr, "  <algorithm>    0 for merge sort, 1 for quick sort\n");
-        fprintf(stderr, "  <field>        0 for field1, 1 for field2, 2 for field3\n\n");
+        fprintf(stderr, "  <field>        1 for field1, 2 for field2, 3 for field3\n\n");
+        fprintf(stderr, "  <algorithm>    1 for merge sort, 2 for quick sort\n");
         fprintf(stderr, "Example:\n");
-        fprintf(stderr, "  %s input.csv output.csv 0 1\n", argv[0]);
+        fprintf(stderr, "  %s input.csv output.csv 1 2\n", argv[0]);
 
         return EXIT_FAILURE;
     }
@@ -278,8 +279,8 @@ int main(int argc, char* argv[]) {
 
     FILE* infile = fopen(argv[1], "r");
     FILE* outfile = fopen(argv[2], "w");
-    size_t algo = atoi(argv[3]);
-    size_t field = atoi(argv[4]);
+    size_t field = atoi(argv[3]);
+    size_t algo = atoi(argv[4]);
 
     time_t start = time(NULL);
     sort_records(infile, outfile, field, algo);
@@ -290,10 +291,10 @@ int main(int argc, char* argv[]) {
     if (infile)
         fclose(infile);
 
+    fflush(outfile);
+
     if (outfile)
         fclose(outfile);
-
-    fflush(outfile);
 
     return EXIT_SUCCESS;
 }
