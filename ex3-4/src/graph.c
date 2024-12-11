@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#define EDGES_HASH_TABLE_INITIAL_CAPACITY 2
+
 /**
  * @brief Frees the memory allocated for the edges of a node in a hash table.
  *
@@ -78,11 +80,13 @@ Graph graph_create(
     }
 
     graph -> labelled = labelled == 1
-                        ? true
-                        : false;
+        ? true
+        : false;
+
     graph -> directed = directed == 1
-                        ? true
-                        : false;
+        ? true
+        : false;
+
     graph -> num_edges = 0;
     graph -> compare = compare;
     graph -> hash = hash;
@@ -111,7 +115,7 @@ int graph_add_node(Graph graph, const void* node) {
     if (hash_table_contains_key(graph -> nodes, node))
         return 0;
 
-    HashTable* edges = hash_table_create(graph -> compare, graph -> hash);
+    HashTable* edges = hash_table_create_sized(graph -> compare, graph -> hash, EDGES_HASH_TABLE_INITIAL_CAPACITY);
     if (!edges)
         return RETURN_FAILURE;
     
@@ -133,33 +137,35 @@ int graph_add_edge(
     if (!edges_node1)
         return RETURN_FAILURE;
 
-    HashTable* edges_node2 = graph->directed
-                            ? NULL  
-                            : (HashTable*) hash_table_get(graph -> nodes, node2);
-    if (!edges_node2 && !graph->directed)
+    HashTable* edges_node2 = graph -> directed
+        ? NULL  
+        : (HashTable*) hash_table_get(graph -> nodes, node2);
+
+    if (!edges_node2 && !graph -> directed)
         return RETURN_FAILURE;
 
     if (
         hash_table_contains_key(edges_node1, node2)
      || (   
-            !graph->directed
+            graph -> directed == false
          && hash_table_contains_key(edges_node2, node1)
         )
     )
         return 0;
 
     const void* edge_label = graph->labelled
-                        ? label
-                        : NULL;
+        ? label
+        : NULL;
 
     Edge* edge_node1 = edge_create(node1, node2, edge_label);
     if (!edge_node1)
         return RETURN_FAILURE;
     
-    Edge* edge_node2 = graph->directed
-                            ? NULL  
-                            : edge_create(node2, node1, edge_label);
-    if (!edge_node2 && !graph->directed) {
+    Edge* edge_node2 = graph -> directed
+        ? NULL  
+        : edge_create(node2, node1, edge_label);
+
+    if (!edge_node2 && !graph -> directed) {
         free(edge_node1);
 
         return RETURN_FAILURE;
@@ -319,9 +325,11 @@ Edge** graph_get_edges(const Graph graph) {
     size_t k = 0; // control if k >= num_edges should not be necessary
     for (int i = 0; i < num_nodes; i++) {
         int num_neighbours = hash_table_size(edges[i]);
+
         Edge** neighbours = num_neighbours > 0
-                            ? (Edge**) hash_table_values(edges[i])
-                            : NULL;
+            ? (Edge**) hash_table_values(edges[i])
+            : NULL;
+
         if (!neighbours && num_neighbours > 0) {
             free(edges);
             free(total_edges);
@@ -329,9 +337,11 @@ Edge** graph_get_edges(const Graph graph) {
         }
 
         for (size_t j = 0; j < num_neighbours; j++) {
-            if (graph -> directed
-             || (   !graph -> directed
-                 && graph->compare(neighbours[j]->source, neighbours[j]->dest) < 0
+            if (
+                graph -> directed
+             || (
+                    graph -> directed == false
+                 && graph -> compare(neighbours[j] -> source, neighbours[j] -> dest) < 0
                 )
             )
                 total_edges[k++] = neighbours[j];
@@ -448,7 +458,9 @@ static int remove_edge_between_nodes(Graph graph, const void* source, const void
     Edge* edge = hash_table_get(edges, dest);
     if (!edge)
         return RETURN_FAILURE;
+
     free(edge);
+
     hash_table_remove(edges, dest);
 
     return 1; 
