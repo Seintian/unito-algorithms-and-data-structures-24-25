@@ -147,19 +147,11 @@ int main(int argc, const char* argv[]) {
     if (dictionary_fp == NULL)
         raise_error("Unable to open dictionary file");
 
-    // Determine number of words in dictionary for memory allocation
-    int word_count = count_lines(dictionary_fp);
-    if (word_count < 1) {
-        fclose(dictionary_fp);
-
-        raise_error("Error: No words in dictionary.\n");
-    }
-
-    char** dictionary = malloc(sizeof(char*) * word_count);
+    char** dictionary;
     int words_in_dictionary = read_dictionary(dictionary_fp, &dictionary);
     if (words_in_dictionary < 1)
         raise_error("No words read from dictionary.");
-    
+
     FILE* to_correct_fp = fopen(argv[2], "r");
     if (to_correct_fp == NULL)
         raise_error("Unable to open to_correct file");
@@ -168,12 +160,11 @@ int main(int argc, const char* argv[]) {
     if (words_in_to_correct < 1) {
         fclose(dictionary_fp);
         fclose(to_correct_fp);
-        raise_error("No words read from to_correct file.");
 
-        return EXIT_FAILURE;
+        raise_error("No words read from to_correct file.");
     }
 
-    char** to_correct = malloc(sizeof(char*) * words_in_to_correct);
+    char** to_correct;
     int words_read = read_to_correct(to_correct_fp, &to_correct);
     if (words_read < 1)
         raise_error("No words read from to_correct file.");
@@ -196,6 +187,16 @@ int main(int argc, const char* argv[]) {
             min_distance == 0 ? "exact match" : "approximate match"
         );
     }
+
+    for (int i = 0; i < words_in_dictionary; i++)
+        free(dictionary[i]);
+
+    free(dictionary);
+
+    for (int i = 0; i < words_in_to_correct; i++)
+        free(to_correct[i]);
+
+    free(to_correct);
 
     fclose(to_correct_fp);
     fclose(dictionary_fp);

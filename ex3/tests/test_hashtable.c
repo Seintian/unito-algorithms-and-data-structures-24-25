@@ -180,7 +180,7 @@ void test_hash_table_replace(void) {
     TEST_ASSERT_EQUAL_STRING("new_value1", (char*)value);
 }
 
-void set_values_to_uppercase(const void* key, const void* value) {
+static void set_values_to_uppercase(const void* key, const void* value) {
     char* new_value = strdup((char*)value);
     for (int i = 0; i < strlen(new_value); i++) {
         new_value[i] = toupper(new_value[i]);
@@ -190,21 +190,24 @@ void set_values_to_uppercase(const void* key, const void* value) {
 }
 
 void free_key_value(const void* key, const void* value) {
-    free((void*)key);
-    free((void*)value);
+    free((void*) key);
+    free((void*) value);
 }
 
 void test_hash_table_map(void) {
-    hash_table_put(table, strdup("key1"), strdup("value1"));
-    hash_table_put(table, strdup("key2"), strdup("value2"));
+    char* value1 = strdup("value1");
+    char* value2 = strdup("value2");
+
+    hash_table_put(table, strdup("key1"), value1);
+    hash_table_put(table, strdup("key2"), value2);
 
     hash_table_map(table, set_values_to_uppercase);
 
-    void* value1 = hash_table_get(table, "key1");
-    void* value2 = hash_table_get(table, "key2");
+    TEST_ASSERT_EQUAL_STRING("VALUE1", hash_table_get(table, "key1"));
+    TEST_ASSERT_EQUAL_STRING("VALUE2", hash_table_get(table, "key2"));
 
-    TEST_ASSERT_EQUAL_STRING("VALUE1", (char*)value1);
-    TEST_ASSERT_EQUAL_STRING("VALUE2", (char*)value2);
+    free(value1);
+    free(value2);
 
     hash_table_map(table, free_key_value);
 }

@@ -62,6 +62,10 @@ void test_read_records() {
     TEST_ASSERT_EQUAL_STRING("Alice", records[0].field1);
     TEST_ASSERT_EQUAL_STRING("Bob", records[1].field1);
     TEST_ASSERT_EQUAL_STRING("Charlie", records[2].field1);
+
+    free(records[0].field1);
+    free(records[1].field1);
+    free(records[2].field1);
     
     fclose(temp_file);
 

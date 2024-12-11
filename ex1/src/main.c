@@ -245,6 +245,9 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
 
     printf("Wrote %zu records in %" PRId64 " seconds.\n", n_wrote_records, end - start);
 
+    for (size_t i = 0; i < n_read_records; i++)
+        free(records[i].field1);
+
     free(records);
 }
 

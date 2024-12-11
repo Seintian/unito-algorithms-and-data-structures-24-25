@@ -43,6 +43,9 @@ static int insert_word(HashTable* table, const char* word) {
         (*freq)++;
 
     else {
+        if (hash_table_contains_key(table, word))
+            return -1;
+
         const char* new_word = strdup(word);
         if (!new_word)
             return -1;
@@ -103,6 +106,16 @@ void test_read_text_valid_file(void) {
     TEST_ASSERT_EQUAL_INT(1, *freq_world);
     TEST_ASSERT_EQUAL_INT(1, *freq_test);
 
+    free((void*) freq_hello);
+    free((void*) freq_world);
+    free((void*) freq_test);
+
+    void** keys = hash_table_keyset(table);
+    for (int i = 0; i < hash_table_size(table); i++)
+        free(keys[i]);
+
+    free(keys);
+
     hash_table_free(table);
     fclose(test_fp);
 }
@@ -126,6 +139,14 @@ void test_insert_word_existing_word(void) {
     TEST_ASSERT_NOT_NULL(freq);
     TEST_ASSERT_EQUAL_INT(2, *freq);
 
+    void** keys = hash_table_keyset(table);
+    free(keys[0]);
+    free(keys);
+
+    void** values = hash_table_values(table);
+    free(values[0]);
+    free(values);
+
     hash_table_free(table);
 }
 
@@ -138,6 +159,12 @@ void test_insert_word_new_word(void) {
     const int* freq = (int*) hash_table_get(table, "newword");
     TEST_ASSERT_NOT_NULL(freq);
     TEST_ASSERT_EQUAL_INT(1, *freq);
+
+    void** keys = hash_table_keyset(table);
+    free(keys[0]);
+    free(keys);
+
+    free((void*) freq);
 
     hash_table_free(table);
 }

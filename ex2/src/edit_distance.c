@@ -75,10 +75,10 @@ int** init_edit_distance_dyn_memo(int len_s1, int len_s2) {
     if (len_s1 == 0 || len_s2 == 0)
         return NULL;
 
-    int** memo = (int**)malloc((len_s1 + 1) * sizeof(int*));
+    int** memo = (int**) malloc((len_s1 + 1) * sizeof(int*));
 
     for (size_t i = 0; i < len_s1 + 1; i++) {
-        memo[i] = (int*)malloc((len_s2 + 1) * sizeof(int));
+        memo[i] = (int*) malloc((len_s2 + 1) * sizeof(int));
 
         memset(memo[i], NOT_SET_IN_MEMO, (len_s2 + 1) * sizeof(int));
     }
@@ -148,7 +148,7 @@ int edit_distance_dyn(const char* s1, const char* s2) {
         memo
     );
 
-    for (size_t i = 0; i < len_s1; i++)
+    for (size_t i = 0; i < len_s1 + 1; i++)
         free(memo[i]);
     
     free(memo);
