@@ -403,8 +403,6 @@ void graph_free(Graph graph) {
     }
 
     int num_nodes = hash_table_size(graph -> nodes);
-    if (!num_nodes)
-        return;
 
     HashTable** edges = (HashTable**) hash_table_values(graph -> nodes);
     if (!edges) {
