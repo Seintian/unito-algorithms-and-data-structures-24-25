@@ -188,17 +188,18 @@ void validate_input(const char* text_path, const char* min_word_length) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 3) {
-        fprintf(stderr, "Usage:\n");
-        fprintf(stderr, "  %s <text_path> <min_word_length>\n", argv[0]);
-        fprintf(stderr, "Options:\n");
-        fprintf(stderr, "  <text_path> Path to the text file.\n");
-        fprintf(stderr, "  <min_word_length> Minimum length of words.\n");
-        fprintf(stderr, "Example:\n");
-        fprintf(stderr, "  %s data/iliade.txt 6\n", argv[0]);
-
-        return EXIT_FAILURE;
-    }
+    if (argc < 3)
+        raise_error(
+            "Usage:\n"
+            "  %s <text_path> <min_word_length>\n"
+            "Options:\n"
+            "  <text_path> Path to the text file.\n"
+            "  <min_word_length> Minimum length of words.\n"
+            "Example:\n"
+            "  %s data/iliade.txt 6\n",
+            argv[0],
+            argv[0]
+        );
 
     validate_input(argv[1], argv[2]);
 

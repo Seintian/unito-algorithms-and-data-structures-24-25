@@ -140,7 +140,9 @@ void validate_input(char* input_file, char* output_file, char* field, char* algo
 
         raise_error(
             "output file cannot be created "
-            "-> input_file: %s, output_file: %s", input_file, output_file
+            "-> input_file: %s, output_file: %s",
+            input_file,
+            output_file
         );
     }
 
@@ -264,19 +266,20 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
  *         `EXIT_FAILURE` if the input arguments are invalid.
  */
 int main(int argc, char* argv[]) {
-    if (argc != 5) {
-        fprintf(stderr, "Usage:\n");
-        fprintf(stderr, "  %s <input_file> <output_file> <field> <algorithm>\n\n", argv[0]);
-        fprintf(stderr, "Options:\n");
-        fprintf(stderr, "  <input_file>   path to the input file\n");
-        fprintf(stderr, "  <output_file>  path to the output file (different from input_file)\n");
-        fprintf(stderr, "  <field>        1 for field1, 2 for field2, 3 for field3\n\n");
-        fprintf(stderr, "  <algorithm>    1 for merge sort, 2 for quick sort\n");
-        fprintf(stderr, "Example:\n");
-        fprintf(stderr, "  %s input.csv output.csv 1 2\n", argv[0]);
-
-        return EXIT_FAILURE;
-    }
+    if (argc != 5)
+        raise_error(
+            "Usage:\n"
+            "  %s <input_file> <output_file> <field> <algorithm>\n\n"
+            "Options:\n"
+            "  <input_file>   path to the input file\n"
+            "  <output_file>  path to the output file (different from input_file)\n"
+            "  <field>        1 for field1 (string), 2 for field2 (int), 3 for field3 (double)\n\n"
+            "  <algorithm>    1 for merge sort, 2 for quick sort\n"
+            "Example:\n"
+            "  %s input.csv output.csv 1 2\n",
+            argv[0],
+            argv[0]
+        );
 
     validate_input(argv[1], argv[2], argv[3], argv[4]);
 

@@ -144,6 +144,7 @@ int graph_add_edge(
     if (!edges_node2 && !graph -> directed)
         return RETURN_FAILURE;
 
+    // FIXME: probable bug here: unable to add edges from same node to different nodes
     if (
         hash_table_contains_key(edges_node1, node2)
      || (   
@@ -153,7 +154,7 @@ int graph_add_edge(
     )
         return 0;
 
-    const void* edge_label = graph->labelled
+    const void* edge_label = graph -> labelled
         ? label
         : NULL;
 

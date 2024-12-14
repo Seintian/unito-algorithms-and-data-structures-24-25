@@ -180,7 +180,6 @@ void* graph_get_label(const Graph gr, const void* node1, const void* node2);
  * @brief Frees the memory allocated for the graph.
  * 
  * @param gr The graph to free.
- * @throws Segmentation fault if gr is NULL or memory allocation fails.
  */
 void graph_free(Graph gr);
 

@@ -129,17 +129,16 @@ void find_closest_word(const char* word, char** dictionary, int words_in_diction
  *         `EXIT_FAILURE` if the input arguments are invalid.
  */
 int main(int argc, const char* argv[]) {
-    if (argc < 3) {
-        fprintf(stderr, "Usage:\n");
-        fprintf(stderr, "  %s <dictionary_path> <to_correct_path>\n", argv[0]);
-        fprintf(stderr, "Options:\n");
-        fprintf(stderr, "  <dictionary_path> Path to the dictionary file.\n");
-        fprintf(stderr, "  <to_correct_path> Path to the file containing the text to correct.\n");
-        fprintf(stderr, "Example:\n");
-        fprintf(stderr, "  %s data/dictionary.txt data/correctme.txt\n", argv[0]);
-
-        return EXIT_FAILURE;
-    }
+    if (argc < 3)
+        raise_error(
+            "Usage:\n"
+            "  %s <dictionary_path> <to_correct_path>\n"
+            "Options:\n"
+            "  <dictionary_path> Path to the dictionary file.\n"
+            "  <to_correct_path> Path to the file containing the text to correct.\n"
+            "Example:\n"
+            "  %s data/dictionary.txt data/correctme.txt\n", argv[0], argv[0]
+        );
 
     validate_input(argv[1], argv[2]);
 

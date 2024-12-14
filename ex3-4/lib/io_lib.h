@@ -3,18 +3,17 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "graph.h"
 
 
 #define MAX_LINE_SIZE 512
-#define MAX_STRING_LENGTH 244
+#define MAX_STRING_LENGTH 252
 
 /**
- * Ogni record contiene i seguenti dati:
- *
- * place1: (tipo stringa) nome della località "sorgente" (la stringa può contenere spazi ma non può contenere virgole);
- * place2: (tipo stringa) nome della località "destinazione" (la stringa può contenere spazi ma non può contenere virgole);
- * distance: (tipo float) distanza in metri tra le due località.
+ * @brief A structure representing a record in the CSV file.
  * 
+ * This structure contains the fields `place1`, `place2`, and `distance` which
+ * represent the two places connected by an edge and the distance between them.
  */
 typedef struct _Record {
     char* place1;
@@ -23,18 +22,27 @@ typedef struct _Record {
 
 } Record;
 
-// TODO: comment
+/**
+ * @brief Format string for reading a record from a CSV file.
+ * 
+ * This format string is used in `fscanf` for reading each record with the fields: 
+ * node1 (string), node2 (string), distance (double).
+ */
 extern const char* recordReadFmt;
 
-// TODO: comment
+/**
+ * @brief Format string for writing a record to a CSV file.
+ * 
+ * This format string is used in `fprintf` for writing a record with the fields: 
+ * node (string).
+ */
 extern const char* recordWriteFmt;
 
-// TODO: redeclare these functions for HashTables and Graphs
 /**
- * @brief Reads records from a file and stores them in an array of RecordPtr.
+ * @brief Reads records from a file and stores them in a graph of type `Graph`.
  *
  * This function reads a specified number of records from the given input file
- * and stores them in the provided array of RecordPtr. The function assumes that
+ * and stores them in the provided Graph. The function assumes that
  * the file is already opened for reading and that the array has enough space to
  * hold the specified number of records.
  *
@@ -45,24 +53,23 @@ extern const char* recordWriteFmt;
  * - The CSV file must have a trailing newline at the end.
  *
  * @param infile A pointer to the input file from which records are to be read.
- * @param records A pointer to an array of RecordPtr where the read records will be stored.
+ * @param nodes A pointer to a Graph where the read records will be stored.
  * @param n_records The number of records to read from the file.
  * @return The number of records successfully read from the file.
- * @throw `EXIT_FAILURE` if an error occurs while reading the records.
  */
-size_t read_records(FILE* infile, Record* records, size_t n_records);
+size_t read_records(FILE* infile, Graph nodes, size_t n_records);
 
 /**
  * @brief Writes records to a file.
  *
- * This function writes the records to the output file in CSV format.
+ * This function writes the specified number of nodes (strings) to the given output file.
+ * The function assumes that the file is already opened for writing and that the
+ * nodes array is NULL terminated.
  *
- * @param outfile Pointer to the output file.
- * @param records Pointer to the array of sorted records.
- * @param n_records Number of records to write.
- * @return The number of records successfully written to the file.
- * @throw `EXIT_FAILURE` if an error occurs while writing the records.
+ * @param outfile A pointer to the output file to which nodes are to be written.
+ * @param nodes A `NULL` terminated array of char* (strings) containing the nodes to be written.
+ * @return The number of nodes successfully written to the file.
  */
-size_t write_records(FILE* outfile, Record* records, size_t n_records);
+size_t write_output(FILE* outfile, const char** nodes);
 
 #endif // _IO_LIB_H
