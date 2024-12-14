@@ -80,6 +80,8 @@
  * ```
  * make test
  * ```
+ * 
+ * @see test_main.c
  */
 
 #include "error_logger.h"

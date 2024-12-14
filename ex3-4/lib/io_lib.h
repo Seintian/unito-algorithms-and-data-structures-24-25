@@ -1,3 +1,8 @@
+/**
+ * @file io_lib.h
+ * @brief Interface for reading and writing records from CSV files.
+ */
+
 #ifndef _IO_LIB_H
 #define _IO_LIB_H
 

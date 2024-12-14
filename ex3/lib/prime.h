@@ -1,6 +1,6 @@
 /**
  * @file prime.h
- * @brief Functions for prime number operations.
+ * @brief Interface for prime number functions.
  */
 
 #ifndef _PRIME_H

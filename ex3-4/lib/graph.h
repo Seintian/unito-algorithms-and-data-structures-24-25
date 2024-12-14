@@ -1,3 +1,8 @@
+/**
+ * @file graph.h
+ * @brief Interface for a generic graph data structure using HashTables.
+ */
+
 #ifndef _GRAPH_H
 #define _GRAPH_H
 

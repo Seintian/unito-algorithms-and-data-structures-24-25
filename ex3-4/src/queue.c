@@ -1,3 +1,8 @@
+/**
+ * @file queue.c
+ * @brief Implementation of a generic queue data structure.
+ */
+
 #include <stdlib.h>
 #include "queue.h"
 

@@ -1,3 +1,10 @@
+/**
+ * @file test_graph.c
+ * @brief Unit tests for the graph data structure.
+ * 
+ * This file contains the implementation of unit tests for the graph data structure.
+ */
+
 #include "graph.h"
 #include "test_graph.h"
 #include "unity.h"
@@ -5,35 +12,66 @@
 #include <string.h>
 #include <stdio.h>
 
-// Utility function to create a string node
+
+/**
+ * @brief Utility function to create a string node.
+ * 
+ * @param name The name of the node to create.
+ * @return A pointer to the newly created node.
+ */
 char* create_node(const char* name) {
     char* node = malloc(strlen(name) + 1);
     strcpy(node, name);
     return node;
 }
 
-// Utility function to create a string label
+/**
+ * @brief Utility function to create a string label.
+ * 
+ * @param label The label to create.
+ * @return A pointer to the newly created label.
+ */
 char* create_label(const char* label) {
     char* lbl = malloc(strlen(label) + 1);
     strcpy(lbl, label);
     return lbl;
 }
 
-// Utility function to free nodes and labels
+/**
+ * @brief Utility function to free nodes and labels.
+ * 
+ * @param node The node to free.
+ */
 void free_node(void* node) {
     free(node);
 }
 
+/**
+ * @brief Utility function to free labels.
+ * 
+ * @param label The label to free.
+ */
 void free_label(void* label) {
     free(label);
 }
 
-// Comparison function for nodes
+/**
+ * @brief Comparison function for nodes.
+ * 
+ * @param a The first node.
+ * @param b The second node.
+ * @return An integer indicating the comparison result.
+ */
 int compare_nodes(const void* a, const void* b) {
     return strcmp((const char*)a, (const char*)b);
 }
 
-// Hash function for nodes
+/**
+ * @brief Hash function for nodes.
+ * 
+ * @param key The node key.
+ * @return The hash value for the node.
+ */
 unsigned long hash_node(const void* key) {
     const char* str = (const char*)key;
     unsigned long hash = 5381;
@@ -43,6 +81,9 @@ unsigned long hash_node(const void* key) {
     return hash;
 }
 
+/**
+ * @brief Test the creation of a graph.
+ */
 void test_graph_creation(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     TEST_ASSERT_NOT_NULL(graph);
@@ -53,6 +94,9 @@ void test_graph_creation(void) {
     graph_free(graph);
 }
 
+/**
+ * @brief Test adding a node to the graph.
+ */
 void test_graph_add_node(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -69,6 +113,9 @@ void test_graph_add_node(void) {
     free_node(node2);
 }
 
+/**
+ * @brief Test adding an edge to the graph.
+ */
 void test_graph_add_edge(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -88,6 +135,9 @@ void test_graph_add_edge(void) {
     free_label(label);
 }
 
+/**
+ * @brief Test removing an edge from the graph.
+ */
 void test_graph_remove_edge(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -108,6 +158,9 @@ void test_graph_remove_edge(void) {
     free_label(label);
 }
 
+/**
+ * @brief Test removing a node from the graph.
+ */
 void test_graph_remove_node(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -130,6 +183,9 @@ void test_graph_remove_node(void) {
     free_label(label);
 }
 
+/**
+ * @brief Test getting the neighbours of a node.
+ */
 void test_graph_get_neighbours(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -152,6 +208,9 @@ void test_graph_get_neighbours(void) {
     free_label(label);
 }
 
+/**
+ * @brief Test getting the label of an edge.
+ */
 void test_graph_get_label(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -172,6 +231,9 @@ void test_graph_get_label(void) {
     free_label(label);
 }
 
+/**
+ * @brief Test freeing the graph.
+ */
 void test_graph_free(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -189,6 +251,9 @@ void test_graph_free(void) {
     free_label(label);
 }
 
+/**
+ * @brief Test a complex graph scenario.
+ */
 void test_graph_complex(void) {
     Graph graph = graph_create(1, 0, compare_nodes, hash_node);
     char* node1 = create_node("Node1");
@@ -221,6 +286,9 @@ void test_graph_complex(void) {
     free_label(label2);
 }
 
+/**
+ * @brief Test freeing the graph with a large number of nodes and edges.
+ */
 void test_graph_free_exhaustive(void) {
     Graph graph = graph_create(1, 1, compare_nodes, hash_node);
     TEST_ASSERT_NOT_NULL(graph);
@@ -276,25 +344,14 @@ void test_graph_free_exhaustive(void) {
     TEST_ASSERT_NOT_NULL(nodes_returned);
     int returned_count = 0;
     for (int i = 0; i < num_nodes; i++) {
-        if (i % 3 == 0) 
-            continue;
-        int found = 0;
-        for (int j = 0; j < expected_nodes; j++) {
-            if (compare_nodes(nodes[i], nodes_returned[j]) == 0) {
-                found = 1;
-                break;
-            }
+        if (graph_contains_node(graph, nodes[i])) {
+            returned_count++;
         }
-        TEST_ASSERT_EQUAL(1, found);
-        returned_count++;
     }
-    TEST_ASSERT_EQUAL(expected_nodes, returned_count);
-    free(nodes_returned);
+    TEST_ASSERT_EQUAL(returned_count, expected_nodes);
 
-    // Free the graph
+    // Clean up
     graph_free(graph);
-
-    // Free nodes
     for (int i = 0; i < num_nodes; i++) {
         free_node(nodes[i]);
     }

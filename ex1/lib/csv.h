@@ -1,12 +1,6 @@
 /**
  * @file csv.h
- * @brief This file provides the interface for the CSV functions. 
- * 
- * This file provides the interface for the CSV functions, 
- * which read records from a CSV file into an array of type `RecordPtr`,
- * and write them back to a CSV file.
- * It also includes the definition of the `Record` structure, 
- * which represents a record with four fields.
+ * @brief Interface for reading and writing records from CSV files.
  */
 
 #ifndef _CSV_H

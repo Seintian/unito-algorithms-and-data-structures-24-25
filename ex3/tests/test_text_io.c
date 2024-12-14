@@ -1,13 +1,23 @@
 /**
- * @file test_io_text.c
+ * @file test_text_io.c
  * @brief Unit tests for text_io functions using Unity framework.
+ *
+ * This file contains the implementation of unit tests for the text_io functions.
  */
 
 #include "test_text_io.h"
 #include <stdio.h>
 
 
-// Hash function for testing with strings
+/**
+ * @brief Hash function for strings.
+ *
+ * This function computes a hash value for a given string using the djb2 algorithm.
+ * It is used for testing the hash table functionality with string keys.
+ *
+ * @param key Pointer to the string to hash.
+ * @return The hash value of the string.
+ */
 static unsigned long string_hash(const void* key) {
     const char* str = (const char*)key;
     unsigned long hash = 5381;
@@ -18,7 +28,17 @@ static unsigned long string_hash(const void* key) {
     return hash;
 }
 
-// Compare function for strings
+/**
+ * @brief Comparison function for strings.
+ *
+ * This function compares two strings and is used for testing the hash table
+ * functionality with string keys.
+ *
+ * @param a Pointer to the first string.
+ * @param b Pointer to the second string.
+ * @return 0 if the strings are equal, a negative value if the first string is less,
+ *         or a positive value if the first string is greater.
+ */
 static int string_compare(const void* a, const void* b) {
     return strcmp((const char*)a, (const char*)b);
 }
@@ -61,7 +81,13 @@ static int insert_word(HashTable* table, const char* word) {
     return 0;
 }
 
-// Test case for count_words with a valid file
+/**
+ * @brief Test case for count_words with a valid file.
+ *
+ * This test case checks the behavior of the `count_words` function when
+ * provided with a valid file containing text. It ensures that the function
+ * correctly counts the number of words in the file.
+ */
 void test_count_words_valid_file(void) {
     FILE* test_fp = tmpfile();
     if (!test_fp)
@@ -76,13 +102,26 @@ void test_count_words_valid_file(void) {
     fclose(test_fp);
 }
 
-// Test case for count_words with a NULL file pointer
+/**
+ * @brief Test case for count_words with a NULL file pointer.
+ *
+ * This test case checks the behavior of the `count_words` function when
+ * provided with a NULL file pointer. It ensures that the function handles
+ * this case gracefully, possibly by returning an error or a default value.
+ */
 void test_count_words_null_file(void) {
     int word_count = count_words(NULL);
     TEST_ASSERT_EQUAL_INT(-1, word_count);
 }
 
-// Test case for read_text with a valid file
+/**
+ * @brief Test case for read_text with a valid file.
+ *
+ * This test case checks the behavior of the `read_text` function when
+ * provided with a valid file containing text. It ensures that the function
+ * correctly reads the contents of the file and updates the hash table
+ * with the word frequencies.
+ */
 void test_read_text_valid_file(void) {
     FILE* test_fp = tmpfile();
     if (!test_fp)
@@ -120,7 +159,13 @@ void test_read_text_valid_file(void) {
     fclose(test_fp);
 }
 
-// Test case for read_text with a NULL file pointer
+/**
+ * @brief Test case for read_text with a NULL file pointer.
+ *
+ * This test case checks the behavior of the `read_text` function when
+ * provided with a NULL file pointer. It ensures that the function handles
+ * this case gracefully, possibly by returning an error or null pointer.
+ */
 void test_read_text_null_file(void) {
     HashTable* table = hash_table_create(string_compare, string_hash);
     int result = read_text(NULL, &table);
@@ -129,7 +174,13 @@ void test_read_text_null_file(void) {
     hash_table_free(table);
 }
 
-// Test case for inserting an existing word into the hash table
+/**
+ * @brief Test case for inserting an existing word into the hash table.
+ *
+ * This test case checks the behavior of the `insert_word` function when
+ * attempting to insert a word that already exists in the hash table. It ensures
+ * that the function correctly increments the word's frequency.
+ */
 void test_insert_word_existing_word(void) {
     HashTable* table = hash_table_create(string_compare, string_hash);
     insert_word(table, "example");
@@ -150,7 +201,13 @@ void test_insert_word_existing_word(void) {
     hash_table_free(table);
 }
 
-// Test case for inserting a new word into the hash table
+/**
+ * @brief Test case for inserting a new word into the hash table.
+ *
+ * This test case checks the behavior of the `insert_word` function when
+ * inserting a new word into the hash table. It ensures that the function
+ * correctly adds the new word with a frequency of 1.
+ */
 void test_insert_word_new_word(void) {
     HashTable* table = hash_table_create(string_compare, string_hash);
     int result = insert_word(table, "newword");

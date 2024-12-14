@@ -11,7 +11,7 @@
  * @section usage Usage
  * The application is executed with the following command:
  * ```
- * ./bin/main_ex2(.exe) <dist_csv_path> <node_to_find> <output_file>
+ * ./bin/main_ex3-4(.exe) <dist_csv_path> <node_to_find> <output_file>
  * ```
  * - `<dist_csv_path>`: Path to the CSV file containing the graph representation.
  * - `<node_to_find>`: The starting node for the graph traversal.
@@ -19,7 +19,7 @@
  *
  * Example:
  * ```
- * ./bin/main_ex2(.exe) data/italian_dist_graph.txt torino data/output.txt
+ * ./bin/main_ex3-4(.exe) data/italian_dist_graph.txt torino data/output.txt
  * ```
  *
  * @section file_structure File Structure
@@ -27,8 +27,9 @@
  * - **main.c**: Contains the main entry point for the application. It handles command-line argument parsing, input validation, graph traversal, and writing results to the output file.
  * - **graph.h**: Declares functions for managing the graph, including adding nodes, edges, and traversing nodes.
  * - **hashtable.h**: Provides the implementation of a hash table used to store graph nodes and edges.
- * - **file_io.h**: Contains functions for reading graph data from a CSV file and writing visited nodes to an output file.
- *
+ * - **io_lib.h**: Contains functions for reading graph data from a CSV file and writing visited nodes to an output file.
+ * - **queue.h**: Defines a generic queue data structure used in the breadth-first search algorithm.
+ * 
  * @section modules Modules and Functions
  *
  * - **Input Validation**:
@@ -80,6 +81,8 @@
  * ```
  * make test
  * ```
+ * 
+ * @see test_main.c
  */
 
 #include "graph.h"
@@ -92,10 +95,30 @@
 #include <string.h>
 
 
+/**
+ * @brief Compares two strings for use with qsort or bsearch.
+ *
+ * This function takes two pointers to strings, casts them to `const char*`,
+ * and compares them using `strcmp`.
+ *
+ * @param a Pointer to the first string.
+ * @param b Pointer to the second string.
+ * @return An integer less than, equal to, or greater than zero if the first string
+ *         is found, respectively, to be less than, to match, or be greater than the second string.
+ */
 static int compare_string(const void* a, const void* b) {
     return strcmp((const char*) a, (const char*) b);
 }
 
+/**
+ * @brief Computes a hash value for the given key.
+ *
+ * This function takes a pointer to a key and computes a hash value
+ * that can be used in hash-based data structures.
+ *
+ * @param key A pointer to the key for which the hash value is to be computed.
+ * @return An unsigned long integer representing the hash value of the key.
+ */
 static unsigned long hash(const void* key) {
     unsigned long hash = 5381;
     const char* str = (const char*) key;
@@ -107,6 +130,17 @@ static unsigned long hash(const void* key) {
     return hash;
 }
 
+/**
+ * @brief Counts the number of lines in a given file.
+ *
+ * This function opens the specified file in read mode and counts the number of lines
+ * by reading through the file until the end-of-file (EOF) is reached. Each line is
+ * assumed to be terminated by a newline character ('\n').
+ *
+ * @param filename The path to the file whose lines are to be counted.
+ * @return The number of lines in the file. If the file cannot be opened, the function
+ *         returns 0.
+ */
 static size_t count_lines(const char* filename) {
     FILE* fp = fopen(filename, "r");
     if (!fp)
@@ -278,12 +312,6 @@ int main(int argc, const char* argv[]) {
 
     validate_input(argv[1], argv[2], argv[3]);
 
-    /**
-     * TODO: directed -> 1 or 0?
-     * Input:
-     * monteriggioni,casa nagli,4582.425363560589
-     * casa nagli,monteriggioni,4582.425363560589
-     */
     Graph gr = graph_create(1, 1, compare_string, hash);
     if (!gr)
         raise_error("Error creating graph");

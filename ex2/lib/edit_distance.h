@@ -1,6 +1,6 @@
 /**
  * @file edit_distance.h
- * @brief Header file for edit distance algorithms.
+ * @brief Interface for computing the edit distance between two strings.
  */
 
 #ifndef _EDIT_DISTANCE_H

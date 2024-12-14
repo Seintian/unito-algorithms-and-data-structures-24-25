@@ -1,6 +1,6 @@
 /**
  * @file hashtable.h
- * @brief Implementation of a generic hash table data structure. Contains only functions declarations and opaque structure definitions.
+ * @brief Interface for a generic hash table data structure.
  */
 
 #ifndef _HASHTABLE_H_

@@ -10,6 +10,19 @@
  * - Support for dynamic resizing to maintain optimal load factors.
  * - Collision handling through linked lists (chaining).
  * 
+ * @section usage_sec Usage
+ * The application is executed with the following command:
+ * ```
+ * ./bin/main_ex3(.exe) <input_file> <min_length>
+ * ```
+ * - `<input_file>`: Path to the text file containing words to be processed.
+ * - `<min_length>`: Minimum length of words to consider for frequency calculation.
+ * 
+ * Example:
+ * ```
+ * ./bin/main_ex3(.exe) data/iliade.txt 6
+ * ```
+ * 
  * The implementation also includes unit tests using the Unity framework to verify the functionality of various operations.
  * 
  * @section features_sec Features
@@ -19,7 +32,7 @@
  * - **Various Utility Functions**: Functions to retrieve keys, values, and check for key existence.
  * - **Load Factor Management**: Handles upscaling and downscaling of capacity based on current usage.
  * 
- * @section usage_sec Usage
+ * @section data_structures_sec Data Structures
  * The main data structures in this project are:
  * - `HashNode`: Represents an entry in the hash table.
  * - `HashTable`: The hash table structure containing buckets, capacity, and utility function pointers.
@@ -63,6 +76,8 @@
  * ```
  * make test
  * ```
+ * 
+ * @see test_main.c
  */
 
 #include <stdlib.h>

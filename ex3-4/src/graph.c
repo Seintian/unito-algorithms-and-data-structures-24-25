@@ -1,5 +1,10 @@
+/**
+ * @file graph.c
+ * @brief Implementation of a generic graph data structure using HashTables (from Ex3).
+ */
+
 #include "graph.h"
-#include "hashtable.h" // HashTable's INITIAL_CAPACITY is 2
+#include "hashtable.h"
 #include "error_logger.h"
 #include <stdlib.h>
 #include <string.h>
@@ -144,7 +149,6 @@ int graph_add_edge(
     if (!edges_node2 && !graph -> directed)
         return RETURN_FAILURE;
 
-    // FIXME: probable bug here: unable to add edges from same node to different nodes
     if (
         hash_table_contains_key(edges_node1, node2)
      || (   

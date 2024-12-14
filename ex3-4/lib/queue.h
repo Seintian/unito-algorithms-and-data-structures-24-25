@@ -1,3 +1,8 @@
+/**
+ * @file queue.h
+ * @brief Interface for a generic queue data structure.
+ */
+
 #ifndef _QUEUE_H
 #define _QUEUE_H
 

@@ -1,13 +1,31 @@
+/**
+ * @file test_algo.c
+ * @brief Unit tests for sorting algorithms using the Unity framework.
+ *
+ * This source file contains the implementation of test cases to validate
+ * the correctness of `merge_sort` and `quick_sort` functions. 
+ */
+
 #include "algo.h"
 #include "unity.h"
 #include <stdio.h>
 
 
-int int_cmp(const void *a, const void *b) {
+/**
+ * @brief Comparator function for integers.
+ *
+ * This function is used as a comparison callback for sorting algorithms.
+ *
+ * @param a Pointer to the first integer.
+ * @param b Pointer to the second integer.
+ * @return Difference between the two integers.
+ */
+static int int_cmp(const void *a, const void *b) {
     return *(int *)a - *(int *)b;
 }
 
-// Test case for merge_sort
+// -------------------------- Merge Sort Tests --------------------------
+
 void test_merge_sort(void) {
     int arr[] = {12, 11, 13, 5, 6, 7};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -18,7 +36,6 @@ void test_merge_sort(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an empty array
 void test_merge_sort_empty(void) {
     int arr[] = {};
     int n = 0;
@@ -29,7 +46,6 @@ void test_merge_sort_empty(void) {
     TEST_ASSERT_TRUE(1);
 }
 
-// Test case for sorting an already sorted array
 void test_merge_sort_sorted(void) {
     int arr[] = {1, 2, 3, 4, 5, 6};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -40,7 +56,6 @@ void test_merge_sort_sorted(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting a reverse-sorted array
 void test_merge_sort_reverse_sorted(void) {
     int arr[] = {6, 5, 4, 3, 2, 1};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -51,7 +66,6 @@ void test_merge_sort_reverse_sorted(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an array with all identical elements
 void test_merge_sort_identical_elements(void) {
     int arr[] = {4, 4, 4, 4, 4};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -62,7 +76,6 @@ void test_merge_sort_identical_elements(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an array with a single element
 void test_merge_sort_single_element(void) {
     int arr[] = {42};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -73,7 +86,6 @@ void test_merge_sort_single_element(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an array with negative numbers
 void test_merge_sort_negative_numbers(void) {
     int arr[] = {-3, -1, -4, -2, -5};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -84,8 +96,8 @@ void test_merge_sort_negative_numbers(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
+// -------------------------- Quick Sort Tests --------------------------
 
-// Test case for quick_sort
 void test_quick_sort(void) {
     int arr[] = {12, 11, 13, 5, 6, 7};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -96,7 +108,6 @@ void test_quick_sort(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an empty array
 void test_quick_sort_empty(void) {
     int arr[] = {};
     int n = 0;
@@ -107,7 +118,6 @@ void test_quick_sort_empty(void) {
     TEST_ASSERT_TRUE(1);
 }
 
-// Test case for sorting an already sorted array
 void test_quick_sort_sorted(void) {
     int arr[] = {1, 2, 3, 4, 5, 6};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -118,7 +128,6 @@ void test_quick_sort_sorted(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting a reverse-sorted array
 void test_quick_sort_reverse_sorted(void) {
     int arr[] = {6, 5, 4, 3, 2, 1};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -129,7 +138,6 @@ void test_quick_sort_reverse_sorted(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an array with all identical elements
 void test_quick_sort_identical_elements(void) {
     int arr[] = {4, 4, 4, 4, 4};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -140,7 +148,6 @@ void test_quick_sort_identical_elements(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an array with a single element
 void test_quick_sort_single_element(void) {
     int arr[] = {42};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -151,7 +158,6 @@ void test_quick_sort_single_element(void) {
     TEST_ASSERT_EQUAL_INT_ARRAY(expected, arr, n);
 }
 
-// Test case for sorting an array with negative numbers
 void test_quick_sort_negative_numbers(void) {
     int arr[] = {-3, -1, -4, -2, -5};
     int n = sizeof(arr) / sizeof(arr[0]);
