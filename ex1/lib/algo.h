@@ -1,10 +1,6 @@
 /**
  * @file algo.h
- * @brief Header file containing the declaration of the merge_sort and the quick_sort functions.
- *
- * This file provides the interface for the merge_sort and the quick_sort functions, which 
- * sort arrays of elements.
- * It does not include the auxiliary functions used by the merge_sort and the quick_sort functions.
+ * @brief Interface for sorting algorithms.
  */
 
 #ifndef _ALGO_H

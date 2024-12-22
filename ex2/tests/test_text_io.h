@@ -1,14 +1,18 @@
 /**
  * @file text_io.h
  * @brief Interface for reading text files and storing words in a hash table.
+ * 
+ * This header file provides the interface for reading text files and storing words
+ * in a hash table. It includes functions for counting words in a file, reading text
+ * from a file, and inserting words into a hash table.
+ * 
+ * @see text_io.c
  */
 
 #ifndef _TEXT_IO_H
 #define _TEXT_IO_H
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 
 #define MAX_LINE_LENGTH 1024
@@ -25,7 +29,7 @@
  * @param file_fp File pointer to the file.
  * @return The number of lines in the file, or -1 if an error occurs.
  */
-int count_lines(FILE* file);
+int count_lines(FILE* file_fp);
 
 /**
  * @brief Counts the number of words in a file.

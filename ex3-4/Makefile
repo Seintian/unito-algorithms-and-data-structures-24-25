@@ -15,15 +15,17 @@ CC = gcc
 UNITY_DIR = ../Resources/C/Unity
 UTILS_DIR = ../Resources/C/utils
 LIB_DIR = lib
-CFLAGS = -I$(UNITY_DIR) -I$(UTILS_DIR) -I$(LIB_DIR) -Wall -Werror -O3
+HASHTABLE_LIB_DIR = ../ex3/$(LIB_DIR)
+CFLAGS = -I$(UNITY_DIR) -I$(LIB_DIR) -I$(UTILS_DIR) -I$(HASHTABLE_LIB_DIR) -Wall -Werror -O3
 
+HASHTABLE_SRC_DIR = ../ex3/src
 SRC_DIR = src
 TEST_DIR = tests
 BIN_DIR = bin
 BUILD_DIR = build
 DOC_DIR = doc
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(UTILS_DIR)/*.c)
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(UTILS_DIR)/*.c) $(HASHTABLE_SRC_DIR)/hashtable.c $(HASHTABLE_SRC_DIR)/prime.c 
 TEST_FILES = $(wildcard $(TEST_DIR)/*.c)
 
 BUILD_FILES = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC_FILES))
@@ -32,8 +34,8 @@ TEST_BUILD_FILES = $(patsubst $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(TEST_FILES))
 
 UNITY_SRC = $(UNITY_DIR)/unity.c
 
-TARGET = $(BIN_DIR)/main_ex2$(EXE)
-TEST_TARGET = $(BIN_DIR)/test_ex2$(EXE)
+TARGET = $(BIN_DIR)/main_ex3-4$(EXE)
+TEST_TARGET = $(BIN_DIR)/test_ex3-4$(EXE)
 
 .PHONY: all clean test compile build_bin compile_commands.json doc Doxyfile help
 
@@ -114,13 +116,13 @@ ifeq ($(OS), Windows_NT)
 	powershell -Command "(Get-Content Doxyfile) -replace 'OUTPUT_DIRECTORY\s*=.*', 'OUTPUT_DIRECTORY = $(DOC_DIR)' | Set-Content Doxyfile"
 	powershell -Command "(Get-Content Doxyfile) -replace 'GENERATE_LATEX\s*= YES', 'GENERATE_LATEX = NO' | Set-Content Doxyfile"
 	powershell -Command "(Get-Content Doxyfile) -replace 'EXTRACT_ALL\s*= NO', 'EXTRACT_ALL = YES' | Set-Content Doxyfile"
-	powershell -Command "(Get-Content Doxyfile) -replace 'PROJECT_NAME\s*=.*\"My Project\"', 'PROJECT_NAME = \"Laboratorio Algoritmi 2024-2025 - Ex2\"' | Set-Content Doxyfile"
+	powershell -Command "(Get-Content Doxyfile) -replace 'PROJECT_NAME\s*=.*\"My Project\"', 'PROJECT_NAME = \"Laboratorio Algoritmi 2024-2025 - Ex3-4\"' | Set-Content Doxyfile"
 	powershell -Command "(Get-Content Doxyfile) -replace 'INPUT\s*=.*', 'INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)' | Set-Content Doxyfile"
 else
 	@sed -i 's|OUTPUT_DIRECTORY *=|OUTPUT_DIRECTORY = $(DOC_DIR)|' Doxyfile
 	@sed -i 's|GENERATE_LATEX *= YES|GENERATE_LATEX = NO|' Doxyfile
 	@sed -i 's|EXTRACT_ALL *= NO|EXTRACT_ALL = YES|' Doxyfile
-	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex2"|' Doxyfile
+	@sed -i 's|PROJECT_NAME *= "My Project"|PROJECT_NAME = "Laboratorio Algoritmi 2024-2025 - Ex3-4"|' Doxyfile
 	@sed -i 's|INPUT *=|INPUT = $(LIB_DIR) $(SRC_DIR) $(TEST_DIR)|' Doxyfile
 endif
 	@echo "Doxyfile created and configured."

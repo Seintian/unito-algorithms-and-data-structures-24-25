@@ -1,6 +1,6 @@
 /**
  * @file text_io.h
- * @brief Input/Output functions for reading files.
+ * @brief Interface for reading text files and storing words in a hash table.
  */
 
 #ifndef _TEXT_IO_H

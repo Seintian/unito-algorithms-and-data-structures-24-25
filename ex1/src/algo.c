@@ -4,9 +4,11 @@
  */
 
 #include "algo.h"
+#include "error_logger.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 
 // Helper function for insertion sort for small segments
@@ -26,6 +28,9 @@ void insertion_sort(void *base, size_t left, size_t right, size_t size, int (*co
 
 // Helper function to merge two halves of the array
 void merge(void *base, size_t left, size_t mid, size_t right, size_t size, int (*compar)(const void*, const void*), void *temp) {
+    if (!base || !temp || !compar)
+        return;
+
     size_t n1 = mid - left + 1;
     size_t n2 = right - mid;
 
@@ -67,10 +72,8 @@ void merge_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
 
     // Allocate temp buffer for merging
     void *temp = malloc(n_items * size);
-    if (temp == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
+    if (temp == NULL) 
+        raise_error("Memory allocation failed");
 
     // Start with subarrays of size 1 and double the size in each iteration
     for (size_t width = 1; width < n_items; width *= 2) {
@@ -186,10 +189,8 @@ void quick_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
 
     // memory allocation for temporary void pointer, used to swap array elements, and the control on malloc's outcome
     void *temp = malloc(size);
-    if (!temp) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
+    if (!temp)
+        raise_error("Memory allocation failed");
 
     quick_sort_recursive(base, n_items, size, compar, temp);
     free(temp);
