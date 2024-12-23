@@ -267,7 +267,7 @@ void test_hash_table_replace(void) {
  */
 static void set_values_to_uppercase(const void* key, const void* value) {
     char* new_value = strdup((char*)value);
-    for (int i = 0; i < strlen(new_value); i++) {
+    for (size_t i = 0; i < strlen(new_value); i++) {
         new_value[i] = toupper(new_value[i]);
     }
 
