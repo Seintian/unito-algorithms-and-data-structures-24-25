@@ -159,16 +159,20 @@ HashTable* hash_table_create(int (*compare)(const void*, const void*), unsigned 
 // Basic hash table operations
 
 void hash_table_put(HashTable* table, const void* key, const void* value) {
-    if (table == NULL)
-        raise_error("Hash table is NULL.");
+    if (table == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
     
     float load_factor = hash_table_load_factor(table);
     if (
         load_factor > LOAD_FACTOR_UP_THRESHOLD
         && hash_table_resize(table, table -> capacity * 2) == RETURN_FAILURE 
         && load_factor > LOAD_FACTOR_UP_TOLERANCE
-    )
-        raise_error("Hash table is too full and resizing failed.");
+    ) {
+        print_error("Hash table is too full and resizing failed.");
+        exit(EXIT_FAILURE);
+    }
 
     unsigned long hash = table -> hash_func(key) % table -> capacity;
     HashNode* node = table -> buckets[hash];
@@ -192,15 +196,19 @@ void hash_table_put(HashTable* table, const void* key, const void* value) {
 }
 
 void hash_table_remove(HashTable* table, const void* key) {
-    if (table == NULL)
-        raise_error("Hash table is NULL.");
+    if (table == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
 
     if (
         hash_table_load_factor(table) < LOAD_FACTOR_DOWN_THRESHOLD
         && table -> capacity / 2 >= INITIAL_CAPACITY
         && hash_table_resize(table, table -> capacity / 2) == RETURN_FAILURE
-    )
-        raise_error("Hash table is too empty and resizing failed.");
+    ) {
+        print_error("Hash table is too empty and resizing failed.");
+        exit(EXIT_FAILURE);
+    }
 
     unsigned long hash = table -> hash_func(key);
     int index = hash % table -> capacity;
@@ -297,8 +305,10 @@ void** hash_table_keyset(const HashTable* table) {
 }
 
 void hash_table_clear(HashTable* table) {
-    if (table == NULL)
-        raise_error("Hash table is NULL.");
+    if (table == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
 
     if (hash_table_size(table) == 0)
         return;
@@ -319,8 +329,10 @@ void hash_table_clear(HashTable* table) {
 }
 
 void hash_table_free(HashTable* table) {
-    if (table == NULL)
-        raise_error("Hash table is NULL.");
+    if (table == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
 
     hash_table_clear(table);
     free(table -> buckets);
@@ -337,8 +349,10 @@ float hash_table_load_factor(const HashTable* table) {
 }
 
 void hash_table_replace(const HashTable* table, const void* key, const void* new_value) {
-    if (table == NULL)
-        raise_error("Hash table is NULL.");
+    if (table == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
 
     unsigned long hash = table -> hash_func(key);
     int index = hash % table -> capacity;
@@ -355,8 +369,10 @@ void hash_table_replace(const HashTable* table, const void* key, const void* new
 }
 
 void hash_table_map(const HashTable* table, void (*func)(const void* key, const void* value)) {
-    if (table == NULL)
-        raise_error("Hash table is NULL.");
+    if (table == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i < table -> capacity; i++) {
         HashNode* node = table -> buckets[i];
@@ -420,8 +436,10 @@ int hash_table_equals(
 }
 
 void hash_table_merge(HashTable* dest, const HashTable* source) {
-    if (dest == NULL || source == NULL)
-        raise_error("Hash table is NULL.");
+    if (dest == NULL || source == NULL) {
+        print_error("Hash table is NULL.");
+        exit(EXIT_FAILURE);
+    }
 
     for (int i = 0; i < source -> capacity; i++) {
         HashNode* node = source -> buckets[i];

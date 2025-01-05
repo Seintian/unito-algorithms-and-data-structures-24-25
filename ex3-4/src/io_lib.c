@@ -22,31 +22,68 @@ size_t read_records(FILE* infile, Graph nodes, size_t n_records) {
     double _distance;
 
     while (records_read < n_records && fgets(_line, MAX_LINE_SIZE, infile)) {
-        if (sscanf(_line, recordReadFmt, _place1, _place2, &_distance) != 3)
-            raise_error("Error reading record from file");
+        if (sscanf(_line, recordReadFmt, _place1, _place2, &_distance) != 3) {
+            print_error("Error reading record from file");
+            exit(EXIT_FAILURE);
+        }
 
         double* distance = malloc(sizeof(double));
-        if (!distance)
-            raise_error("Memory allocation error while reading records");
+        if (!distance) {
+            print_error("Memory allocation error while reading records");
+            exit(EXIT_FAILURE);
+        }
 
         *distance = _distance;
 
         char* place1 = strdup(_place1);
-        if (!place1)
-            raise_error("Memory allocation error while reading records");
+        if (!place1) {
+            free(distance);
+
+            print_error("Memory allocation error while reading records");
+            exit(EXIT_FAILURE);
+        }
 
         char* place2 = strdup(_place2);
-        if (!place2)
-            raise_error("Memory allocation error while reading records");   
+        if (!place2) {
+            free(place1);
+            free(distance);
 
-        if (graph_add_node(nodes, place1) == -1)
-            raise_error("Error adding node \"%s\" to graph after %zu records", place1, records_read);
+            print_error("Memory allocation error while reading records");
+            exit(EXIT_FAILURE);
+        }
 
-        if (graph_add_node(nodes, place2) == -1)
-            raise_error("Error adding node \"%s\" to graph after %zu records", place2, records_read);
+        if (graph_add_node(nodes, place1) == -1) {
+            print_error("Error adding node \"%s\" to graph after %zu records", place1, records_read);
 
-        if (graph_add_edge(nodes, place1, place2, distance) != 1)
-            raise_error("Error adding edge \"%s - %s\" to graph after %zu records", place1, place2, records_read);
+            free(place1);
+            free(place2);
+            free(distance);
+
+            exit(EXIT_FAILURE);
+        }
+
+        if (graph_add_node(nodes, place2) == -1) {
+            print_error("Error adding node \"%s\" to graph after %zu records", place2, records_read);
+
+            graph_remove_node(nodes, place1);
+            free(place1);
+            free(place2);
+            free(distance);
+
+            exit(EXIT_FAILURE);
+        }
+
+        if (graph_add_edge(nodes, place1, place2, distance) != 1) {
+            print_error("Error adding edge \"%s - %s\" to graph after %zu records", place1, place2, records_read);
+
+            graph_remove_node(nodes, place1);
+            graph_remove_node(nodes, place2);
+            free(place1);
+            free(place2);
+            free(distance);
+
+            exit(EXIT_FAILURE);
+        }
 
         records_read++;
     }

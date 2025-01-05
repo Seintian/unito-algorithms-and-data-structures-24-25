@@ -84,19 +84,24 @@
  */
 void validate_input(const char* dictionary, const char* to_correct) {
     if (strcmp(dictionary, to_correct) == 0) {
-        raise_error("dictionary and to_correct cannot be the same " \
+        print_error("dictionary and to_correct cannot be the same " \
                     "-> dictionary: %s, to_correct: %s", dictionary, to_correct);
+
+        exit(EXIT_FAILURE);
     }
 
     FILE* dictionary_fp = fopen(dictionary, "r");
-    if (!dictionary_fp)
-        raise_error("Error: dictionary file does not exist -> %s", dictionary);
+    if (!dictionary_fp) {
+        print_error("Error: dictionary file does not exist -> %s", dictionary);
+        exit(EXIT_FAILURE);
+    }
 
     FILE* to_correct_fp = fopen(to_correct, "r");
     if (!to_correct_fp) {
         fclose(dictionary_fp);
 
-        raise_error("Error: to_correct file does not exist -> %s", to_correct);
+        print_error("Error: to_correct file does not exist -> %s", to_correct);
+        exit(EXIT_FAILURE);
     }
 
     fclose(dictionary_fp);
@@ -131,8 +136,8 @@ void find_closest_word(const char* word, char** dictionary, int words_in_diction
  *         `EXIT_FAILURE` if the input arguments are invalid.
  */
 int main(int argc, const char* argv[]) {
-    if (argc < 3)
-        raise_error(
+    if (argc != 3) {
+        print_error(
             "Usage:\n"
             "  %s <dictionary_path> <to_correct_path>\n"
             "Options:\n"
@@ -141,34 +146,52 @@ int main(int argc, const char* argv[]) {
             "Example:\n"
             "  %s data/dictionary.txt data/correctme.txt\n", argv[0], argv[0]
         );
+        exit(EXIT_FAILURE);
+    }
 
     validate_input(argv[1], argv[2]);
 
     FILE* dictionary_fp = fopen(argv[1], "r");
-    if (dictionary_fp == NULL)
-        raise_error("Unable to open dictionary file");
+    if (dictionary_fp == NULL) {
+        print_error("Unable to open dictionary file");
+        exit(EXIT_FAILURE);
+    }
 
     char** dictionary;
     int words_in_dictionary = read_dictionary(dictionary_fp, &dictionary);
-    if (words_in_dictionary < 1)
-        raise_error("No words read from dictionary.");
+    if (words_in_dictionary < 1) {
+        fclose(dictionary_fp);
+
+        print_error("No words read from dictionary.");
+        exit(EXIT_FAILURE);
+    }
 
     FILE* to_correct_fp = fopen(argv[2], "r");
-    if (to_correct_fp == NULL)
-        raise_error("Unable to open to_correct file");
+    if (to_correct_fp == NULL) {
+        fclose(dictionary_fp);
+
+        print_error("Unable to open to_correct file");
+        exit(EXIT_FAILURE);
+    }
 
     int words_in_to_correct = count_words(to_correct_fp);
     if (words_in_to_correct < 1) {
         fclose(dictionary_fp);
         fclose(to_correct_fp);
 
-        raise_error("No words read from to_correct file.");
+        print_error("No words read from to_correct file.");
+        exit(EXIT_FAILURE);
     }
 
     char** to_correct;
     int words_read = read_to_correct(to_correct_fp, &to_correct);
-    if (words_read < 1)
-        raise_error("No words read from to_correct file.");
+    if (words_read < 1) {
+        fclose(dictionary_fp);
+        fclose(to_correct_fp);
+
+        print_error("No words read from to_correct file.");
+        exit(EXIT_FAILURE);
+    }
     
     const char* word;
     int min_distance;

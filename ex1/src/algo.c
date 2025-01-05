@@ -72,8 +72,10 @@ void merge_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
 
     // Allocate temp buffer for merging
     void *temp = malloc(n_items * size);
-    if (temp == NULL) 
-        raise_error("Memory allocation failed");
+    if (temp == NULL) {
+        print_error("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
 
     // Start with subarrays of size 1 and double the size in each iteration
     for (size_t width = 1; width < n_items; width *= 2) {
@@ -189,8 +191,10 @@ void quick_sort(void *base, size_t n_items, size_t size, int (*compar)(const voi
 
     // memory allocation for temporary void pointer, used to swap array elements, and the control on malloc's outcome
     void *temp = malloc(size);
-    if (!temp)
-        raise_error("Memory allocation failed");
+    if (!temp){
+        print_error("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
 
     quick_sort_recursive(base, n_items, size, compar, temp);
     free(temp);

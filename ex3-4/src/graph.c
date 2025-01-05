@@ -56,6 +56,23 @@ static int remove_edge_between_nodes(Graph graph, const void* source, const void
  */
 static Edge* edge_create(const void* source, const void* dest, const void* label);
 
+/**
+ * @struct graph
+ * @brief Represents a graph data structure.
+ *
+ * @var graph::nodes
+ * A hash table containing the nodes of the graph and their associated edges.
+ * @var graph::labelled
+ * A boolean flag indicating whether the graph is labelled.
+ * @var graph::directed
+ * A boolean flag indicating whether the graph is directed.
+ * @var graph::num_edges
+ * The number of edges in the graph.
+ * @var graph::compare
+ * A pointer to a function that compares two elements.
+ * @var graph::hash
+ * A pointer to a function that computes the hash value of an element.
+ */
 struct graph {
     HashTable* nodes;
     bool labelled;
@@ -120,7 +137,7 @@ int graph_add_node(Graph graph, const void* node) {
     if (hash_table_contains_key(graph -> nodes, node))
         return 0;
 
-    HashTable* edges = hash_table_create_sized(graph -> compare, graph -> hash, EDGES_HASH_TABLE_INITIAL_CAPACITY);
+    const HashTable* edges = hash_table_create_sized(graph -> compare, graph -> hash, EDGES_HASH_TABLE_INITIAL_CAPACITY);
     if (!edges)
         return RETURN_FAILURE;
     
@@ -166,7 +183,7 @@ int graph_add_edge(
     if (!edge_node1)
         return RETURN_FAILURE;
     
-    Edge* edge_node2 = graph -> directed
+    const Edge* edge_node2 = graph -> directed
         ? NULL  
         : edge_create(node2, node1, edge_label);
 
@@ -403,7 +420,7 @@ void* graph_get_label(
 
 void graph_free(Graph graph) {
     if (!graph) {
-        raise_error("graph_free(): graph is NULL.");
+        print_error("graph_free(): graph is NULL.");
         exit(EXIT_FAILURE);
     }
 
@@ -411,13 +428,13 @@ void graph_free(Graph graph) {
 
     HashTable** edges = (HashTable**) hash_table_values(graph -> nodes);
     if (!edges) {
-        raise_error("graph_free(): unable to allocate memory in order to free graph.");
+        print_error("graph_free(): unable to allocate memory in order to free graph.");
         exit(EXIT_FAILURE);
     }
 
     for (int i = 0; i < num_nodes; i++) {
         if (free_node_edges(edges[i]) == RETURN_FAILURE) {
-            raise_error("graph_free(): unable to allocate memory in order to free graph.");
+            print_error("graph_free(): unable to allocate memory in order to free graph.");
             exit(EXIT_FAILURE);
         }
     }
@@ -431,7 +448,7 @@ static int free_node_edges(HashTable* edges) {
     if (!edges)
         return RETURN_FAILURE;
     
-    size_t num_edges = hash_table_size(edges);
+    int num_edges = hash_table_size(edges);
     if (num_edges == 0) {
         hash_table_free(edges);
         return 0;
@@ -441,7 +458,7 @@ static int free_node_edges(HashTable* edges) {
     if (!edges_array)
         return RETURN_FAILURE;
 
-    for (size_t i = 0; i < num_edges; i++)
+    for (int i = 0; i < num_edges; i++)
         free(edges_array[i]);
 
     free(edges_array);

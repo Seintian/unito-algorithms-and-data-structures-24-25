@@ -63,8 +63,10 @@ size_t count_lines(FILE* file) {
 size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
     size_t read_count = 0;
     char* temp_buffer = malloc(MAX_FIELD1_SIZE);
-    if (temp_buffer == NULL)
-        raise_error("Memory allocation failed");
+    if (temp_buffer == NULL){
+        print_error("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
 
     for (; read_count < n_records; read_count++) {
         if (fscanf(
@@ -78,8 +80,10 @@ size_t read_records(FILE* infile, RecordPtr records, size_t n_records) {
             break;
 
         records[read_count].field1 = malloc(strlen(temp_buffer) + 1);
-        if (records[read_count].field1 == NULL)
-            raise_error("Memory allocation failed");
+        if (records[read_count].field1 == NULL){
+            print_error("Memory allocation failed");
+            exit(EXIT_FAILURE);
+        }
 
         strcpy(records[read_count].field1, temp_buffer);
     }

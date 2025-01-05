@@ -32,7 +32,7 @@ static size_t calculate_formatted_width(const char* format, va_list args) {
 }
 
 // Helper to log the error
-void raise_error_internal(const char* caller_func, const char* file, int line, const char* format, ...) {
+void print_error_internal(const char* caller_func, const char* file, int line, const char* format, ...) {
     if (!format)
         format = errno ? strerror(errno) : "No Error";
 
@@ -105,6 +105,5 @@ void raise_error_internal(const char* caller_func, const char* file, int line, c
     fprintf(stderr, "[!] Exiting the program...\n");
 
     free(hr);
-    exit(EXIT_FAILURE);
 }
 

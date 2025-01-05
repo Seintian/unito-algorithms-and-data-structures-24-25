@@ -93,6 +93,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 /**
@@ -194,14 +195,14 @@ void bfs_cleanup(Queue bfs_queue, HashTable* explored_set, void** visited_nodes)
 void** breadth_first_visit(Graph gr, void* start, int (*compare)(const void*, const void*), unsigned long (*hash)(const void*)) {
     if (!gr || !start || !compare || !hash)
         return NULL;
-    
+
     if (!graph_contains_node(gr, start))
         return NULL;
-    
+
     void** visited_nodes = malloc(sizeof(void*) * (graph_num_nodes(gr) + 1)); // non necessario controllo su output di graph_num_nodes
     if (!visited_nodes)
         return NULL;
-    
+
     size_t visited_nodes_count = 1;
 
     Queue bfs_queue = queue_create();
@@ -220,7 +221,7 @@ void** breadth_first_visit(Graph gr, void* start, int (*compare)(const void*, co
         bfs_cleanup(bfs_queue, explored_set, visited_nodes);
         return NULL;
     }
-    
+
     hash_table_put(explored_set, start, NULL);
     visited_nodes[0] = start;
 
@@ -228,6 +229,7 @@ void** breadth_first_visit(Graph gr, void* start, int (*compare)(const void*, co
         const void* current_node = queue_dequeue(bfs_queue); // non necessario controllo su output di queue_dequeue
         void** neighbours = graph_get_neighbours(gr, current_node);
         int num_neighbours = graph_num_neighbours(gr, current_node);
+
         if (!neighbours && num_neighbours > 0) { 
             bfs_cleanup(bfs_queue, explored_set, visited_nodes);
             return NULL;
@@ -240,6 +242,7 @@ void** breadth_first_visit(Graph gr, void* start, int (*compare)(const void*, co
             if (queue_enqueue(bfs_queue, neighbours[i]) == RETURN_FAILURE) {
                 bfs_cleanup(bfs_queue, explored_set, visited_nodes);
                 free(neighbours);
+
                 return NULL;
             }
 
@@ -271,24 +274,30 @@ void** breadth_first_visit(Graph gr, void* start, int (*compare)(const void*, co
  * @throw `EXIT_FAILURE` if any of the input arguments is invalid.
  */
 void validate_input(const char* dist_csv_path, const char* node_to_find, const char* output_file) {
-    if (strcmp(dist_csv_path, output_file) == 0)
-        raise_error("dist_csv_path and output_file cannot be the same");
+    if (strcmp(dist_csv_path, output_file) == 0) {
+        print_error("dist_csv_path and output_file cannot be the same");
+        exit(EXIT_FAILURE);
+    }
 
     FILE* dist_csv_path_fp = fopen(dist_csv_path, "r");
-    if (!dist_csv_path_fp)
-        raise_error("dist_csv_path file does not exist -> %s", dist_csv_path);
+    if (!dist_csv_path_fp) {
+        print_error("dist_csv_path file does not exist -> %s", dist_csv_path);
+        exit(EXIT_FAILURE);
+    }
 
     if (strlen(node_to_find) == 0) {
         fclose(dist_csv_path_fp);
 
-        raise_error("node_to_find cannot be empty.\n");
+        print_error("node_to_find cannot be empty.\n");
+        exit(EXIT_FAILURE);
     }
 
     FILE* output_file_fp = fopen(output_file, "w");
     if (!output_file_fp) {
         fclose(dist_csv_path_fp);
 
-        raise_error("output_file file cannot be written -> %s\n", output_file);
+        print_error("output_file file cannot be written -> %s\n", output_file);
+        exit(EXIT_FAILURE);
     }
 
     fclose(dist_csv_path_fp);
@@ -296,8 +305,8 @@ void validate_input(const char* dist_csv_path, const char* node_to_find, const c
 }
 
 int main(int argc, const char* argv[]) {
-    if (argc != 4)
-        raise_error(
+    if (argc != 4) {
+        print_error(
             "Usage:\n"
             "  %s <dist_csv_path> <node_to_find> <output_file>\n"
             "Options:\n"
@@ -309,39 +318,82 @@ int main(int argc, const char* argv[]) {
             argv[0],
             argv[0]
         );
+        exit(EXIT_FAILURE);
+    }
 
     validate_input(argv[1], argv[2], argv[3]);
 
     Graph gr = graph_create(1, 1, compare_string, hash);
-    if (!gr)
-        raise_error("Error creating graph");
+    if (!gr) {
+        print_error("Error creating graph");
+        exit(EXIT_FAILURE);
+    }
 
     size_t records = count_lines(argv[1]);
-    if (records == 0)
-        raise_error("Empty input file");
+    if (records == 0) {
+        graph_free(gr);
+
+        print_error("Empty input file");
+        exit(EXIT_FAILURE);
+    }
 
     FILE* dist_csv_path_fp = fopen(argv[1], "r");
-    if (!dist_csv_path_fp)
-        raise_error("Error opening input file");
+    if (!dist_csv_path_fp) {
+        graph_free(gr);
+
+        print_error("Error opening input file");
+        exit(EXIT_FAILURE);
+    }
 
     size_t records_read = read_records(dist_csv_path_fp, gr, records);
-    if (records_read == 0)
-        raise_error("Error reading records from file");
+    if (records_read == 0) {
+        fclose(dist_csv_path_fp);
+        graph_free(gr);
+
+        print_error("Error reading records from file");
+        exit(EXIT_FAILURE);
+    }
+
+    clock_t start = clock();
 
     void** visited_nodes = breadth_first_visit(gr, (void*) argv[2], compare_string, hash);
-    if (!visited_nodes)
-        raise_error("Error traversing graph");
+    if (!visited_nodes) {
+        fclose(dist_csv_path_fp);
+        graph_free(gr);
+
+        print_error("Error traversing graph");
+        exit(EXIT_FAILURE);
+    }
+
+    clock_t end = clock();
+    printf("Time taken: %f seconds\n", (float) (end - start) / CLOCKS_PER_SEC);
 
     FILE* output_file = fopen(argv[3], "w");
-    if (!output_file)
-        raise_error("Error opening output file");
+    if (!output_file) {
+        fclose(dist_csv_path_fp);
+        free(visited_nodes);
+        graph_free(gr);
+
+        print_error("Error opening output file");
+        exit(EXIT_FAILURE);
+    }
 
     size_t nodes_written = write_output(output_file, (const char**) visited_nodes);
-    if (nodes_written == 0)
-        raise_error("Error writing output");
+    if (nodes_written == 0) {
+        fclose(output_file);
+        fclose(dist_csv_path_fp);
+        free(visited_nodes);
+        graph_free(gr);
 
-    fclose(output_file);
-    fclose(dist_csv_path_fp);
+        print_error("Error writing output");
+        exit(EXIT_FAILURE);
+    }
+
+    if (output_file)
+        fclose(output_file);
+
+    if (dist_csv_path_fp)
+        fclose(dist_csv_path_fp);
 
     graph_free(gr);
     free(visited_nodes);

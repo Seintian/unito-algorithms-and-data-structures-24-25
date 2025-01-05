@@ -90,13 +90,17 @@
 
 void find_max_word(const HashTable* table, int min_length) {
     void** keys = hash_table_keyset(table);
-    if (!keys)
-        raise_error("failed to get keys from hash table");
+    if (!keys) {
+        print_error("failed to get keys from hash table");
+        exit(EXIT_FAILURE);
+    }
 
     void** values = hash_table_values(table);
     if (!values) {
-        raise_error("failed to get values from hash table");
         free(keys);
+
+        print_error("failed to get values from hash table");
+        exit(EXIT_FAILURE);
     }
 
     char* max_word = NULL;
@@ -128,19 +132,17 @@ void free_key_value(const void* key, const void* value) {
 }
 
 /**
- * @brief Inserts a word into the hash table.
+ * @brief Clears the hash table and frees the memory.
  *
- * This function inserts a word into the hash table. If the word is already in the hash table,
- * the frequency of the word is incremented. If the word is not in the hash table, it is added
- * with a frequency of 1.
+ * This function clears the hash table and frees the memory allocated for the keys and values.
  *
- * @param table Pointer to the hash table.
- * @param word The word to insert.
- * @return 0 if successful, -1 if an error occurs.
+ * @param table Pointer to the hash table to clear.
  */
 void clear_words_hash_table(HashTable* table) {
-    if (table == NULL)
-        raise_error("Error: hash table is NULL");
+    if (table == NULL) {
+        print_error("Error: hash table is NULL");
+        exit(EXIT_FAILURE);
+    }
 
     hash_table_map(table, free_key_value);
     hash_table_free(table);
@@ -192,19 +194,23 @@ int compare_string(const void* a, const void* b) {
  */
 void validate_input(const char* text_path, const char* min_word_length) {
     FILE* text_fp = fopen(text_path, "r");
-    if (!text_fp)
-        raise_error("dictionary file does not exist -> %s", text_path);
+    if (!text_fp) {
+        print_error("dictionary file does not exist -> %s", text_path);
+        exit(EXIT_FAILURE);
+    }
 
     int min_length = atoi(min_word_length);
-    if (min_length < 0)
-        raise_error("Error: minimum word length must be a positive integer -> %s", min_word_length);
+    if (min_length < 0) {
+        print_error("Error: minimum word length must be a positive integer -> %s", min_word_length);
+        exit(EXIT_FAILURE);
+    }
 
     fclose(text_fp);
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 3)
-        raise_error(
+    if (argc != 3) {
+        print_error(
             "Usage:\n"
             "  %s <text_path> <min_word_length>\n"
             "Options:\n"
@@ -215,20 +221,33 @@ int main(int argc, char* argv[]) {
             argv[0],
             argv[0]
         );
+        exit(EXIT_FAILURE);
+    }
 
     validate_input(argv[1], argv[2]);
 
     HashTable* table = hash_table_create(&compare_string, &hash_string);
-    if (!table)
-        raise_error("Error: failed to create hash table");
+    if (!table) {
+        print_error("Error: failed to create hash table");
+        exit(EXIT_FAILURE);
+    }
 
     FILE* text_fp = fopen(argv[1], "r");
-    if (!text_fp)
-        raise_error("Error: failed to open text file");
+    if (!text_fp) {
+        free(table);
+
+        print_error("Error: failed to open text file");
+        exit(EXIT_FAILURE);
+    }
 
     printf("Reading text file...\n");
-    if (read_text(text_fp, &table) == -1)
-        raise_error("failed to read text file");
+    if (read_text(text_fp, &table) == -1) {
+        fclose(text_fp);
+        clear_words_hash_table(table);
+
+        print_error("failed to read text file");
+        exit(EXIT_FAILURE);
+    }
 
     printf("Finding most frequent word with at least %d characters...\n", atoi(argv[2]));
     find_max_word((const HashTable*) table, atoi(argv[2]));

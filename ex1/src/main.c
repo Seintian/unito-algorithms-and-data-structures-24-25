@@ -121,31 +121,36 @@ int (*compare_records)(const void* a, const void* b);
  * @throw `EXIT_FAILURE` if any of the input arguments is invalid.
  */
 void validate_input(char* input_file, char* output_file, char* field, char* algorithm) {
-    if (strcmp(input_file, output_file) == 0)
-        raise_error(
+    if (strcmp(input_file, output_file) == 0) {
+        print_error(
             "input_file and output_file cannot be the same "
             "-> input_file: %s, output_file: %s",
             input_file,
             output_file
         );
+        exit(EXIT_FAILURE);
+    }
 
     FILE* input = fopen(input_file, "r");
-    if (!input)
-        raise_error(
+    if (!input) {
+        print_error(
             "input file does not exist -> %s",
             input_file
         );
+        exit(EXIT_FAILURE);
+    }
 
     FILE* output = fopen(output_file, "w");
     if (!output) {
         fclose(input);
 
-        raise_error(
+        print_error(
             "output file cannot be created "
             "-> input_file: %s, output_file: %s",
             input_file,
             output_file
         );
+        exit(EXIT_FAILURE);
     }
 
     int fld = atoi(field);
@@ -153,10 +158,11 @@ void validate_input(char* input_file, char* output_file, char* field, char* algo
         fclose(input);
         fclose(output);
 
-        raise_error(
+        print_error(
             "invalid field (expected 1, 2, or 3) -> %s",
             field
         );
+        exit(EXIT_FAILURE);
     }
 
     int algo = atoi(algorithm);
@@ -164,10 +170,11 @@ void validate_input(char* input_file, char* output_file, char* field, char* algo
         fclose(input);
         fclose(output);
 
-        raise_error(
+        print_error(
             "invalid algorithm (expected 1 or 2) -> %s",
             algorithm
         );
+        exit(EXIT_FAILURE);
     }
 
     fclose(input);
@@ -211,8 +218,10 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
     time_t end;
 
     RecordPtr records = (RecordPtr) malloc(n_records * sizeof(Record));
-    if (!records)
-        raise_error("Memory allocation failed");
+    if (!records){
+        print_error("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
 
     printf("Reading %zu records...\n", n_records);
 
@@ -268,8 +277,8 @@ void sort_records(FILE *infile, FILE *outfile, size_t field, size_t algo) {
  *         `EXIT_FAILURE` if the input arguments are invalid.
  */
 int main(int argc, char* argv[]) {
-    if (argc != 5)
-        raise_error(
+    if (argc != 5) {
+        print_error(
             "Usage:\n"
             "  %s <input_file> <output_file> <field> <algorithm>\n\n"
             "Options:\n"
@@ -282,6 +291,8 @@ int main(int argc, char* argv[]) {
             argv[0],
             argv[0]
         );
+        exit(EXIT_FAILURE);
+    }
 
     validate_input(argv[1], argv[2], argv[3], argv[4]);
 
