@@ -284,7 +284,7 @@ int main(int argc, char* argv[]) {
             "Options:\n"
             "  <input_file>   path to the input file\n"
             "  <output_file>  path to the output file (different from input_file)\n"
-            "  <field>        1 for field1 (string), 2 for field2 (int), 3 for field3 (double)\n\n"
+            "  <field>        1 for field1 (string), 2 for field2 (int), 3 for field3 (double)\n"
             "  <algorithm>    1 for merge sort, 2 for quick sort\n"
             "Example:\n"
             "  %s input.csv output.csv 1 2\n",

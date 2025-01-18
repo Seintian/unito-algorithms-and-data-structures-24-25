@@ -35,12 +35,6 @@ UNITY_SRC = $(UNITY_DIR)/unity.c
 TARGET = $(BIN_DIR)/main_ex1$(EXE)
 TEST_TARGET = $(BIN_DIR)/test_ex1$(EXE)
 
-.PHONY: all clean test compile build_bin compile_commands.json doc Doxyfile help
-
-# Default target
-all: $(TARGET) $(TEST_TARGET)
-	@echo "All targets have been built ($(TARGET), $(TEST_TARGET))."
-
 # Create build directory if it does not exist
 $(BIN_DIR):
 	$(MKDIR) $(BIN_DIR)
@@ -48,14 +42,6 @@ $(BIN_DIR):
 # Create object directory if it does not exist
 $(BUILD_DIR):
 	$(MKDIR) $(BUILD_DIR)
-
-# Rule for compiling object files
-compile: $(BUILD_FILES) $(TEST_BUILD_FILES)
-	@echo "Object files have been compiled."
-
-# Rule for creating executables
-build_bin: $(TARGET) $(TEST_TARGET)
-	@echo "Executables have been built."
 
 # Rule for compiling object files from the source directory
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
@@ -73,33 +59,32 @@ $(TARGET): $(BUILD_FILES) $(BUILD_DIR)/main.o | $(BUILD_DIR) $(BIN_DIR)
 $(TEST_TARGET): $(TEST_BUILD_FILES) $(BUILD_FILES) $(UNITY_SRC) | $(BUILD_DIR) $(BIN_DIR)
 	$(CC) $(CFLAGS) -o $@ $(TEST_BUILD_FILES) $(BUILD_FILES) $(UNITY_SRC)
 
-# Run tests
-test: $(TEST_TARGET)
-	$(TEST_TARGET)
+.PHONY: all clean test compile build_bin doc Doxyfile help
+
+# Default target
+all: $(TARGET) $(TEST_TARGET)
+	@echo "All targets have been built ($(TARGET), $(TEST_TARGET))."
 
 # Clean up build artifacts
 clean:
 	$(call RM,$(BIN_DIR))
 	$(call RM,$(BUILD_DIR))
 	$(call RM,$(DOC_DIR))
-	$(call RM,compile_commands.json)
 	$(call RM,Doxyfile)
 	$(call RM,Doxyfile.bak)
 	@echo "Build artifacts, documentation and IDE plugin's configuration have been removed."
 
-# Generate compilation database
-compile_commands.json: $(BUILD_FILES) $(TEST_BUILD_FILES) | $(BUILD_DIR)
-	@echo "[" > $@
-	@for file in $(SRC_FILES) $(TEST_FILES); do \
-		echo "    {" >> $@; \
-		echo "        \"directory\": \"$(CURDIR)\"," >> $@; \
-		echo "        \"command\": \"$(CC) $(CFLAGS) -c -o $(BUILD_DIR)/$$(basename $$file).o $$file\"," >> $@; \
-		echo "        \"file\": \"$$file\"" >> $@; \
-		echo "    }," >> $@; \
-	done
-	@sed -i '$$ s/,$$//' $@ # Remove the last comma
-	@echo "]" >> $@
-	@echo "Compilation database generated in compile_commands.json"
+# Rule for compiling object files
+compile: $(BUILD_FILES) $(TEST_BUILD_FILES)
+	@echo "Object files have been compiled."
+
+# Rule for creating executables
+build_bin: $(TARGET) $(TEST_TARGET)
+	@echo "Executables have been built."
+
+# Run tests
+test: $(TEST_TARGET)
+	$(TEST_TARGET)
 
 # Doxygen documentation generation
 doc: Doxyfile $(SRC_FILES) $(TEST_FILES)
@@ -125,12 +110,11 @@ else
 endif
 
 help:
-	@echo "Usage: make [all|clean|test|build_bin|compile_commands.json|doc|Doxyfile|help]"
+	@echo "Usage: make [all|clean|test|build_bin|doc|Doxyfile|help]"
 	@echo "  all: Compile the main application and test executable"
 	@echo "  clean: Remove build artifacts"
 	@echo "  test: Run tests"
 	@echo "  build_bin: Create the executables from the object files"
-	@echo "  compile_commands.json: Generate a compilation database for Development Environment Integration"
 	@echo "  doc: Generate Doxygen documentation"
 	@echo "  Doxyfile: Generate a Doxyfile for Doxygen documentation generation"
 	@echo "  help: Display this help message"
