@@ -277,11 +277,11 @@ int graph_remove_edge(
 
     if (graph -> directed)
         return 1;
-    
+
     result = remove_edge_between_nodes(graph, node2, node1);
     if (result == 1)
         graph -> num_edges--;
-    
+
     return result;
 }
 
